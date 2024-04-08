@@ -13,16 +13,17 @@
  * 
  * Game scene.
  */
-the_final_stand.entity.Mathias = function(x, y) {
+the_final_stand.entity.Mathias = function (x, y, game) {
 
-    //--------------------------------------------------------------------------
-    // Super call
-    //--------------------------------------------------------------------------
-    
-    /**
-     * Calls the constructor method of the super class.
-     */
+   //--------------------------------------------------------------------------
+   // Super call
+   //--------------------------------------------------------------------------
+
+   /**
+    * Calls the constructor method of the super class.
+    */
    the_final_stand.entity.Player.call(this, x, y, 60, 60, "Mathias");
+   this.game = game;
 };
 
 //------------------------------------------------------------------------------
@@ -42,13 +43,15 @@ the_final_stand.entity.Mathias.prototype.constructor = the_final_stand.entity.Ma
  *
  * @returns {undefined}
  */
-the_final_stand.entity.Mathias.prototype.init = function() {
+the_final_stand.entity.Mathias.prototype.init = function () {
    rune.display.Sprite.prototype.init.call(this);
-    
+
    this.m_initAnimation();
    this.characterStats();
    this.charName = "Mathias";
-   
+
+   this.hud = new the_final_stand.hud.PlayerHUD(this);
+   this.hud.render();
 };
 
 /**
@@ -59,10 +62,13 @@ the_final_stand.entity.Mathias.prototype.init = function() {
  *
  * @returns {undefined}
  */
-the_final_stand.entity.Mathias.prototype.update = function(step) {
+the_final_stand.entity.Mathias.prototype.update = function (step) {
    rune.display.Sprite.prototype.update.call(this, step);
 
    this.m_updateInput(step);
+   if (this.keyboard.justPressed("SPACE")) {
+      this.shoot();
+   }
    this.m_initPhysics();
 };
 
@@ -74,12 +80,12 @@ the_final_stand.entity.Mathias.prototype.update = function(step) {
  *
  * @returns {undefined}
  */
-the_final_stand.entity.Mathias.prototype.dispose = function() {
+the_final_stand.entity.Mathias.prototype.dispose = function () {
    rune.display.Sprite.prototype.dispose.call(this);
 };
 
 
-the_final_stand.entity.Mathias.prototype.m_initAnimation = function() {
-    this.animation.create("idle", [0], 10, true);
-    this.animation.create("run", [1,2,3,4,5], 10, true);
+the_final_stand.entity.Mathias.prototype.m_initAnimation = function () {
+   this.animation.create("idle", [0], 10, true);
+   this.animation.create("run", [1, 2, 3, 4, 5], 10, true);
 };

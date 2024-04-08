@@ -47,5 +47,6 @@ the_final_stand.data.Requests.prototype.m_construct = function() {
 	this.add("murlocpng", "./../asset/players/murlocpng.png");
 	this.add("Running Danimal", "./../asset/players/Running Danimal.png");
 	this.add("test_player", "./../asset/players/test_player.png");
+	this.add("bullet", "./../asset/projectiles/bullet.png");
 	this.add("test_bg", "./../asset/test_bg.png");
 };

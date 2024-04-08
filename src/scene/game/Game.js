@@ -44,33 +44,34 @@ the_final_stand.scene.Game.prototype.constructor = the_final_stand.scene.Game;
  */
 the_final_stand.scene.Game.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
-
+    
     this.bg = new rune.display.Graphic(0, 0, 400, 300, "test_bg");
     this.stage.addChild(this.bg);
 
-    this.player = new the_final_stand.entity.Mathias(200, 112);
+    this.player = new the_final_stand.entity.Mathias(200, 112, this);
+    this.player.getGameObj(this);
     this.stage.addChild(this.player);
 
-    this.player2 = new the_final_stand.entity.Jesper(150, 112);
-    this.stage.addChild(this.player2);
+    // this.player2 = new the_final_stand.entity.Jesper(150, 112);
+    // this.stage.addChild(this.player2);
 
 
     // Create a new instance of PlayerHUD
-    this.playerHUD1 = new the_final_stand.hud.PlayerHUD(this.player);
-    var hudTexts1 = this.playerHUD1.render();
-    this.stage.addChild(hudTexts1.charName);
-    this.stage.addChild(hudTexts1.hpText);
-    this.stage.addChild(hudTexts1.ammoText);
-    
-    this.playerHUD2 = new the_final_stand.hud.PlayerHUD(this.player2);
-    var hudTexts2 = this.playerHUD2.render();
-    this.stage.addChild(hudTexts2.charName);
-    this.stage.addChild(hudTexts2.hpText);
-    this.stage.addChild(hudTexts2.ammoText);
+    // this.playerHUD1 = new the_final_stand.hud.PlayerHUD(this.player);
+    // var hudTexts1 = this.playerHUD1.render();
+    // this.stage.addChild(hudTexts1.charName);
+    // this.stage.addChild(hudTexts1.hpText);
+    // this.stage.addChild(hudTexts1.ammoText);
 
-    hudTexts2.charName.x = 150;
-    hudTexts2.hpText.x = 150;
-    hudTexts2.ammoText.x = 150;
+    // this.playerHUD2 = new the_final_stand.hud.PlayerHUD(this.player2);
+    // var hudTexts2 = this.playerHUD2.render();
+    // this.stage.addChild(hudTexts2.charName);
+    // this.stage.addChild(hudTexts2.hpText);
+    // this.stage.addChild(hudTexts2.ammoText);
+
+    // hudTexts2.charName.x = 150;
+    // hudTexts2.hpText.x = 150;
+    // hudTexts2.ammoText.x = 150;
 };
 
 /**

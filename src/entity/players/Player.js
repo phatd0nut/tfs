@@ -43,11 +43,15 @@ the_final_stand.entity.Player.prototype.constructor = the_final_stand.entity.Pla
  *
  * @returns {undefined}
  */
+
 the_final_stand.entity.Player.prototype.init = function () {
     rune.display.Sprite.prototype.init.call(this);
 
-    this.m_initPhysics();
 };
+
+the_final_stand.entity.Player.prototype.getGameObj = function (game) {
+    this.game = game;
+}
 
 /**
  * This method is automatically executed once per "tick". The method is used for 
@@ -81,10 +85,53 @@ the_final_stand.entity.Player.prototype.m_initPhysics = function () {
 
 the_final_stand.entity.Player.prototype.characterStats = function () {
     this.hp = 100;
-    this.initial9mmAmmo = 50;
-};
+    this.currentWeapon = 'pistol'; // Sätt det initiala vapnet här
+    this.ammo = {
+        'pistol': 50,
+        'shotgun': 10,
+        'rifle': 30,
+        'grenade': 5,
+        'rocket': 3,
+        'flamethrower': 100,
+        'minigun': 200,
+        'laser': 100
+    };
 
-// var aspectRatio = window.innerWidth / window.innerHeight;
+    this.gunOffsets = {
+        'pistol': {
+            x: 7,
+            y: 6.8
+        },
+        'shotgun': {
+            x: 0,
+            y: 0
+        },
+        'rifle': {
+            x: 0,
+            y: 0
+        },
+        'grenade': {
+            x: 0,
+            y: 0
+        },
+        'rocket': {
+            x: 0,
+            y: 0
+        },
+        'flamethrower': {
+            x: 0,
+            y: 0
+        },
+        'minigun': {
+            x: 0,
+            y: 0
+        },
+        'laser': {
+            x: 0,
+            y: 0
+        }
+    };
+};
 
 the_final_stand.entity.Player.prototype.m_updateInput = function () {
     var speed = 5;
@@ -128,5 +175,27 @@ the_final_stand.entity.Player.prototype.m_updateInput = function () {
         this.animation.gotoAndPlay("run");
     } else {
         this.animation.gotoAndPlay("idle");
+    }
+};
+
+the_final_stand.entity.Player.prototype.shoot = function () {
+    if (this.keyboard.justPressed("SPACE") && this.ammo[this.currentWeapon] > 0) {
+        this.ammo[this.currentWeapon]--;
+        var radian = (this.rotation - 90) * Math.PI / 180;
+        var gunOffsetX = this.gunOffsets[this.currentWeapon].x;
+        var gunOffsetY = this.gunOffsets[this.currentWeapon].y;
+        // Rotera offseten
+        var rotatedOffsetX = gunOffsetX * Math.cos(radian) - gunOffsetY * Math.sin(radian);
+        var rotatedOffsetY = gunOffsetX * Math.sin(radian) + gunOffsetY * Math.cos(radian);
+        var x = this.x + this.width / 2 + Math.cos(radian) * this.width / 2 + rotatedOffsetX;
+        var y = this.y + this.height / 2 + Math.sin(radian) * this.height / 2 + rotatedOffsetY;
+        var projectile = new the_final_stand.entity.Projectile(x, y, radian, this.game.application);
+        this.stage.addChild(projectile);
+        if (this.hud) {
+            this.hud.updateAmmo();
+        } else {
+            console.error('HUD is not initialized');
+            return;
+        }
     }
 };
