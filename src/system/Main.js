@@ -30,8 +30,8 @@ the_final_stand.system.Main = function() {
         useGamepads:true,
         useKeyboard:true,
         framerate: 30,
-        screenResolutionX: 384,
-        screenResolutionY: 216,
+        screenResolutionX: 1280,
+        screenResolutionY: 720,
         debug: true
     });
 };
