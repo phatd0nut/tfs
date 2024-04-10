@@ -23,7 +23,8 @@ the_final_stand.entity.Player = function (x, y, width, height, texture) {
      * Calls the constructor method of the super class.
      */
     rune.display.Sprite.call(this, x, y, width, height, texture);
-    this.aspectRatio = window.innerWidth / window.innerHeight;
+
+    this.game = this.application.scenes.selected;
 };
 
 //------------------------------------------------------------------------------
@@ -43,10 +44,14 @@ the_final_stand.entity.Player.prototype.constructor = the_final_stand.entity.Pla
  *
  * @returns {undefined}
  */
+
 the_final_stand.entity.Player.prototype.init = function () {
     rune.display.Sprite.prototype.init.call(this);
+    this.widthX = 640;
+    this.heightY = 480;
+    this.aspectRatio = this.widthX / this.heightY;
 
-    this.m_initPhysics();
+    this.m_initAnimation();
 };
 
 /**
@@ -61,6 +66,10 @@ the_final_stand.entity.Player.prototype.update = function (step) {
     rune.display.Sprite.prototype.update.call(this, step);
 
     this.m_updateInput(step);
+    
+    this.player_shoot.x = this.x;
+    this.player_shoot.y = this.y;
+    this.player_shoot.rotation = this.rotation;
 };
 
 /**
@@ -81,13 +90,57 @@ the_final_stand.entity.Player.prototype.m_initPhysics = function () {
 
 the_final_stand.entity.Player.prototype.characterStats = function () {
     this.hp = 100;
-    this.initial9mmAmmo = 50;
+    this.currentWeapon = 'pistol'; // Sätt det initiala vapnet här
+    this.ammo = {
+        'pistol': Infinity,
+        'shotgun': 10,
+        'rifle': 30,
+        'grenade': 5,
+        'rocket': 3,
+        'flamethrower': 100,
+        'minigun': 200,
+        'laser': 100
+    };
+
+    this.gunOffsets = {
+        'pistol': {
+            x: 7,
+            y: 6.8
+        },
+        'shotgun': {
+            x: 0,
+            y: 0
+        },
+        'rifle': {
+            x: 0,
+            y: 0
+        },
+        'grenade': {
+            x: 0,
+            y: 0
+        },
+        'rocket': {
+            x: 0,
+            y: 0
+        },
+        'flamethrower': {
+            x: 0,
+            y: 0
+        },
+        'minigun': {
+            x: 0,
+            y: 0
+        },
+        'laser': {
+            x: 0,
+            y: 0
+        }
+    };
 };
 
-// var aspectRatio = window.innerWidth / window.innerHeight;
 
 the_final_stand.entity.Player.prototype.m_updateInput = function () {
-    var speed = 5;
+    var speed = 3;
     var diagonalSpeed = speed * Math.cos(Math.PI / 4);
 
     if (this.keyboard.pressed("D") && !this.keyboard.pressed("W") && !this.keyboard.pressed("S")) {
@@ -129,4 +182,39 @@ the_final_stand.entity.Player.prototype.m_updateInput = function () {
     } else {
         this.animation.gotoAndPlay("idle");
     }
+
 };
+
+the_final_stand.entity.Player.prototype.shoot = function () {
+    if (this.keyboard.justPressed("SPACE") && this.ammo[this.currentWeapon] > 0) {
+        this.ammo[this.currentWeapon]--;
+        var radian = (this.rotation - 90) * Math.PI / 180;
+        var gunOffsetX = this.gunOffsets[this.currentWeapon].x;
+        var gunOffsetY = this.gunOffsets[this.currentWeapon].y;
+
+        // Spela upp player_shoot animationen
+        this.player_shoot.animation.gotoAndPlay("shoot");
+        this.player_shoot.visible = true;
+        
+
+        
+        // Rotera offseten
+        var rotatedOffsetX = gunOffsetX * Math.cos(radian) - gunOffsetY * Math.sin(radian);
+        var rotatedOffsetY = gunOffsetX * Math.sin(radian) + gunOffsetY * Math.cos(radian);
+        var x = this.x + this.width / 2 + Math.cos(radian) * this.width / 2 + rotatedOffsetX;
+        var y = this.y + this.height / 2 + Math.sin(radian) * this.height / 2 + rotatedOffsetY;
+        var projectile = new the_final_stand.entity.Projectile(x, y, radian, this.game.application);
+        this.stage.addChild(projectile);
+        if (this.hud) {
+            this.hud.updateAmmo();
+        } else {
+            console.error('HUD is not initialized');
+            return;
+        }
+    }
+};
+
+// the_final_stand.entity.Player.prototype.onShootEnd = function () {
+//     console.log('Shoot animation ended');
+//     this.player_shoot.visible = false;
+// };

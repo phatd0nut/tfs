@@ -7,12 +7,12 @@
  * 
  * @namespace the_final_stand
  */
-var the_final_stand = function() {
+var the_final_stand = function () {
 
     //--------------------------------------------------------------------------
     // Public static scope
     //--------------------------------------------------------------------------
-    
+
     /**
      * Public scope.
      *
@@ -24,7 +24,7 @@ var the_final_stand = function() {
     //--------------------------------------------------------------------------
     // Package structure
     //--------------------------------------------------------------------------
-    
+
     /**
      * This package contains classes that represent data, or that are used to 
      * manage data. Data can consist of concrete information, or of raw data 
@@ -36,28 +36,30 @@ var the_final_stand = function() {
      */
     m_this.data = {};
 
-     /**
-     * This package contains classes that represent data, or that are used to 
-     * manage data. Data can consist of concrete information, or of raw data 
-     * such as resource files.
-     *
-     * @namespace entity
-     * @memberof the_final_stand
-     * @since 1.0
-     */
-     m_this.entity = {};
+    /**
+    * This package contains classes that represent data, or that are used to 
+    * manage data. Data can consist of concrete information, or of raw data 
+    * such as resource files.
+    *
+    * @namespace entity
+    * @memberof the_final_stand
+    * @since 1.0
+    */
+    m_this.entity = {};
 
-          /**
-     * This package contains classes that represent data, or that are used to 
-     * manage data. Data can consist of concrete information, or of raw data 
-     * such as resource files.
-     *
-     * @namespace hud
-     * @memberof the_final_stand
-     * @since 1.0
-     */
-          m_this.hud = {};
-    
+
+
+        /**
+    * This package contains classes that represent data, or that are used to 
+    * manage data. Data can consist of concrete information, or of raw data 
+    * such as resource files.
+    *
+    * @namespace hud
+    * @memberof the_final_stand
+    * @since 1.0
+    */
+        m_this.hud = {};
+
     /**
      * This package includes the scenes that make up the application. Scenes 
      * are used to represent graphical parts (also known as views) of an 
@@ -77,7 +79,7 @@ var the_final_stand = function() {
      * @since 1.0
      */
     m_this.system = {};
-    
+
     //--------------------------------------------------------------------------
     // Return public scope object
     //--------------------------------------------------------------------------
@@ -99,9 +101,9 @@ var the_final_stand = function() {
  *
  * @ignore
  */
-the_final_stand.bootstrap = function(callback) {
+the_final_stand.bootstrap = function (callback) {
     var app = new the_final_stand.system.Main();
-        app.start(callback);
-        
+    app.start(callback);
+
     return app;
 };

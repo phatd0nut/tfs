@@ -43,7 +43,7 @@ the_final_stand.entity.Jesper.prototype.constructor = the_final_stand.entity.Jes
  * @returns {undefined}
  */
 the_final_stand.entity.Jesper.prototype.init = function () {
-   rune.display.Sprite.prototype.init.call(this);
+   the_final_stand.entity.Player.prototype.init.call(this);
 
    this.m_initAnimation();
    this.characterStats();
@@ -60,7 +60,7 @@ the_final_stand.entity.Jesper.prototype.init = function () {
  * @returns {undefined}
  */
 the_final_stand.entity.Jesper.prototype.update = function (step) {
-   rune.display.Sprite.prototype.update.call(this, step);
+   the_final_stand.entity.Player.prototype.update.call(this, step);
 
    this.m_updateInput(step);
    this.m_initPhysics();
@@ -75,7 +75,7 @@ the_final_stand.entity.Jesper.prototype.update = function (step) {
  * @returns {undefined}
  */
 the_final_stand.entity.Jesper.prototype.dispose = function () {
-   rune.display.Sprite.prototype.dispose.call(this);
+   the_final_stand.entity.Player.prototype.dispose.call(this);
 };
 
 

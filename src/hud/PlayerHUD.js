@@ -1,8 +1,9 @@
-the_final_stand.hud.PlayerHUD = function(player) {
+the_final_stand.hud.PlayerHUD = function (player) {
     this.player = player;
+    this.ammoText = null; // Initialize ammoText as a property of PlayerHUD
 };
 
-the_final_stand.hud.PlayerHUD.prototype.render = function() {
+the_final_stand.hud.PlayerHUD.prototype.render = function () {
     var charName = new rune.text.BitmapField(this.player.charName);
     charName.x = 10;
     charName.y = 15;
@@ -14,15 +15,16 @@ the_final_stand.hud.PlayerHUD.prototype.render = function() {
     hpText.y = 25;
 
     // Create a new BitmapField for Ammo
-    var ammoText = new rune.text.BitmapField("Ammo: " + this.player.initial9mmAmmo);
+    this.ammoText = new rune.text.BitmapField("Ammo: " + this.player.ammo[this.player.currentWeapon]);
     // Set the position of the Ammo text
-    ammoText.x = 10;
-    ammoText.y = 35;
+    this.ammoText.x = 10;
+    this.ammoText.y = 35;
 
-    // Return the text objects
-    return {
-        charName: charName,
-        hpText: hpText,
-        ammoText: ammoText
-    };
+    this.player.stage.addChild(charName);
+    this.player.stage.addChild(hpText);
+    this.player.stage.addChild(this.ammoText);
+};
+
+the_final_stand.hud.PlayerHUD.prototype.updateAmmo = function() {
+    this.ammoText.text = "Ammo: " + this.player.ammo[this.player.currentWeapon];
 };

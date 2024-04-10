@@ -43,9 +43,11 @@ the_final_stand.data.Requests.prototype.constructor = the_final_stand.data.Reque
  */
 the_final_stand.data.Requests.prototype.m_construct = function() {
     rune.resource.Requests.prototype.m_construct.call(this);
-    this.add("Mathias", "./../asset/players/Mathias.png");
+    this.add("1_mathias", "./../asset/players/1_mathias.png");
+	this.add("1_mathias_shooting", "./../asset/players/1_mathias_shooting.png");
 	this.add("murlocpng", "./../asset/players/murlocpng.png");
 	this.add("Running Danimal", "./../asset/players/Running Danimal.png");
 	this.add("test_player", "./../asset/players/test_player.png");
+	this.add("bullet", "./../asset/projectiles/bullet.png");
 	this.add("test_bg", "./../asset/test_bg.png");
 };
