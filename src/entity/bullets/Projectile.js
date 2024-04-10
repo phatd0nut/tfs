@@ -3,6 +3,7 @@ the_final_stand.entity.Projectile = function (x, y, direction, application) {
     this.direction = direction;
     this.application = application;
     this.speed = 50;
+
 };
 
 // Inherit from rune.display.Graphic

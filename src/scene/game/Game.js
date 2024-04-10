@@ -49,7 +49,6 @@ the_final_stand.scene.Game.prototype.init = function () {
     this.stage.addChild(this.bg);
 
     this.player = new the_final_stand.entity.Mathias(200, 112, this);
-    this.player.getGameObj(this);
     this.stage.addChild(this.player);
 
     // this.player2 = new the_final_stand.entity.Jesper(150, 112);

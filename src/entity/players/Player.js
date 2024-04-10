@@ -23,7 +23,8 @@ the_final_stand.entity.Player = function (x, y, width, height, texture) {
      * Calls the constructor method of the super class.
      */
     rune.display.Sprite.call(this, x, y, width, height, texture);
-    this.aspectRatio = window.innerWidth / window.innerHeight;
+
+    this.game = this.application.scenes.selected;
 };
 
 //------------------------------------------------------------------------------
@@ -46,12 +47,12 @@ the_final_stand.entity.Player.prototype.constructor = the_final_stand.entity.Pla
 
 the_final_stand.entity.Player.prototype.init = function () {
     rune.display.Sprite.prototype.init.call(this);
+    this.widthX = 640;
+    this.heightY = 480;
+    this.aspectRatio = this.widthX / this.heightY;
 
+    this.m_initAnimation();
 };
-
-the_final_stand.entity.Player.prototype.getGameObj = function (game) {
-    this.game = game;
-}
 
 /**
  * This method is automatically executed once per "tick". The method is used for 
@@ -65,6 +66,10 @@ the_final_stand.entity.Player.prototype.update = function (step) {
     rune.display.Sprite.prototype.update.call(this, step);
 
     this.m_updateInput(step);
+    
+    this.player_shoot.x = this.x;
+    this.player_shoot.y = this.y;
+    this.player_shoot.rotation = this.rotation;
 };
 
 /**
@@ -87,7 +92,7 @@ the_final_stand.entity.Player.prototype.characterStats = function () {
     this.hp = 100;
     this.currentWeapon = 'pistol'; // Sätt det initiala vapnet här
     this.ammo = {
-        'pistol': 50,
+        'pistol': Infinity,
         'shotgun': 10,
         'rifle': 30,
         'grenade': 5,
@@ -133,8 +138,9 @@ the_final_stand.entity.Player.prototype.characterStats = function () {
     };
 };
 
+
 the_final_stand.entity.Player.prototype.m_updateInput = function () {
-    var speed = 5;
+    var speed = 3;
     var diagonalSpeed = speed * Math.cos(Math.PI / 4);
 
     if (this.keyboard.pressed("D") && !this.keyboard.pressed("W") && !this.keyboard.pressed("S")) {
@@ -176,6 +182,7 @@ the_final_stand.entity.Player.prototype.m_updateInput = function () {
     } else {
         this.animation.gotoAndPlay("idle");
     }
+
 };
 
 the_final_stand.entity.Player.prototype.shoot = function () {
@@ -184,6 +191,13 @@ the_final_stand.entity.Player.prototype.shoot = function () {
         var radian = (this.rotation - 90) * Math.PI / 180;
         var gunOffsetX = this.gunOffsets[this.currentWeapon].x;
         var gunOffsetY = this.gunOffsets[this.currentWeapon].y;
+
+        // Spela upp player_shoot animationen
+        this.player_shoot.animation.gotoAndPlay("shoot");
+        this.player_shoot.visible = true;
+        
+
+        
         // Rotera offseten
         var rotatedOffsetX = gunOffsetX * Math.cos(radian) - gunOffsetY * Math.sin(radian);
         var rotatedOffsetY = gunOffsetX * Math.sin(radian) + gunOffsetY * Math.cos(radian);
@@ -199,3 +213,8 @@ the_final_stand.entity.Player.prototype.shoot = function () {
         }
     }
 };
+
+// the_final_stand.entity.Player.prototype.onShootEnd = function () {
+//     console.log('Shoot animation ended');
+//     this.player_shoot.visible = false;
+// };

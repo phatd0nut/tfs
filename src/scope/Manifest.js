@@ -47,27 +47,18 @@ var the_final_stand = function () {
     */
     m_this.entity = {};
 
+
+
         /**
     * This package contains classes that represent data, or that are used to 
     * manage data. Data can consist of concrete information, or of raw data 
     * such as resource files.
     *
-    * @namespace bullets
+    * @namespace hud
     * @memberof the_final_stand
     * @since 1.0
     */
-        m_this.entity = {};
-
-    /**
-* This package contains classes that represent data, or that are used to 
-* manage data. Data can consist of concrete information, or of raw data 
-* such as resource files.
-*
-* @namespace hud
-* @memberof the_final_stand
-* @since 1.0
-*/
-    m_this.hud = {};
+        m_this.hud = {};
 
     /**
      * This package includes the scenes that make up the application. Scenes 
