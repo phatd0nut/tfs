@@ -47,8 +47,8 @@ the_final_stand.entity.Player.prototype.constructor = the_final_stand.entity.Pla
 
 the_final_stand.entity.Player.prototype.init = function () {
     rune.display.Sprite.prototype.init.call(this);
-    this.widthX = 640;
-    this.heightY = 480;
+    this.widthX = 1280;
+    this.heightY = 720;
     this.aspectRatio = this.widthX / this.heightY;
 
     this.m_initAnimation();
