@@ -44,14 +44,15 @@ the_final_stand.scene.Game.prototype.constructor = the_final_stand.scene.Game;
  */
 the_final_stand.scene.Game.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
+    this.activeBullets = [];
     
     this.bg = new rune.display.Graphic(0, 0, 400, 300, "test_bg");
     this.stage.addChild(this.bg);
 
-    this.player = new the_final_stand.entity.Mathias(200, 112, this);
+    this.player = new the_final_stand.entity.Mathias(640, 360, this);
     this.stage.addChild(this.player);
 
-    this.zombie = new the_final_stand.entity.ZombieDefault(150, 112, this);
+    this.zombie = new the_final_stand.entity.ZombieDefault(640, 420, this);
     this.stage.addChild(this.zombie);
 
     // this.player2 = new the_final_stand.entity.Jesper(150, 112);

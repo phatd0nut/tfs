@@ -203,8 +203,10 @@ the_final_stand.entity.Player.prototype.shoot = function () {
         var rotatedOffsetY = gunOffsetX * Math.sin(radian) + gunOffsetY * Math.cos(radian);
         var x = this.x + this.width / 2 + Math.cos(radian) * this.width / 2 + rotatedOffsetX;
         var y = this.y + this.height / 2 + Math.sin(radian) * this.height / 2 + rotatedOffsetY;
-        var projectile = new the_final_stand.entity.Projectile(x, y, radian, this.game.application);
+        var projectile = new the_final_stand.entity.Projectile(x, y, radian, this.game);
         this.stage.addChild(projectile);
+        this.game.activeBullets.push(projectile);
+
         if (this.hud) {
             this.hud.updateAmmo();
         } else {

@@ -74,7 +74,8 @@ the_final_stand.entity.ZombieDefault.prototype.dispose = function () {
 };
 
 the_final_stand.entity.ZombieDefault.prototype.m_initAnimation = function () {
-    this.animation.create("idle", [0], 10, true);
-    this.animation.create("run", [1, 2, 3, 4, 5], 10, true);
-
+    this.animation.create("idle", [0], 0, false);
+    this.animation.create("walk", [1, 2, 3, 4, 5], 10, true);
+    this.animation.create("attack", [6, 7], 10, false);
+    this.animation.create("die", [8, 9, 10, 11], 7, false);
 };

@@ -24,6 +24,7 @@ the_final_stand.entity.Zombie = function (x, y, width, height, texture) {
      */
     rune.display.Sprite.call(this, x, y, width, height, texture);
 
+
     this.game = this.application.scenes.selected;
 };
 
@@ -47,11 +48,16 @@ the_final_stand.entity.Zombie.prototype.constructor = the_final_stand.entity.Zom
 
 the_final_stand.entity.Zombie.prototype.init = function () {
     rune.display.Sprite.prototype.init.call(this);
+
+    this.isAlive = true;
+
     this.widthX = 1280;
     this.heightY = 720;
     this.aspectRatio = this.widthX / this.heightY;
 
     this.m_initAnimation();
+    this.m_initHitBox();
+
 };
 
 /**
@@ -64,7 +70,7 @@ the_final_stand.entity.Zombie.prototype.init = function () {
  */
 the_final_stand.entity.Zombie.prototype.update = function (step) {
     rune.display.Sprite.prototype.update.call(this, step);
-
+    this.m_hitBoxDetection();
 };
 
 /**
@@ -77,4 +83,31 @@ the_final_stand.entity.Zombie.prototype.update = function (step) {
  */
 the_final_stand.entity.Zombie.prototype.dispose = function () {
     rune.display.Sprite.prototype.dispose.call(this);
+};
+
+the_final_stand.entity.Zombie.prototype.m_initHitBox = function () {
+    // Define the hitbox
+    console.log(this.x, this.y);
+    this.hitbox.set(10, 10, this.width - 20, this.height - 20);
+    this.hitbox.debug = true;
+    // this.registerHit = new hitTest(this.hitbox, this.hitBoxDetection, this);
+};
+
+the_final_stand.entity.Zombie.prototype.m_hitBoxDetection = function () {
+    if (this.isAlive) {
+        for (var i = 0; i < this.game.activeBullets.length; i++) {
+            var bullets = this.game.activeBullets[i];
+            bullets.hitTest(this, this.deathAnimation.bind(this, bullets), this);
+        }
+    }
+};
+the_final_stand.entity.Zombie.prototype.deathAnimation = function (bullet) {
+    var index = this.game.activeBullets.indexOf(bullet);
+    if (index !== -1) {
+        console.log("hit");
+        this.game.activeBullets.splice(index, 1);
+        this.game.stage.removeChild(bullet);
+    }
+    this.isAlive = false;
+    this.animation.gotoAndPlay("die");
 };
