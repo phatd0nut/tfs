@@ -50,4 +50,5 @@ the_final_stand.data.Requests.prototype.m_construct = function() {
 	this.add("test_player", "./../asset/players/test_player.png");
 	this.add("bullet", "./../asset/projectiles/bullet.png");
 	this.add("test_bg", "./../asset/test_bg.png");
+	this.add("zombie_default", "./../asset/zombies/zombie_default.png");
 };

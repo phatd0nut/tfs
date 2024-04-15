@@ -47,8 +47,8 @@ the_final_stand.entity.Player.prototype.constructor = the_final_stand.entity.Pla
 
 the_final_stand.entity.Player.prototype.init = function () {
     rune.display.Sprite.prototype.init.call(this);
-    this.widthX = 640;
-    this.heightY = 480;
+    this.widthX = 1280;
+    this.heightY = 720;
     this.aspectRatio = this.widthX / this.heightY;
 
     this.m_initAnimation();
@@ -203,8 +203,10 @@ the_final_stand.entity.Player.prototype.shoot = function () {
         var rotatedOffsetY = gunOffsetX * Math.sin(radian) + gunOffsetY * Math.cos(radian);
         var x = this.x + this.width / 2 + Math.cos(radian) * this.width / 2 + rotatedOffsetX;
         var y = this.y + this.height / 2 + Math.sin(radian) * this.height / 2 + rotatedOffsetY;
-        var projectile = new the_final_stand.entity.Projectile(x, y, radian, this.game.application);
+        var projectile = new the_final_stand.entity.Projectile(x, y, radian, this.game);
         this.stage.addChild(projectile);
+        this.game.activeBullets.push(projectile);
+
         if (this.hud) {
             this.hud.updateAmmo();
         } else {
