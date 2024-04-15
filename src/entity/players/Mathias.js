@@ -64,9 +64,8 @@ the_final_stand.entity.Mathias.prototype.update = function (step) {
    the_final_stand.entity.Player.prototype.update.call(this, step);
 
    this.m_updateInput(step);
-   if (this.keyboard.justPressed("SPACE")) {
-      this.shoot();
-      this.player_shoot.visible = true;
+   if (this.keyboard.justPressed("SPACE") || this.gamepads.get(0).justPressed(2)) {
+      // this.player_shoot.visible = true;
    }
 
    this.m_initPhysics();
@@ -92,7 +91,7 @@ the_final_stand.entity.Mathias.prototype.m_initAnimation = function () {
 
    this.player_shoot.animation.create("shoot", [0, 1, 2], 10, false);
    this.stage.addChild(this.player_shoot);
-   this.player_shoot.visible = false;
+   // this.player_shoot.visible = false;
 
    // this.player_shoot.animation.find("shoot").scripts.add(2, this.onShootEnd, this);
 };

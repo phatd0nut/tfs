@@ -2,7 +2,7 @@ the_final_stand.entity.Projectile = function (x, y, direction, game) {
     rune.display.Graphic.call(this, x, y, 4, 4, 'bullet'); // Call the parent constructor
     this.direction = direction;
     this.game = game;
-    this.speed = 10;
+    this.speed = 50;
     this.hitbox.set(0, 0, 4, 4);
 
 };

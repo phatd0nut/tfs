@@ -49,7 +49,7 @@ the_final_stand.scene.Game.prototype.init = function () {
     this.bg = new rune.display.Graphic(0, 0, 400, 300, "test_bg");
     this.stage.addChild(this.bg);
 
-    this.player = new the_final_stand.entity.Mathias(640, 360, this);
+    this.player = new the_final_stand.entity.Mathias(640, 360, this, this.gamepads.get(0));
     this.stage.addChild(this.player);
 
     this.zombie = new the_final_stand.entity.ZombieDefault(640, 420, this);

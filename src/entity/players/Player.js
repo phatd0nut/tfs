@@ -66,7 +66,7 @@ the_final_stand.entity.Player.prototype.update = function (step) {
     rune.display.Sprite.prototype.update.call(this, step);
 
     this.m_updateInput(step);
-    
+
     this.player_shoot.x = this.x;
     this.player_shoot.y = this.y;
     this.player_shoot.rotation = this.rotation;
@@ -104,8 +104,8 @@ the_final_stand.entity.Player.prototype.characterStats = function () {
 
     this.gunOffsets = {
         'pistol': {
-            x: 7,
-            y: 6.8
+            x: 5,
+            y: 10.6
         },
         'shotgun': {
             x: 0,
@@ -140,79 +140,116 @@ the_final_stand.entity.Player.prototype.characterStats = function () {
 
 
 the_final_stand.entity.Player.prototype.m_updateInput = function () {
-    var speed = 3;
-    var diagonalSpeed = speed * Math.cos(Math.PI / 4);
+    var speed = 3; // Hastigheten som spelaren rör sig i
+    var diagonalSpeed = speed * Math.cos(Math.PI / 4); // Hastigheten som spelaren rör sig i diagonala riktningar
+    var isMoving = false; // Kontrollera om spelaren rör sig eller inte
 
-    if (this.keyboard.pressed("D") && !this.keyboard.pressed("W") && !this.keyboard.pressed("S")) {
+    // Gamepadstyrning
+    var gamepad = this.game.gamepads.get(0);
+
+    if (gamepad) {
+        if (gamepad.justPressed(2)) {
+            this.shoot();
+        }
+        else {
+            // Lägg till en liten tröskelvärde för att bestämma om spaken är i neutral position
+            var threshold = 0.1;
+            var x = gamepad.m_axesOne.x;
+            var y = gamepad.m_axesOne.y;
+
+            if (Math.abs(x) > threshold || Math.abs(y) > threshold) {
+                // Räkna ut rotationen baserat på spakens position
+                this.rotation = Math.atan2(y, x) * (180 / Math.PI) + 90;
+                if (this.rotation < 0) {
+                    this.rotation += 360;
+                }
+
+                // Räkna ut den nya positionen baserat på spakens position och hastigheten
+                this.x += x * speed;
+                this.y += y * speed;
+
+                isMoving = true;
+            }
+        }
+    }
+
+    // Tangentbordsstyrning
+    if (this.keyboard.justPressed("SPACE")) {
+        this.shoot();
+    }
+    else if (this.keyboard.pressed("D") && !this.keyboard.pressed("W") && !this.keyboard.pressed("S")) {
         this.x += speed;
         this.rotation = 90;
-        this.animation.gotoAndPlay("run");
+        isMoving = true;
     } else if (this.keyboard.pressed("A") && !this.keyboard.pressed("W") && !this.keyboard.pressed("S")) {
         this.rotation = -90;
         this.x -= speed;
-        this.animation.gotoAndPlay("run");
+        isMoving = true;
     } else if (this.keyboard.pressed("W") && !this.keyboard.pressed("A") && !this.keyboard.pressed("D")) {
         this.rotation = 0;
         this.y -= speed * this.aspectRatio * Math.cos(Math.PI / 4);
-        this.animation.gotoAndPlay("run");
+        isMoving = true;
     } else if (this.keyboard.pressed("S") && !this.keyboard.pressed("A") && !this.keyboard.pressed("D")) {
         this.rotation = 180;
         this.y += speed * this.aspectRatio * Math.cos(Math.PI / 4);
-        this.animation.gotoAndPlay("run");
+        isMoving = true;
     } else if (this.keyboard.pressed("W") && this.keyboard.pressed("D")) {
         this.rotation = 45;
         this.x += diagonalSpeed;
         this.y -= diagonalSpeed * this.aspectRatio;
-        this.animation.gotoAndPlay("run");
+        isMoving = true;
     } else if (this.keyboard.pressed("W") && this.keyboard.pressed("A")) {
         this.rotation = -45;
         this.x -= diagonalSpeed;
         this.y -= diagonalSpeed * this.aspectRatio;
-        this.animation.gotoAndPlay("run");
+        isMoving = true;
     } else if (this.keyboard.pressed("S") && this.keyboard.pressed("D")) {
         this.rotation = 135;
         this.x += diagonalSpeed;
         this.y += diagonalSpeed * this.aspectRatio;
-        this.animation.gotoAndPlay("run");
+        isMoving = true;
     } else if (this.keyboard.pressed("S") && this.keyboard.pressed("A")) {
         this.rotation = -135;
         this.x -= diagonalSpeed;
         this.y += diagonalSpeed * this.aspectRatio;
-        this.animation.gotoAndPlay("run");
-    } else {
+        isMoving = true;
+    }
+
+    console.log(isMoving);
+    if (!isMoving) {
         this.animation.gotoAndPlay("idle");
+    } else {
+        this.animation.gotoAndPlay("run");
     }
 
 };
 
 the_final_stand.entity.Player.prototype.shoot = function () {
-    if (this.keyboard.justPressed("SPACE") && this.ammo[this.currentWeapon] > 0) {
-        this.ammo[this.currentWeapon]--;
-        var radian = (this.rotation - 90) * Math.PI / 180;
-        var gunOffsetX = this.gunOffsets[this.currentWeapon].x;
-        var gunOffsetY = this.gunOffsets[this.currentWeapon].y;
+    this.ammo[this.currentWeapon]--;
+    var radian = (this.rotation - 90) * Math.PI / 180;
+    var gunOffsetX = this.gunOffsets[this.currentWeapon].x;
+    var gunOffsetY = this.gunOffsets[this.currentWeapon].y;
 
-        // Spela upp player_shoot animationen
-        this.player_shoot.animation.gotoAndPlay("shoot");
-        this.player_shoot.visible = true;
-        
+    
 
-        
-        // Rotera offseten
-        var rotatedOffsetX = gunOffsetX * Math.cos(radian) - gunOffsetY * Math.sin(radian);
-        var rotatedOffsetY = gunOffsetX * Math.sin(radian) + gunOffsetY * Math.cos(radian);
-        var x = this.x + this.width / 2 + Math.cos(radian) * this.width / 2 + rotatedOffsetX;
-        var y = this.y + this.height / 2 + Math.sin(radian) * this.height / 2 + rotatedOffsetY;
-        var projectile = new the_final_stand.entity.Projectile(x, y, radian, this.game);
-        this.stage.addChild(projectile);
-        this.game.activeBullets.push(projectile);
+    // Spela upp player_shoot animationen
+    // this.player_shoot.animation.gotoAndPlay("shoot");
+    // this.player_shoot.visible = true;
+    
+    // Rotera offseten
+    var rotatedOffsetX = gunOffsetX * Math.cos(radian) - gunOffsetY * Math.sin(radian);
+    var rotatedOffsetY = gunOffsetX * Math.sin(radian) + gunOffsetY * Math.cos(radian);
+    var x = this.x + this.width / 2 + Math.cos(radian) * this.width / 2 + rotatedOffsetX;
+    var y = this.y + this.height / 2 + Math.sin(radian) * this.height / 2 + rotatedOffsetY;
+    var projectile = new the_final_stand.entity.Projectile(x, y, radian, this.game);
+    this.stage.addChild(projectile);
+    this.game.activeBullets.push(projectile);
 
-        if (this.hud) {
-            this.hud.updateAmmo();
-        } else {
-            console.error('HUD is not initialized');
-            return;
-        }
+    if (this.hud) {
+        this.hud.updateAmmo();
+    } else {
+        console.error('HUD is not initialized');
+        return;
     }
 };
 
