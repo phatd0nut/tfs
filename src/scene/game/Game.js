@@ -46,7 +46,7 @@ the_final_stand.scene.Game.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
     this.activeBullets = [];
     
-    this.bg = new rune.display.Graphic(0, 0, 400, 300, "test_bg");
+    this.bg = new rune.display.Graphic(0, 0, 1289, 720, "standard_map");
     this.stage.addChild(this.bg);
 
     this.player = new the_final_stand.entity.Mathias(640, 360, this, this.gamepads.get(0));
