@@ -67,9 +67,9 @@ the_final_stand.entity.Player.prototype.update = function (step) {
 
     this.m_updateInput(step);
 
-    this.player_shoot.x = this.x;
-    this.player_shoot.y = this.y;
-    this.player_shoot.rotation = this.rotation;
+    // this.player_shoot.x = this.x;
+    // this.player_shoot.y = this.y;
+    // this.player_shoot.rotation = this.rotation;
 };
 
 /**
@@ -215,7 +215,7 @@ the_final_stand.entity.Player.prototype.m_updateInput = function () {
         isMoving = true;
     }
 
-    console.log(isMoving);
+    // console.log(isMoving);
     if (!isMoving) {
         this.animation.gotoAndPlay("idle");
     } else {

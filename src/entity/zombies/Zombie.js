@@ -88,7 +88,7 @@ the_final_stand.entity.Zombie.prototype.dispose = function () {
 the_final_stand.entity.Zombie.prototype.m_initHitBox = function () {
     // Define the hitbox
     console.log(this.x, this.y);
-    this.hitbox.set(10, 10, this.width - 20, this.height - 20);
+    this.hitbox.set(20, 12, this.width - 40, this.height - 30);
     this.hitbox.debug = true;
     // this.registerHit = new hitTest(this.hitbox, this.hitBoxDetection, this);
 };
@@ -101,13 +101,17 @@ the_final_stand.entity.Zombie.prototype.m_hitBoxDetection = function () {
         }
     }
 };
+
 the_final_stand.entity.Zombie.prototype.deathAnimation = function (bullet) {
     var index = this.game.activeBullets.indexOf(bullet);
+    console.log(index);
     if (index !== -1) {
         console.log("hit");
         this.game.activeBullets.splice(index, 1);
         this.game.stage.removeChild(bullet);
+        console.log(index);
     }
+    console.log(index);
     this.isAlive = false;
     this.animation.gotoAndPlay("die");
 };
