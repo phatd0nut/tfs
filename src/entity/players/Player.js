@@ -164,11 +164,14 @@ the_final_stand.entity.Player.prototype.m_updateInput = function () {
                     this.rotation += 360;
                 }
 
-                // Räkna ut den nya positionen baserat på spakens position och hastigheten
-                this.x += x * speed;
-                this.y += y * speed;
+        // Om knapp 5 inte är nedtryckt, uppdatera positionen
+        if (!gamepad.pressed(5)) {
+            // Räkna ut den nya positionen baserat på spakens position och hastigheten
+            this.x += x * speed;
+            this.y += y * speed;
 
-                isMoving = true;
+            isMoving = true;
+        }
             }
         }
     }

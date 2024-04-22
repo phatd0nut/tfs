@@ -84,8 +84,8 @@ the_final_stand.entity.Mathias.prototype.dispose = function () {
 };
 
 the_final_stand.entity.Mathias.prototype.m_initAnimation = function () {
-   this.animation.create("idle", [0], 10, true);
-   this.animation.create("run", [1, 2, 3, 4, 5], 10, true);
+   this.animation.create("idle", [1], 10, true);
+   this.animation.create("run", [2, 3, 4, 5], 10, true);
 
    this.player_shoot = new rune.display.Sprite(this.x, this.y, 64, 64, '1_mathias_shooting');
 

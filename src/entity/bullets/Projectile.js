@@ -23,9 +23,11 @@ the_final_stand.entity.Projectile.prototype.dispose = function () {
 };
 
 the_final_stand.entity.Projectile.prototype.outOfBounds = function () {
+    // this.game.stage.map.back.hitTestObject(this, function() {
+    //     console.log('hit wall');
+    // })
     if (this.x < 0 || this.x > this.game.application.screen.width || this.y < 0 || this.y > this.game.application.screen.height) {
         this.game.activeBullets.splice(this.game.activeBullets.indexOf(this), 1);
-        
         this.game.stage.removeChild(this);
     }
 };
