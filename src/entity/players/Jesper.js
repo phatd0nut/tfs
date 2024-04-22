@@ -22,7 +22,7 @@ the_final_stand.entity.Jesper = function (x, y) {
    /**
     * Calls the constructor method of the super class.
     */
-   the_final_stand.entity.Player.call(this, x, y, 48, 48, "test_player");
+   the_final_stand.entity.Player.call(this, x, y, 48, 48, "2_jesper");
 };
 
 //------------------------------------------------------------------------------
@@ -80,8 +80,14 @@ the_final_stand.entity.Jesper.prototype.dispose = function () {
 
 
 the_final_stand.entity.Jesper.prototype.m_initAnimation = function () {
-   this.animation.create("idle", [0, 1, 2], 3, true);
-   this.animation.create("walk", [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18], 20, true);
-   this.animation.create("up", [8, 9, 10, 11], 10, true);
-   this.animation.create("down", [12, 13, 14, 15], 10, true);
+   this.animation.create("idle", [0], 10, true);
+   this.animation.create("run", [1, 2, 3, 4, 5], 10, true);
+
+   // this.player_shoot = new rune.display.Sprite(this.x, this.y, 64, 64, '1_mathias_shooting');
+
+   // this.player_shoot.animation.create("shoot", [0, 1, 2], 10, false);
+   // this.stage.addChild(this.player_shoot);
+   // this.player_shoot.visible = false;
+
+   // this.player_shoot.animation.find("shoot").scripts.add(2, this.onShootEnd, this);
 };

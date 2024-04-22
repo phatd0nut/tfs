@@ -50,6 +50,7 @@ the_final_stand.entity.Zombie.prototype.init = function () {
     rune.display.Sprite.prototype.init.call(this);
 
     this.isAlive = true;
+    this.isMoving = false;
 
     this.widthX = 1280;
     this.heightY = 720;
@@ -71,6 +72,8 @@ the_final_stand.entity.Zombie.prototype.init = function () {
 the_final_stand.entity.Zombie.prototype.update = function (step) {
     rune.display.Sprite.prototype.update.call(this, step);
     this.m_hitBoxDetection();
+    this.m_followPlayers();
+    
 };
 
 /**
@@ -86,9 +89,7 @@ the_final_stand.entity.Zombie.prototype.dispose = function () {
 };
 
 the_final_stand.entity.Zombie.prototype.m_initHitBox = function () {
-    // Define the hitbox
-    console.log(this.x, this.y);
-    this.hitbox.set(10, 10, this.width - 20, this.height - 20);
+    this.hitbox.set(20, 12, this.width - 40, this.height - 30);
     this.hitbox.debug = true;
     // this.registerHit = new hitTest(this.hitbox, this.hitBoxDetection, this);
 };
@@ -101,13 +102,56 @@ the_final_stand.entity.Zombie.prototype.m_hitBoxDetection = function () {
         }
     }
 };
+
 the_final_stand.entity.Zombie.prototype.deathAnimation = function (bullet) {
     var index = this.game.activeBullets.indexOf(bullet);
+    console.log(index);
     if (index !== -1) {
         console.log("hit");
         this.game.activeBullets.splice(index, 1);
         this.game.stage.removeChild(bullet);
+        console.log(index);
     }
+    console.log(index);
     this.isAlive = false;
+    this.isMoving = false;
     this.animation.gotoAndPlay("die");
+};
+
+the_final_stand.entity.Zombie.prototype.m_followPlayers = function () {
+    // Om zombien inte är vid liv, gör ingenting
+    if (!this.isAlive) {
+        return;
+    }
+
+    var player = this.game.player;
+    var path2Player = new rune.util.Path();
+    path2Player.add(this.x, this.y); // Lägg till zombiens nuvarande position
+    path2Player.add(player.x, player.y); // Lägg till spelarens position
+
+    // Beräkna riktningen till nästa punkt på sökvägen
+    var nextPoint = path2Player.getAt(1); // Hämta nästa punkt på sökvägen
+    if (nextPoint) {
+        var dx = nextPoint.x - this.x;
+        var dy = nextPoint.y - this.y;
+        var distance = Math.sqrt(dx * dx + dy * dy);
+
+        // Normalisera riktningen
+        if (distance > 0) {
+            dx /= distance;
+            dy /= distance;
+        }
+
+        // Flytta zombien mot nästa punkt med en viss hastighet
+        this.x += dx * this.zombieDefaultSpeed;
+        this.y += dy * this.zombieDefaultSpeed;
+        this.isMoving = true;
+        if (this.isMoving) {
+            this.animation.gotoAndPlay("walk");
+        }
+
+        // Ändra zombiens rotation baserat på riktningen den rör sig mot
+        var angle = Math.atan2(dy, dx);
+        this.rotation = angle * (180 / Math.PI) - 270; // Konvertera till grader
+    }
 };

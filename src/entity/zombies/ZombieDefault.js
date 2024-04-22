@@ -45,6 +45,7 @@ the_final_stand.entity.ZombieDefault.prototype.constructor = the_final_stand.ent
 the_final_stand.entity.ZombieDefault.prototype.init = function () {
     the_final_stand.entity.Zombie.prototype.init.call(this);
 
+    this.zombieDefaultSpeed = 2;
 };
 
 /**

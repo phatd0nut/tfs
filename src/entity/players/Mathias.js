@@ -64,9 +64,8 @@ the_final_stand.entity.Mathias.prototype.update = function (step) {
    the_final_stand.entity.Player.prototype.update.call(this, step);
 
    this.m_updateInput(step);
-   if (this.keyboard.justPressed("SPACE")) {
-      this.shoot();
-      this.player_shoot.visible = true;
+   if (this.keyboard.justPressed("SPACE") || this.gamepads.get(0).justPressed(2)) {
+      // this.player_shoot.visible = true;
    }
 
    this.m_initPhysics();
@@ -85,14 +84,14 @@ the_final_stand.entity.Mathias.prototype.dispose = function () {
 };
 
 the_final_stand.entity.Mathias.prototype.m_initAnimation = function () {
-   this.animation.create("idle", [0], 10, true);
-   this.animation.create("run", [1, 2, 3, 4, 5], 10, true);
+   this.animation.create("idle", [1], 10, true);
+   this.animation.create("run", [2, 3, 4, 5], 10, true);
 
    this.player_shoot = new rune.display.Sprite(this.x, this.y, 64, 64, '1_mathias_shooting');
 
    this.player_shoot.animation.create("shoot", [0, 1, 2], 10, false);
    this.stage.addChild(this.player_shoot);
-   this.player_shoot.visible = false;
+   // this.player_shoot.visible = false;
 
    // this.player_shoot.animation.find("shoot").scripts.add(2, this.onShootEnd, this);
 };
