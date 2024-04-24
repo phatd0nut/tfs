@@ -51,6 +51,7 @@ the_final_stand.entity.Zombie.prototype.init = function () {
 
     this.isAlive = true;
     this.isMoving = false;
+    this.isAttacking = false;
 
     this.widthX = 1280;
     this.heightY = 720;
@@ -73,7 +74,6 @@ the_final_stand.entity.Zombie.prototype.update = function (step) {
     rune.display.Sprite.prototype.update.call(this, step);
     this.m_hitBoxDetection();
     this.m_followPlayers();
-    
 };
 
 /**
@@ -98,24 +98,33 @@ the_final_stand.entity.Zombie.prototype.m_hitBoxDetection = function () {
     if (this.isAlive) {
         for (var i = 0; i < this.game.activeBullets.length; i++) {
             var bullets = this.game.activeBullets[i];
-            bullets.hitTest(this, this.deathAnimation.bind(this, bullets), this);
+            bullets.hitTest(this, this.die.bind(this, bullets), this);
         }
     }
 };
 
-the_final_stand.entity.Zombie.prototype.deathAnimation = function (bullet) {
-    var index = this.game.activeBullets.indexOf(bullet);
-    console.log(index);
-    if (index !== -1) {
-        console.log("hit");
-        this.game.activeBullets.splice(index, 1);
-        this.game.stage.removeChild(bullet);
-        console.log(index);
+the_final_stand.entity.Zombie.prototype.attack = function () {
+    this.isAttacking = true;
+    if (this.isAttacking && this.isAlive && this.animation.currentAnimation !== "attack") {
+        this.animation.gotoAndPlay("attack");
+    } else {
+        this.isAttacking = false;
     }
-    console.log(index);
+};
+
+the_final_stand.entity.Zombie.prototype.die = function (bullet) {
+    var index = this.game.activeBullets.indexOf(bullet);
+    if (index !== -1) {
+        bullet.dispose();
+    }
     this.isAlive = false;
     this.isMoving = false;
+    this.isAttacking = false;
+
     this.animation.gotoAndPlay("die");
+
+    // Anropa killZombie metoden i ZombieSpawner klassen
+    this.game.zombieSpawner.killedZombies(this);
 };
 
 the_final_stand.entity.Zombie.prototype.m_followPlayers = function () {
@@ -143,8 +152,19 @@ the_final_stand.entity.Zombie.prototype.m_followPlayers = function () {
         }
 
         // Flytta zombien mot nästa punkt med en viss hastighet
-        this.x += dx * this.zombieDefaultSpeed;
-        this.y += dy * this.zombieDefaultSpeed;
+        // Determine the zombie's speed
+        var speed;
+        if (this instanceof the_final_stand.entity.ZombieFat) {
+            speed = this.zombieFatSpeed;
+        } else if (this instanceof the_final_stand.entity.ZombieFast) {
+            speed = this.zombieFastSpeed;
+        } else {
+            speed = this.zombieDefaultSpeed;
+        }
+
+        // Use the determined speed to move the zombie
+        this.x += dx * speed;
+        this.y += dy * speed;
         this.isMoving = true;
         if (this.isMoving) {
             this.animation.gotoAndPlay("walk");

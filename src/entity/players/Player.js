@@ -66,6 +66,7 @@ the_final_stand.entity.Player.prototype.update = function (step) {
     rune.display.Sprite.prototype.update.call(this, step);
 
     this.m_updateInput(step);
+    this.hitBox();
 
     // this.player_shoot.x = this.x;
     // this.player_shoot.y = this.y;
@@ -164,14 +165,14 @@ the_final_stand.entity.Player.prototype.m_updateInput = function () {
                     this.rotation += 360;
                 }
 
-        // Om knapp 5 inte är nedtryckt, uppdatera positionen
-        if (!gamepad.pressed(5)) {
-            // Räkna ut den nya positionen baserat på spakens position och hastigheten
-            this.x += x * speed;
-            this.y += y * speed;
+                // Om knapp 5 inte är nedtryckt, uppdatera positionen
+                if (!gamepad.pressed(5)) {
+                    // Räkna ut den nya positionen baserat på spakens position och hastigheten
+                    this.x += x * speed;
+                    this.y += y * speed;
 
-            isMoving = true;
-        }
+                    isMoving = true;
+                }
             }
         }
     }
@@ -233,12 +234,12 @@ the_final_stand.entity.Player.prototype.shoot = function () {
     var gunOffsetX = this.gunOffsets[this.currentWeapon].x;
     var gunOffsetY = this.gunOffsets[this.currentWeapon].y;
 
-    
+
 
     // Spela upp player_shoot animationen
     // this.player_shoot.animation.gotoAndPlay("shoot");
     // this.player_shoot.visible = true;
-    
+
     // Rotera offseten
     var rotatedOffsetX = gunOffsetX * Math.cos(radian) - gunOffsetY * Math.sin(radian);
     var rotatedOffsetY = gunOffsetX * Math.sin(radian) + gunOffsetY * Math.cos(radian);
@@ -260,3 +261,8 @@ the_final_stand.entity.Player.prototype.shoot = function () {
 //     console.log('Shoot animation ended');
 //     this.player_shoot.visible = false;
 // };
+
+the_final_stand.entity.Player.prototype.hitBox = function () {
+    this.hitbox.set(20, 12, this.width - 40, this.height - 30);
+    this.hitbox.debug = true;
+}
