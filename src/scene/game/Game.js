@@ -44,14 +44,14 @@ the_final_stand.scene.Game.prototype.constructor = the_final_stand.scene.Game;
  */
 the_final_stand.scene.Game.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
+    this.stage.map.load('map1');
     this.zombieSpawner = new the_final_stand.entity.ZombieSpawner(this);
     this.updateCounter = 0;
     this.activeBullets = [];
 
     // this.bg = new rune.display.Graphic(0, 0, 1289, 720, "standard_map");
     // this.stage.addChild(this.bg);
-
-    this.stage.map.load('map1');
+    console.log(this.stage.map);
 
     // this.zombie = new the_final_stand.entity.ZombieDefault(640, 420, this);
     // this.stage.addChild(this.zombie);
@@ -95,13 +95,27 @@ the_final_stand.scene.Game.prototype.init = function () {
  */
 the_final_stand.scene.Game.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
-    this.updateCounter++;
-    if (this.updateCounter % 60 === 0) {
-        this.zombieSpawner.spawnZombie();
-    }
-    this.zombieSpawner.update(step);
+    this.zombieSpawner.update();
+    
+   // Check collision between player and each zombie
+   var zombies = this.zombieSpawner.zombies;
+   for (var i = 0; i < zombies.length; i++) {
+       if (this.player.hitTestAndSeparate(zombies[i])) {
+           zombies[i].attack(); // Call attack method on the zombie
+       }
+   }
 
+    // Check collision between all zombies
+    var zombies = this.zombieSpawner.zombies;
+    for (var i = 0; i < zombies.length; i++) {
+        for (var j = i + 1; j < zombies.length; j++) {
+            if (zombies[i].hitTestAndSeparate(zombies[j])) {
+                
+            }
+        }
+    }
 };
+
 
 /**
  * This method is automatically called once just before the scene ends. Use 
@@ -113,5 +127,5 @@ the_final_stand.scene.Game.prototype.update = function (step) {
  */
 the_final_stand.scene.Game.prototype.dispose = function () {
     rune.scene.Scene.prototype.dispose.call(this);
-    this.zombieSpawner.dispose();
+    // this.zombieSpawner.dispose();
 };

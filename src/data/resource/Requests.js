@@ -49,9 +49,8 @@ the_final_stand.data.Requests.prototype.m_construct = function() {
 	this.add("1_mathias", "./../asset/players/1_mathias.png");
 	this.add("1_mathias_shooting", "./../asset/players/1_mathias_shooting.png");
 	this.add("2_jesper", "./../asset/players/2_jesper.png");
-	this.add("murlocpng", "./../asset/players/murlocpng.png");
-	this.add("Running Danimal", "./../asset/players/Running Danimal.png");
-	this.add("test_player", "./../asset/players/test_player.png");
 	this.add("bullet", "./../asset/projectiles/bullet.png");
 	this.add("zombie_default", "./../asset/zombies/zombie_default.png");
+	this.add("zombie_fast", "./../asset/zombies/zombie_fast.png");
+	this.add("zombie_fat", "./../asset/zombies/zombie_fat.png");
 };

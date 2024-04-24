@@ -13,7 +13,7 @@
  * 
  * Game scene.
  */
-the_final_stand.entity.ZombieDefault = function (x, y, game) {
+the_final_stand.entity.ZombieFat = function (x, y, game) {
 
     //--------------------------------------------------------------------------
     // Super call
@@ -22,7 +22,7 @@ the_final_stand.entity.ZombieDefault = function (x, y, game) {
     /**
      * Calls the constructor method of the super class.
      */
-    the_final_stand.entity.Zombie.call(this, x, y, 60, 60, "zombie_default");
+    the_final_stand.entity.Zombie.call(this, x, y, 60, 60, "zombie_fat");
     this.game = game;
 };
 
@@ -30,8 +30,8 @@ the_final_stand.entity.ZombieDefault = function (x, y, game) {
 // Inheritance
 //------------------------------------------------------------------------------
 
-the_final_stand.entity.ZombieDefault.prototype = Object.create(the_final_stand.entity.Zombie.prototype);
-the_final_stand.entity.ZombieDefault.prototype.constructor = the_final_stand.entity.ZombieDefault;
+the_final_stand.entity.ZombieFat.prototype = Object.create(the_final_stand.entity.Zombie.prototype);
+the_final_stand.entity.ZombieFat.prototype.constructor = the_final_stand.entity.ZombieFat;
 
 //------------------------------------------------------------------------------
 // Override public prototype methods (ENGINE)
@@ -43,10 +43,10 @@ the_final_stand.entity.ZombieDefault.prototype.constructor = the_final_stand.ent
  *
  * @returns {undefined}
  */
-the_final_stand.entity.ZombieDefault.prototype.init = function () {
+the_final_stand.entity.ZombieFat.prototype.init = function () {
     the_final_stand.entity.Zombie.prototype.init.call(this);
 
-    this.zombieDefaultSpeed = 2;
+    this.zombieFatSpeed = 1.2;
 };
 
 /**
@@ -57,7 +57,7 @@ the_final_stand.entity.ZombieDefault.prototype.init = function () {
  *
  * @returns {undefined}
  */
-the_final_stand.entity.ZombieDefault.prototype.update = function (step) {
+the_final_stand.entity.ZombieFat.prototype.update = function (step) {
     the_final_stand.entity.Zombie.prototype.update.call(this, step);
     
 };
@@ -70,12 +70,12 @@ the_final_stand.entity.ZombieDefault.prototype.update = function (step) {
  *
  * @returns {undefined}
  */
-the_final_stand.entity.ZombieDefault.prototype.dispose = function () {
+the_final_stand.entity.ZombieFat.prototype.dispose = function () {
     the_final_stand.entity.Zombie.prototype.dispose.call(this);
 };
 
-the_final_stand.entity.ZombieDefault.prototype.m_initAnimation = function () {
-    this.animation.create("walk", [1, 2, 3, 4, 5], 10, true);
-    this.animation.create("attack", [6, 7], 10, true);
-    this.animation.create("die", [8, 9, 10, 11], 7, false);
+the_final_stand.entity.ZombieFat.prototype.m_initAnimation = function () {
+    this.animation.create("walk", [1, 2, 3, 4], 10, true);
+    this.animation.create("attack", [5, 6], 10, false);
+    this.animation.create("die", [7, 8, 9, 10, 11, 12, 13, 14, 15], 7, false);
 };
