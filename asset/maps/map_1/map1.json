@@ -191,8 +191,20 @@
     2, 2, 2, 2, 2, 2, 2, 2
   ],
   "front": [],
-  "tiles": {
-    "value": 2,
-    "collision": "0x1111"
-  }
+  "tiles": [
+    { "value": 3, "collision": "0x1111" },
+    { "value": 4, "collision": "0x1111" },
+    { "value": 5, "collision": "0x1111" },
+    { "value": 6, "collision": "0x1111" },
+    { "value": 7, "collision": "0x1111" },
+    
+    { "value": 9, "collision": "0x1111" },
+    { "value": 11, "collision": "0x1111" },
+    { "value": 13, "collision": "0x1111" },
+    { "value": 14, "collision": "0x1111" },
+    { "value": 17, "collision": "0x1111" },
+    { "value": 19, "collision": "0x1111" },
+
+    { "value": 24, "collision": "0x1111" }
+  ]
 }

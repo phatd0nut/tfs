@@ -26,6 +26,7 @@ the_final_stand.entity.Zombie = function (x, y, width, height, texture) {
 
 
     this.game = this.application.scenes.selected;
+    this.player = this.game.player;
 };
 
 //------------------------------------------------------------------------------
@@ -59,7 +60,6 @@ the_final_stand.entity.Zombie.prototype.init = function () {
 
     this.m_initAnimation();
     this.m_initHitBox();
-
 };
 
 /**
@@ -74,6 +74,10 @@ the_final_stand.entity.Zombie.prototype.update = function (step) {
     rune.display.Sprite.prototype.update.call(this, step);
     this.m_hitBoxDetection();
     this.m_followPlayers();
+
+    if (this.animation.currentAnimation !== "attack") {
+        this.isAttacking = false;
+    }
 };
 
 /**
@@ -107,6 +111,22 @@ the_final_stand.entity.Zombie.prototype.attack = function () {
     this.isAttacking = true;
     if (this.isAttacking && this.isAlive && this.animation.currentAnimation !== "attack") {
         this.animation.gotoAndPlay("attack");
+
+        // Frame counter för att räkna frames per attack
+        this.frameCounter = (this.frameCounter || 0) + 1;
+
+        // 60 är antalet frames per sekund och 3 är antalet frames per attack
+        if (this.frameCounter >= 60 / 3) {
+            this.player.hp -= this.attackDamage;
+
+        
+            if (this.player.hp < 0) {
+                this.player.playerDead();
+            }
+
+            this.player.hud.updateHp();
+            this.frameCounter -= 60 / 3; // Återställ frameCounter
+        }
     } else {
         this.isAttacking = false;
     }
@@ -133,10 +153,9 @@ the_final_stand.entity.Zombie.prototype.m_followPlayers = function () {
         return;
     }
 
-    var player = this.game.player;
     var path2Player = new rune.util.Path();
     path2Player.add(this.x, this.y); // Lägg till zombiens nuvarande position
-    path2Player.add(player.x, player.y); // Lägg till spelarens position
+    path2Player.add(this.player.x, this.player.y); // Lägg till spelarens position
 
     // Beräkna riktningen till nästa punkt på sökvägen
     var nextPoint = path2Player.getAt(1); // Hämta nästa punkt på sökvägen
@@ -166,7 +185,7 @@ the_final_stand.entity.Zombie.prototype.m_followPlayers = function () {
         this.x += dx * speed;
         this.y += dy * speed;
         this.isMoving = true;
-        if (this.isMoving) {
+        if (this.isMoving && !this.isAttacking) {
             this.animation.gotoAndPlay("walk");
         }
 
