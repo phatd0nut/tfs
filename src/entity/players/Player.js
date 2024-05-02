@@ -25,6 +25,8 @@ the_final_stand.entity.Player = function (x, y, width, height, texture) {
     rune.display.Sprite.call(this, x, y, width, height, texture);
 
     this.game = this.application.scenes.selected;
+
+    this.hp = 100;
 };
 
 //------------------------------------------------------------------------------
@@ -90,7 +92,6 @@ the_final_stand.entity.Player.prototype.m_initPhysics = function () {
 };
 
 the_final_stand.entity.Player.prototype.characterStats = function () {
-    this.hp = 100;
     this.currentWeapon = 'pistol'; // Sätt det initiala vapnet här
     this.ammo = {
         'pistol': Infinity,
@@ -105,8 +106,8 @@ the_final_stand.entity.Player.prototype.characterStats = function () {
 
     this.gunOffsets = {
         'pistol': {
-            x: 5,
-            y: 10.6
+            x: -2,
+            y: 8
         },
         'shotgun': {
             x: 0,
@@ -141,11 +142,12 @@ the_final_stand.entity.Player.prototype.characterStats = function () {
 
 
 the_final_stand.entity.Player.prototype.m_updateInput = function () {
-    var speed = 3; // Hastigheten som spelaren rör sig i
-    var diagonalSpeed = speed * Math.cos(Math.PI / 4); // Hastigheten som spelaren rör sig i diagonala riktningar
-    var isMoving = false; // Kontrollera om spelaren rör sig eller inte
+    var RuneMath = rune.util.Math;
 
-    // Gamepadstyrning
+    var speed = 3;
+    var diagonalSpeed = speed * RuneMath.cos(RuneMath.degreesToRadians(45));
+    var isMoving = false;
+
     var gamepad = this.game.gamepads.get(0);
 
     if (gamepad) {
@@ -153,21 +155,18 @@ the_final_stand.entity.Player.prototype.m_updateInput = function () {
             this.shoot();
         }
         else {
-            // Lägg till en liten tröskelvärde för att bestämma om spaken är i neutral position
             var threshold = 0.1;
             var x = gamepad.m_axesOne.x;
             var y = gamepad.m_axesOne.y;
 
-            if (Math.abs(x) > threshold || Math.abs(y) > threshold) {
-                // Räkna ut rotationen baserat på spakens position
-                this.rotation = Math.atan2(y, x) * (180 / Math.PI) + 90;
-                if (this.rotation < 0) {
-                    this.rotation += 360;
+            if (RuneMath.abs(x) > threshold || RuneMath.abs(y) > threshold) {
+                var rotation = Math.atan2(y, x);
+                if (rotation < 0) {
+                    rotation += 2 * Math.PI;
                 }
+                this.rotation = RuneMath.radiansToDegrees(rotation) + 90;
 
-                // Om knapp 5 inte är nedtryckt, uppdatera positionen
                 if (!gamepad.pressed(5)) {
-                    // Räkna ut den nya positionen baserat på spakens position och hastigheten
                     this.x += x * speed;
                     this.y += y * speed;
 
@@ -255,6 +254,12 @@ the_final_stand.entity.Player.prototype.shoot = function () {
         console.error('HUD is not initialized');
         return;
     }
+};
+
+the_final_stand.entity.Player.prototype.playerDead = function () {
+    this.hp = 0;
+    this.x = this.x; // Keep the player's x position unchanged
+    this.y = this.y; // Keep the player's y position unchanged
 };
 
 // the_final_stand.entity.Player.prototype.onShootEnd = function () {

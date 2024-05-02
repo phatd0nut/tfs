@@ -24,6 +24,9 @@ the_final_stand.entity.ZombieFat = function (x, y, game) {
      */
     the_final_stand.entity.Zombie.call(this, x, y, 60, 60, "zombie_fat");
     this.game = game;
+
+    this.hp = 200;
+    this.attackDamage = 66;
 };
 
 //------------------------------------------------------------------------------
@@ -76,6 +79,6 @@ the_final_stand.entity.ZombieFat.prototype.dispose = function () {
 
 the_final_stand.entity.ZombieFat.prototype.m_initAnimation = function () {
     this.animation.create("walk", [1, 2, 3, 4], 10, true);
-    this.animation.create("attack", [5, 6], 10, false);
+    this.animation.create("attack", [5, 6], 3, true);
     this.animation.create("die", [7, 8, 9, 10, 11, 12, 13, 14, 15], 7, false);
 };

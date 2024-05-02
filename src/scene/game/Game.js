@@ -51,7 +51,6 @@ the_final_stand.scene.Game.prototype.init = function () {
 
     // this.bg = new rune.display.Graphic(0, 0, 1289, 720, "standard_map");
     // this.stage.addChild(this.bg);
-    console.log(this.stage.map);
 
     // this.zombie = new the_final_stand.entity.ZombieDefault(640, 420, this);
     // this.stage.addChild(this.zombie);
@@ -96,6 +95,8 @@ the_final_stand.scene.Game.prototype.init = function () {
 the_final_stand.scene.Game.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
     this.zombieSpawner.update();
+
+    this.player.hitTestAndSeparate(this.stage.map.back);
     
    // Check collision between player and each zombie
    var zombies = this.zombieSpawner.zombies;

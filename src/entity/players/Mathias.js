@@ -23,6 +23,8 @@ the_final_stand.entity.Mathias = function (x, y) {
     * Calls the constructor method of the super class.
     */
    the_final_stand.entity.Player.call(this, x, y, 60, 60, "1_mathias");
+
+   this.charName = "Mathias";
 };
 
 //------------------------------------------------------------------------------
@@ -45,11 +47,7 @@ the_final_stand.entity.Mathias.prototype.constructor = the_final_stand.entity.Ma
 the_final_stand.entity.Mathias.prototype.init = function () {
    the_final_stand.entity.Player.prototype.init.call(this);
 
-   this.characterStats();
-   this.charName = "Mathias";
-
    this.hud = new the_final_stand.hud.PlayerHUD(this);
-   this.hud.render();
 };
 
 /**
@@ -69,6 +67,8 @@ the_final_stand.entity.Mathias.prototype.update = function (step) {
    }
 
    this.m_initPhysics();
+   this.characterStats();
+   this.hud.render();
 };
 
 /**
