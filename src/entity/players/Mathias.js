@@ -47,6 +47,7 @@ the_final_stand.entity.Mathias.prototype.constructor = the_final_stand.entity.Ma
 the_final_stand.entity.Mathias.prototype.init = function () {
    the_final_stand.entity.Player.prototype.init.call(this);
 
+   this.getStarterWep();
    this.hud = new the_final_stand.hud.PlayerHUD(this);
 };
 
@@ -67,7 +68,6 @@ the_final_stand.entity.Mathias.prototype.update = function (step) {
    }
 
    this.m_initPhysics();
-   this.characterStats();
    this.hud.render();
 };
 

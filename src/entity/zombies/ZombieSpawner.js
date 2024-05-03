@@ -1,6 +1,7 @@
 the_final_stand.entity.ZombieSpawner = function(game) {
     this.game = game;
     this.zombies = [];
+    this.zombieTypes = [the_final_stand.entity.ZombieDefault, the_final_stand.entity.ZombieFat, the_final_stand.entity.ZombieFast];
     this.zombiesDead = 0;
     this.totalZombiesInWave = 0;
     this.spawnPoints = [
@@ -49,12 +50,10 @@ the_final_stand.entity.ZombieSpawner.prototype.update = function() {
 the_final_stand.entity.ZombieSpawner.prototype.spawnZombie = function() {
     var point = this.spawnPoints[Math.floor(Math.random() * this.spawnPoints.length)];
 
-    // Array of zombie types
-    var zombieTypes = [the_final_stand.entity.ZombieDefault, the_final_stand.entity.ZombieFat, the_final_stand.entity.ZombieFast];
 
     // Select a random zombie type
-    var index = Math.floor(Math.random() * zombieTypes.length);
-    var ZombieType = zombieTypes[index];
+    var index = Math.floor(Math.random() * this.zombieTypes.length);
+    var ZombieType = this.zombieTypes[index];
 
     // Spawn a new zombie of the selected type
     var zombie = new ZombieType(point.x, point.y, this.game);
@@ -65,8 +64,8 @@ the_final_stand.entity.ZombieSpawner.prototype.spawnZombie = function() {
 
 the_final_stand.entity.ZombieSpawner.prototype.spawnWave = function(waveNumber) {
     var numZombies;
-    if (waveNumber === 1) {
-        numZombies = 25; // Antalet zombies som spawnas första vågen
+    if (waveNumber === 0) {
+        numZombies = 0; // Antalet zombies som spawnas första vågen
     } else {
         numZombies = 25 + Math.pow(2, waveNumber); // Ökar antalet zombies exponentiellt
     }

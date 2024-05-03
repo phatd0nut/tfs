@@ -45,12 +45,16 @@ the_final_stand.scene.Game.prototype.constructor = the_final_stand.scene.Game;
 the_final_stand.scene.Game.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
     this.stage.map.load('map1');
-    this.zombieSpawner = new the_final_stand.entity.ZombieSpawner(this);
-    this.updateCounter = 0;
-    this.activeBullets = [];
+
 
     // this.bg = new rune.display.Graphic(0, 0, 1289, 720, "standard_map");
     // this.stage.addChild(this.bg);
+
+    this.zombieSpawner = new the_final_stand.entity.ZombieSpawner(this);
+    this.updateCounter = 0;
+    // this.activeBullets = [];
+    
+    this.activeBullets = new Set();
 
     // this.zombie = new the_final_stand.entity.ZombieDefault(640, 420, this);
     // this.stage.addChild(this.zombie);
@@ -97,24 +101,24 @@ the_final_stand.scene.Game.prototype.update = function (step) {
     this.zombieSpawner.update();
 
     this.player.hitTestAndSeparate(this.stage.map.back);
-    
-   // Check collision between player and each zombie
-   var zombies = this.zombieSpawner.zombies;
-   for (var i = 0; i < zombies.length; i++) {
-       if (this.player.hitTestAndSeparate(zombies[i])) {
-           zombies[i].attack(); // Call attack method on the zombie
-       }
-   }
 
-    // Check collision between all zombies
+    // Kontrollerar kollision mellan spelaren och zombies
     var zombies = this.zombieSpawner.zombies;
     for (var i = 0; i < zombies.length; i++) {
+        if (this.player.hitTestAndSeparate(zombies[i])) {
+            zombies[i].attack();
+        }
+
+        // Kontrollerar kollision mellan zombies
         for (var j = i + 1; j < zombies.length; j++) {
-            if (zombies[i].hitTestAndSeparate(zombies[j])) {
-                
-            }
+            zombies[i].hitTestAndSeparate(zombies[j]);
         }
     }
+
+    // Uppdatera alla aktiva projektiler
+    this.activeBullets.forEach(function (bullet) {
+        bullet.update();
+    });
 };
 
 

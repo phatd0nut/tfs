@@ -25,8 +25,11 @@ the_final_stand.entity.Player = function (x, y, width, height, texture) {
     rune.display.Sprite.call(this, x, y, width, height, texture);
 
     this.game = this.application.scenes.selected;
+    this.RuneMath = rune.util.Math;
 
     this.hp = 100;
+    this.speed = 3;
+    this.diagonalSpeed = this.speed * this.RuneMath.cos(this.RuneMath.degreesToRadians(45));
 };
 
 //------------------------------------------------------------------------------
@@ -70,6 +73,10 @@ the_final_stand.entity.Player.prototype.update = function (step) {
     this.m_updateInput(step);
     this.hitBox();
 
+    if (this.currentWeapon) {
+        this.currentWeapon.update(step);
+    }
+
     // this.player_shoot.x = this.x;
     // this.player_shoot.y = this.y;
     // this.player_shoot.rotation = this.rotation;
@@ -91,61 +98,20 @@ the_final_stand.entity.Player.prototype.m_initPhysics = function () {
 
 };
 
-the_final_stand.entity.Player.prototype.characterStats = function () {
-    this.currentWeapon = 'pistol'; // Sätt det initiala vapnet här
-    this.ammo = {
-        'pistol': Infinity,
-        'shotgun': 10,
-        'rifle': 30,
-        'grenade': 5,
-        'rocket': 3,
-        'flamethrower': 100,
-        'minigun': 200,
-        'laser': 100
-    };
+the_final_stand.entity.Player.prototype.getStarterWep = function () {
+    this.currentWeapon = new the_final_stand.entity.Pistol(this.stage, this.game);
+};
 
-    this.gunOffsets = {
-        'pistol': {
-            x: -2,
-            y: 8
-        },
-        'shotgun': {
-            x: 0,
-            y: 0
-        },
-        'rifle': {
-            x: 0,
-            y: 0
-        },
-        'grenade': {
-            x: 0,
-            y: 0
-        },
-        'rocket': {
-            x: 0,
-            y: 0
-        },
-        'flamethrower': {
-            x: 0,
-            y: 0
-        },
-        'minigun': {
-            x: 0,
-            y: 0
-        },
-        'laser': {
-            x: 0,
-            y: 0
-        }
-    };
+the_final_stand.entity.Player.prototype.switchWeapon = function(weaponName) {
+    if (this.ammo[weaponName] > 0) {
+        this.currentWeapon = new the_final_stand.entity[weaponName.charAt(0).toUpperCase() + weaponName.slice(1)]();
+    } else {
+        console.log("No ammo for " + weaponName);
+    }
 };
 
 
 the_final_stand.entity.Player.prototype.m_updateInput = function () {
-    var RuneMath = rune.util.Math;
-
-    var speed = 3;
-    var diagonalSpeed = speed * RuneMath.cos(RuneMath.degreesToRadians(45));
     var isMoving = false;
 
     var gamepad = this.game.gamepads.get(0);
@@ -159,16 +125,16 @@ the_final_stand.entity.Player.prototype.m_updateInput = function () {
             var x = gamepad.m_axesOne.x;
             var y = gamepad.m_axesOne.y;
 
-            if (RuneMath.abs(x) > threshold || RuneMath.abs(y) > threshold) {
+            if (this.RuneMath.abs(x) > threshold || this.RuneMath.abs(y) > threshold) {
                 var rotation = Math.atan2(y, x);
                 if (rotation < 0) {
                     rotation += 2 * Math.PI;
                 }
-                this.rotation = RuneMath.radiansToDegrees(rotation) + 90;
+                this.rotation = this.RuneMath.radiansToDegrees(rotation) + 90;
 
                 if (!gamepad.pressed(5)) {
-                    this.x += x * speed;
-                    this.y += y * speed;
+                    this.x += x * this.speed;
+                    this.y += y * this.speed;
 
                     isMoving = true;
                 }
@@ -181,44 +147,43 @@ the_final_stand.entity.Player.prototype.m_updateInput = function () {
         this.shoot();
     }
     else if (this.keyboard.pressed("D") && !this.keyboard.pressed("W") && !this.keyboard.pressed("S")) {
-        this.x += speed;
+        this.x += this.speed;
         this.rotation = 90;
         isMoving = true;
     } else if (this.keyboard.pressed("A") && !this.keyboard.pressed("W") && !this.keyboard.pressed("S")) {
         this.rotation = -90;
-        this.x -= speed;
+        this.x -= this.speed;
         isMoving = true;
     } else if (this.keyboard.pressed("W") && !this.keyboard.pressed("A") && !this.keyboard.pressed("D")) {
         this.rotation = 0;
-        this.y -= speed * this.aspectRatio * Math.cos(Math.PI / 4);
+        this.y -= this.speed * this.aspectRatio * Math.cos(Math.PI / 4);
         isMoving = true;
     } else if (this.keyboard.pressed("S") && !this.keyboard.pressed("A") && !this.keyboard.pressed("D")) {
         this.rotation = 180;
-        this.y += speed * this.aspectRatio * Math.cos(Math.PI / 4);
+        this.y += this.speed * this.aspectRatio * Math.cos(Math.PI / 4);
         isMoving = true;
     } else if (this.keyboard.pressed("W") && this.keyboard.pressed("D")) {
         this.rotation = 45;
-        this.x += diagonalSpeed;
-        this.y -= diagonalSpeed * this.aspectRatio;
+        this.x += this.diagonalSpeed;
+        this.y -= this.diagonalSpeed * this.aspectRatio;
         isMoving = true;
     } else if (this.keyboard.pressed("W") && this.keyboard.pressed("A")) {
         this.rotation = -45;
-        this.x -= diagonalSpeed;
-        this.y -= diagonalSpeed * this.aspectRatio;
+        this.x -= this.diagonalSpeed;
+        this.y -= this.diagonalSpeed * this.aspectRatio;
         isMoving = true;
     } else if (this.keyboard.pressed("S") && this.keyboard.pressed("D")) {
         this.rotation = 135;
-        this.x += diagonalSpeed;
-        this.y += diagonalSpeed * this.aspectRatio;
+        this.x += this.diagonalSpeed;
+        this.y += this.diagonalSpeed * this.aspectRatio;
         isMoving = true;
     } else if (this.keyboard.pressed("S") && this.keyboard.pressed("A")) {
         this.rotation = -135;
-        this.x -= diagonalSpeed;
-        this.y += diagonalSpeed * this.aspectRatio;
+        this.x -= this.diagonalSpeed;
+        this.y += this.diagonalSpeed * this.aspectRatio;
         isMoving = true;
     }
 
-    // console.log(isMoving);
     if (!isMoving) {
         this.animation.gotoAndPlay("idle");
     } else {
@@ -228,25 +193,18 @@ the_final_stand.entity.Player.prototype.m_updateInput = function () {
 };
 
 the_final_stand.entity.Player.prototype.shoot = function () {
-    this.ammo[this.currentWeapon]--;
     var radian = (this.rotation - 90) * Math.PI / 180;
-    var gunOffsetX = this.gunOffsets[this.currentWeapon].x;
-    var gunOffsetY = this.gunOffsets[this.currentWeapon].y;
-
-
-
-    // Spela upp player_shoot animationen
-    // this.player_shoot.animation.gotoAndPlay("shoot");
-    // this.player_shoot.visible = true;
+    var gunOffsetX = this.currentWeapon.offsetX;
+    var gunOffsetY = this.currentWeapon.offsetY;
 
     // Rotera offseten
     var rotatedOffsetX = gunOffsetX * Math.cos(radian) - gunOffsetY * Math.sin(radian);
     var rotatedOffsetY = gunOffsetX * Math.sin(radian) + gunOffsetY * Math.cos(radian);
     var x = this.x + this.width / 2 + Math.cos(radian) * this.width / 2 + rotatedOffsetX;
     var y = this.y + this.height / 2 + Math.sin(radian) * this.height / 2 + rotatedOffsetY;
-    var projectile = new the_final_stand.entity.Projectile(x, y, radian, this.game);
-    this.stage.addChild(projectile);
-    this.game.activeBullets.push(projectile);
+
+    // Anropa fire metoden i currentWeapon objektet (Weapon.js metod)
+    this.currentWeapon.fire(x, y, radian, this.rotation);
 
     if (this.hud) {
         this.hud.updateAmmo();
@@ -258,8 +216,8 @@ the_final_stand.entity.Player.prototype.shoot = function () {
 
 the_final_stand.entity.Player.prototype.playerDead = function () {
     this.hp = 0;
-    this.x = this.x; // Keep the player's x position unchanged
-    this.y = this.y; // Keep the player's y position unchanged
+    this.x = this.x;
+    this.y = this.y; 
 };
 
 // the_final_stand.entity.Player.prototype.onShootEnd = function () {
