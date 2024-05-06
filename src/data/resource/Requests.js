@@ -43,12 +43,16 @@ the_final_stand.data.Requests.prototype.constructor = the_final_stand.data.Reque
  */
 the_final_stand.data.Requests.prototype.m_construct = function() {
     rune.resource.Requests.prototype.m_construct.call(this);
-    this.add("Map1-tilest", "./../asset/maps/map_1/Map1-tilest.png");
+    this.add("pistol", "./../asset/audio/guns/pistol.mp3");
+	this.add("Map1-tilest", "./../asset/maps/map_1/Map1-tilest.png");
 	this.add("map1", "./../asset/maps/map_1/map1.json");
-	this.add("standard_map", "./../asset/maps/standard_map.png");
+	this.add("map2", "./../asset/maps/map_2/map2.json");
+	this.add("Newmap2", "./../asset/maps/map_2/Newmap2.png");
+	this.add("test_map", "./../asset/maps/test_map.png");
 	this.add("1_mathias", "./../asset/players/1_mathias.png");
 	this.add("1_mathias_shooting", "./../asset/players/1_mathias_shooting.png");
 	this.add("2_jesper", "./../asset/players/2_jesper.png");
+	this.add("3_enor", "./../asset/players/3_enor.png");
 	this.add("bullet", "./../asset/projectiles/bullet.png");
 	this.add("bullet12x12", "./../asset/projectiles/bullet12x12.png");
 	this.add("bullet6x6", "./../asset/projectiles/bullet6x6.png");

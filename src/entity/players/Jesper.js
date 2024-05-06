@@ -13,7 +13,7 @@
  * 
  * Game scene.
  */
-the_final_stand.entity.Jesper = function (x, y) {
+the_final_stand.entity.Jesper = function (x, y, game, gamepadIndex) {
 
    //--------------------------------------------------------------------------
    // Super call
@@ -22,7 +22,11 @@ the_final_stand.entity.Jesper = function (x, y) {
    /**
     * Calls the constructor method of the super class.
     */
-   the_final_stand.entity.Player.call(this, x, y, 48, 48, "2_jesper");
+   the_final_stand.entity.Player.call(this, x, y, 60, 60, "2_jesper");
+
+   this.charName = "Jesper";
+   this.game = game;
+   this.gamepadIndex = gamepadIndex;
 };
 
 //------------------------------------------------------------------------------
@@ -45,10 +49,9 @@ the_final_stand.entity.Jesper.prototype.constructor = the_final_stand.entity.Jes
 the_final_stand.entity.Jesper.prototype.init = function () {
    the_final_stand.entity.Player.prototype.init.call(this);
 
-   this.m_initAnimation();
-   this.characterStats();
-   this.charName = "Jesper";
-
+   // this.getStarterWep();
+   // this.hud = new the_final_stand.hud.PlayerHUD(this);
+   // this.hud.render();
 };
 
 /**
@@ -78,12 +81,11 @@ the_final_stand.entity.Jesper.prototype.dispose = function () {
    the_final_stand.entity.Player.prototype.dispose.call(this);
 };
 
-
 the_final_stand.entity.Jesper.prototype.m_initAnimation = function () {
-   this.animation.create("idle", [0], 10, true);
-   this.animation.create("run", [1, 2, 3, 4, 5], 10, true);
+   this.animation.create("idle", [1], 10, true);
+   this.animation.create("run", [2, 3, 4, 5], 10, true);
 
-   // this.player_shoot = new rune.display.Sprite(this.x, this.y, 64, 64, '1_mathias_shooting');
+   // this.player_shoot = new rune.display.Sprite(this.x, this.y, 64, 64, '1_Jesper_shooting');
 
    // this.player_shoot.animation.create("shoot", [0, 1, 2], 10, false);
    // this.stage.addChild(this.player_shoot);

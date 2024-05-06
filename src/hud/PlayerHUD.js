@@ -1,5 +1,7 @@
-the_final_stand.hud.PlayerHUD = function(player) {
+the_final_stand.hud.PlayerHUD = function(player, playerArray, index) {
     this.player = player;
+    this.players = playerArray;
+    this.index = index;
     this.ammoText = null;
     this.hpText = null;
 };
@@ -14,17 +16,22 @@ the_final_stand.hud.PlayerHUD.prototype.createBitmapField = function(text, x, y)
 };
 
 the_final_stand.hud.PlayerHUD.prototype.render = function() {
-    var charName = this.createBitmapField(this.player.charName, 10, 30);
+    var hudWidth = 250; // Ändra detta till bredden på din HUD
+    var hudSpacing = 20; // Ändra detta till det utrymme du vill ha mellan varje HUD
+
+    var xOffset = this.index * (hudWidth + hudSpacing);
+
+    var charName = this.createBitmapField(this.player.charName, 10 + xOffset, 30);
     this.player.stage.addChild(charName);
 
     if (this.hpText) {
         this.player.stage.removeChild(this.hpText);
     }
 
-    this.hpText = this.createBitmapField("HP: " + this.player.hp, 10, 90);
+    this.hpText = this.createBitmapField("HP: " + this.player.hp, 10 + xOffset, 90);
     this.player.stage.addChild(this.hpText);
 
-    this.ammoText = this.createBitmapField("Ammo: " + this.player.currentWeapon.ammo, 10, 60);
+    this.ammoText = this.createBitmapField("Ammo: " + this.player.currentWeapon.ammo, 10 + xOffset, 60);
     this.player.stage.addChild(this.ammoText);
 };
 

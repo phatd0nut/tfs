@@ -36,7 +36,7 @@ the_final_stand.entity.ZombieFat.prototype = Object.create(the_final_stand.entit
 the_final_stand.entity.ZombieFat.prototype.constructor = the_final_stand.entity.ZombieFat;
 
 the_final_stand.entity.ZombieFat.prototype.attackDamage = 66;
-the_final_stand.entity.ZombieFat.prototype.zombieFatSpeed = 1.2;
+the_final_stand.entity.ZombieFat.prototype.speed = 1.2;
 
 //------------------------------------------------------------------------------
 // Override public prototype methods (ENGINE)

@@ -59,6 +59,10 @@ the_final_stand.entity.Zombie.prototype.init = function () {
     this.heightY = 720;
     this.aspectRatio = this.widthX / this.heightY;
 
+    this.directionChangeTimer = 0;
+    this.dxDeviation = 0;
+    this.dyDeviation = 0;
+
     this.m_initAnimation();
     this.m_initHitBox();
 };
@@ -94,6 +98,7 @@ the_final_stand.entity.Zombie.prototype.update = function (step) {
  *
  * @returns {undefined}
  */
+
 the_final_stand.entity.Zombie.prototype.dispose = function () {
     rune.display.Sprite.prototype.dispose.call(this);
 };
@@ -161,47 +166,66 @@ the_final_stand.entity.Zombie.prototype.die = function (bullet) {
     this.game.zombieSpawner.killedZombies(this);
 };
 
+
 the_final_stand.entity.Zombie.prototype.m_followPlayers = function () {
     if (!this.isAlive) {
         return;
     }
 
-    var path2Player = new rune.util.Path();
-    path2Player.add(this.x, this.y);
-    path2Player.add(this.player.x, this.player.y);
+    var closestPlayer = null;
+    var closestDistance = Infinity;
 
-    var nextPoint = path2Player.getAt(1);
-    if (nextPoint) {
-        var dx = nextPoint.x - this.x;
-        var dy = nextPoint.y - this.y;
+    // Loopa igenom alla spelare och hitta den närmaste spelaren
+    for (var i = 0; i < this.game.players.length; i++) {
+        var player = this.game.players[i];
+        var dx = player.x - this.x;
+        var dy = player.y - this.y;
         var distanceSquared = dx * dx + dy * dy;
 
-        if (distanceSquared > 0) {
-            var distance = Math.sqrt(distanceSquared);
-            dx /= distance;
-            dy /= distance;
+        if (distanceSquared < closestDistance) {
+            closestDistance = distanceSquared;
+            closestPlayer = player;
+        }
+    }
+
+    if (closestPlayer) {
+        var dx = closestPlayer.x - this.x;
+        var dy = closestPlayer.y - this.y;
+        var distance = Math.sqrt(dx * dx + dy * dy);
+        dx /= distance;
+        dy /= distance;
+
+        // Om zombien är inom 150 pixlar från spelaren, rör sig zombien mot spelaren
+        if (distance <= 150) {
+            this.dxDeviation = dx;
+            this.dyDeviation = dy;
+        } else {
+            if (this.directionChangeTimer <= 0) {
+                // Om zombien är längre bort än 150 pixlar från spelaren, slumpa en ny riktning att röra sig i
+                this.dxDeviation = dx + (Math.random() - 0.5) * 0.6;
+                this.dyDeviation = dy + (Math.random() - 0.5) * 0.6;
+                this.directionChangeTimer = 120;  // Ändra riktning var 2 sekunder (120 frames)
+            } else {
+                this.directionChangeTimer--;
+            }
         }
 
-        var speed;
-        switch (this.constructor) {
-            case the_final_stand.entity.ZombieFat:
-                speed = this.zombieFatSpeed;
-                break;
-            case the_final_stand.entity.ZombieFast:
-                speed = this.zombieFastSpeed;
-                break;
-            default:
-                speed = this.zombieDefaultSpeed;
-        }
+        // Skapar en mjukare rörelse när zombien följer spelaren genom att använda en linjär interpolation (lerp) för att röra sig mot spelaren
+        dx = this.dxDeviation * 0.9 + dx * 0.1;
+        dy = this.dyDeviation * 0.9 + dy * 0.1;
 
-        this.x += dx * speed;
-        this.y += dy * speed;
-        this.isMoving = true;
-        if (!this.isAttacking) {
-            this.animation.gotoAndPlay("walk");
-        }
+        // Normaliserar zombiernas hastighet så att de rör sig lika snabbt oavsett avståndet till spelaren
+        var directionMagnitude = Math.sqrt(dx * dx + dy * dy);
+        dx /= directionMagnitude;
+        dy /= directionMagnitude;
 
+        // Rör zombien i riktningen mot spelaren
+        this.x += dx * this.speed;
+        this.y += dy * this.speed;
+
+        // Roterar zombien åt det håll den rör sig
         var angle = Math.atan2(dy, dx);
         this.rotation = angle * (180 / Math.PI) - 270;
     }
 };
+

@@ -24,7 +24,7 @@ the_final_stand.entity.Player = function (x, y, width, height, texture) {
      */
     rune.display.Sprite.call(this, x, y, width, height, texture);
 
-    this.game = this.application.scenes.selected;
+    // this.game = this.application.scenes.selected;
     this.RuneMath = rune.util.Math;
 
     this.hp = 100;
@@ -57,6 +57,9 @@ the_final_stand.entity.Player.prototype.init = function () {
     this.aspectRatio = this.widthX / this.heightY;
 
     this.m_initAnimation();
+    this.getStarterWep();
+    this.hud = new the_final_stand.hud.PlayerHUD(this, this.game.players, this.game.players.indexOf(this));
+    this.hud.render();
 };
 
 /**
@@ -113,8 +116,7 @@ the_final_stand.entity.Player.prototype.switchWeapon = function(weaponName) {
 
 the_final_stand.entity.Player.prototype.m_updateInput = function () {
     var isMoving = false;
-
-    var gamepad = this.game.gamepads.get(0);
+    var gamepad = this.game.gamepads.get(this.gamepadIndex);
 
     if (gamepad) {
         if (gamepad.justPressed(2)) {
