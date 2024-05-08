@@ -1,5 +1,5 @@
 the_final_stand.entity.Pistol = function(stage, game) {
-    the_final_stand.entity.Weapon.call(this, "Pistol", Infinity, -2, 8, stage, game);
+    the_final_stand.entity.Weapon.call(this, "Pistol", Infinity, -2, 8, stage, game, false);
     this.weaponType = 'pistol';
     this.weaponDamage = 29;
     this.fireRate = 180;

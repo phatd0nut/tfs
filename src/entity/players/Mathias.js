@@ -22,7 +22,7 @@ the_final_stand.entity.Mathias = function (x, y, game, gamepadIndex) {
    /**
     * Calls the constructor method of the super class.
     */
-   the_final_stand.entity.Player.call(this, x, y, 60, 60, "1_mathias");
+   the_final_stand.entity.Player.call(this, x, y, 60, 60, "1_mathias_pistol_60x60");
 
    this.charName = "Mathias";
    this.game = game;
@@ -49,9 +49,6 @@ the_final_stand.entity.Mathias.prototype.constructor = the_final_stand.entity.Ma
 the_final_stand.entity.Mathias.prototype.init = function () {
    the_final_stand.entity.Player.prototype.init.call(this);
 
-   // this.getStarterWep();
-   // this.hud = new the_final_stand.hud.PlayerHUD(this);
-   // this.hud.render();
 };
 
 /**
@@ -82,14 +79,6 @@ the_final_stand.entity.Mathias.prototype.dispose = function () {
 };
 
 the_final_stand.entity.Mathias.prototype.m_initAnimation = function () {
-   this.animation.create("idle", [1], 10, true);
-   this.animation.create("run", [2, 3, 4, 5], 10, true);
-
-   // this.player_shoot = new rune.display.Sprite(this.x, this.y, 64, 64, '1_mathias_shooting');
-
-   // this.player_shoot.animation.create("shoot", [0, 1, 2], 10, false);
-   // this.stage.addChild(this.player_shoot);
-   // this.player_shoot.visible = false;
-
-   // this.player_shoot.animation.find("shoot").scripts.add(2, this.onShootEnd, this);
+   this.animation.create("idle", [0], 10, true);
+   this.animation.create("run", [1, 2, 3, 4], 10, true);
 };

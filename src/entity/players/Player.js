@@ -79,10 +79,6 @@ the_final_stand.entity.Player.prototype.update = function (step) {
     if (this.currentWeapon) {
         this.currentWeapon.update(step);
     }
-
-    // this.player_shoot.x = this.x;
-    // this.player_shoot.y = this.y;
-    // this.player_shoot.rotation = this.rotation;
 };
 
 /**
@@ -119,33 +115,44 @@ the_final_stand.entity.Player.prototype.m_updateInput = function () {
     var gamepad = this.game.gamepads.get(this.gamepadIndex);
 
     if (gamepad) {
-        if (gamepad.justPressed(2)) {
+        if (gamepad.justPressed(2) || (this.currentWeapon.isAutomatic && gamepad.pressed(2))) {
             this.shoot();
         }
-        else {
-            var threshold = 0.1;
-            var x = gamepad.m_axesOne.x;
-            var y = gamepad.m_axesOne.y;
 
-            if (this.RuneMath.abs(x) > threshold || this.RuneMath.abs(y) > threshold) {
-                var rotation = Math.atan2(y, x);
-                if (rotation < 0) {
-                    rotation += 2 * Math.PI;
-                }
-                this.rotation = this.RuneMath.radiansToDegrees(rotation) + 90;
+        var threshold = 0.1;
+        var x = gamepad.m_axesOne.x;
+        var y = gamepad.m_axesOne.y;
 
-                if (!gamepad.pressed(5)) {
-                    this.x += x * this.speed;
-                    this.y += y * this.speed;
+        if (this.RuneMath.abs(x) > threshold || this.RuneMath.abs(y) > threshold) {
+            var rotation = Math.atan2(y, x);
+            if (rotation < 0) {
+                rotation += 2 * Math.PI;
+            }
+            this.rotation = this.RuneMath.radiansToDegrees(rotation) + 90;
 
-                    isMoving = true;
-                }
+            if (!gamepad.pressed(5)) {
+                this.x += x * this.speed;
+                this.y += y * this.speed;
+
+                isMoving = true;
             }
         }
     }
 
-    // Tangentbordsstyrning
-    if (this.keyboard.justPressed("SPACE")) {
+    // this.m_keyboardInput(); // För testning
+
+    if (!isMoving) {
+        this.animation.gotoAndPlay("idle");
+    } else {
+        this.animation.gotoAndPlay("run");
+    }
+
+
+};
+
+the_final_stand.entity.Player.prototype.m_keyboardInput = function () {
+       // Tangentbordsstyrning
+       if (this.keyboard.justPressed("SPACE")) {
         this.shoot();
     }
     else if (this.keyboard.pressed("D") && !this.keyboard.pressed("W") && !this.keyboard.pressed("S")) {
@@ -185,13 +192,6 @@ the_final_stand.entity.Player.prototype.m_updateInput = function () {
         this.y += this.diagonalSpeed * this.aspectRatio;
         isMoving = true;
     }
-
-    if (!isMoving) {
-        this.animation.gotoAndPlay("idle");
-    } else {
-        this.animation.gotoAndPlay("run");
-    }
-
 };
 
 the_final_stand.entity.Player.prototype.shoot = function () {
@@ -230,4 +230,4 @@ the_final_stand.entity.Player.prototype.playerDead = function () {
 the_final_stand.entity.Player.prototype.hitBox = function () {
     this.hitbox.set(20, 12, this.width - 40, this.height - 30);
     this.hitbox.debug = true;
-}
+};

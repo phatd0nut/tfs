@@ -1,7 +1,8 @@
-the_final_stand.entity.Weapon = function (name, ammo, offsetX, offsetY, stage, game) {
+the_final_stand.entity.Weapon = function (name, ammo, offsetX, offsetY, stage, game, isAutomatic) {
     this.name = name;
     this.ammo = ammo;
     this.weaponType = '';
+    this.isAutomatic = isAutomatic;
     this.weaponDamage = null;
     this.bulletSpread = 0;
     this.fireRate = 0;

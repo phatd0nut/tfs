@@ -60,7 +60,8 @@ the_final_stand.scene.Game.prototype.init = function () {
 
     this.players = [];
     // this.players.push(this.player, this.player2, this.player3);
-    this.players.push(this.player, this.player2);
+    // this.players.push(this.player, this.player2);
+    this.players.push(this.player);
     for (var i = 0; i < this.players.length; i++) {
         this.stage.addChild(this.players[i]);
     }
@@ -89,10 +90,8 @@ the_final_stand.scene.Game.prototype.update = function (step) {
             zombies[i].hitTestAndSeparate(this.stage.map.back);
 
             if (player.hitTestAndSeparate(zombies[i])) {
-                zombies[i].attack();
+                zombies[i].doDamage();
             }
-
-            
 
             // Kontrollerar kollision mellan zombies
             for (var j = i + 1; j < zombies.length; j++) {
