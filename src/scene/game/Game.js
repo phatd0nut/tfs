@@ -44,44 +44,27 @@ the_final_stand.scene.Game.prototype.constructor = the_final_stand.scene.Game;
  */
 the_final_stand.scene.Game.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
-    this.stage.map.load('map1');
-    this.zombieSpawner = new the_final_stand.entity.ZombieSpawner(this);
-    this.updateCounter = 0;
-    this.activeBullets = [];
+    this.stage.map.load('map2');
 
     // this.bg = new rune.display.Graphic(0, 0, 1289, 720, "standard_map");
     // this.stage.addChild(this.bg);
 
-    // this.zombie = new the_final_stand.entity.ZombieDefault(640, 420, this);
-    // this.stage.addChild(this.zombie);
+    this.zombieSpawner = new the_final_stand.entity.ZombieSpawner(this);
+    this.updateCounter = 0;
 
-    this.player = new the_final_stand.entity.Mathias(640, 360, this, this.gamepads.get(0));
-    this.stage.addChild(this.player);
+    this.activeBullets = new Set();
 
-    // this.player2 = new the_final_stand.entity.Jesper(640, 300, this, this.gamepads.get(1));
-    // this.stage.addChild(this.player2);
+    this.player = new the_final_stand.entity.Mathias(500, 345, this, 0);
+    this.player2 = new the_final_stand.entity.Jesper(716, 345, this, 1);
+    this.player3 = new the_final_stand.entity.Enor(608, 420, this, 2);
 
-
-    // this.player2 = new the_final_stand.entity.Jesper(150, 112);
-    // this.stage.addChild(this.player2);
-
-
-    // Create a new instance of PlayerHUD
-    // this.playerHUD1 = new the_final_stand.hud.PlayerHUD(this.player);
-    // var hudTexts1 = this.playerHUD1.render();
-    // this.stage.addChild(hudTexts1.charName);
-    // this.stage.addChild(hudTexts1.hpText);
-    // this.stage.addChild(hudTexts1.ammoText);
-
-    // this.playerHUD2 = new the_final_stand.hud.PlayerHUD(this.player2);
-    // var hudTexts2 = this.playerHUD2.render();
-    // this.stage.addChild(hudTexts2.charName);
-    // this.stage.addChild(hudTexts2.hpText);
-    // this.stage.addChild(hudTexts2.ammoText);
-
-    // hudTexts2.charName.x = 150;
-    // hudTexts2.hpText.x = 150;
-    // hudTexts2.ammoText.x = 150;
+    this.players = [];
+    // this.players.push(this.player, this.player2, this.player3);
+    // this.players.push(this.player, this.player2);
+    this.players.push(this.player);
+    for (var i = 0; i < this.players.length; i++) {
+        this.stage.addChild(this.players[i]);
+    }
 };
 
 /**
@@ -92,29 +75,40 @@ the_final_stand.scene.Game.prototype.init = function () {
  *
  * @returns {undefined}
  */
+
 the_final_stand.scene.Game.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
     this.zombieSpawner.update();
 
-    this.player.hitTestAndSeparate(this.stage.map.back);
-    
-   // Check collision between player and each zombie
-   var zombies = this.zombieSpawner.zombies;
-   for (var i = 0; i < zombies.length; i++) {
-       if (this.player.hitTestAndSeparate(zombies[i])) {
-           zombies[i].attack(); // Call attack method on the zombie
-       }
-   }
-
-    // Check collision between all zombies
+    // Kontrollerar kollision mellan alla spelare och zombies
     var zombies = this.zombieSpawner.zombies;
-    for (var i = 0; i < zombies.length; i++) {
-        for (var j = i + 1; j < zombies.length; j++) {
-            if (zombies[i].hitTestAndSeparate(zombies[j])) {
-                
+    for (var p = 0; p < this.players.length; p++) {
+        var player = this.players[p];
+        player.hitTestAndSeparate(this.stage.map.back);
+
+        for (var i = 0; i < zombies.length; i++) {
+            zombies[i].hitTestAndSeparate(this.stage.map.back);
+
+            if (player.hitTestAndSeparate(zombies[i])) {
+                zombies[i].doDamage();
+            }
+
+            // Kontrollerar kollision mellan zombies
+            for (var j = i + 1; j < zombies.length; j++) {
+                zombies[i].hitTestAndSeparate(zombies[j]);
             }
         }
+
+        // Kontrollerar kollision mellan spelare
+        for (var q = p + 1; q < this.players.length; q++) {
+            player.hitTestAndSeparate(this.players[q]);
+        }
     }
+
+    // Uppdatera alla aktiva projektiler
+    this.activeBullets.forEach(function (bullet) {
+        bullet.update();
+    });
 };
 
 

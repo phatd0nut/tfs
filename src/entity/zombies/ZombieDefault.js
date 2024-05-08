@@ -26,7 +26,6 @@ the_final_stand.entity.ZombieDefault = function (x, y, game) {
     this.game = game;
 
     this.hp = 100;
-    this.attackDamage = 33;
 };
 
 //------------------------------------------------------------------------------
@@ -35,6 +34,9 @@ the_final_stand.entity.ZombieDefault = function (x, y, game) {
 
 the_final_stand.entity.ZombieDefault.prototype = Object.create(the_final_stand.entity.Zombie.prototype);
 the_final_stand.entity.ZombieDefault.prototype.constructor = the_final_stand.entity.ZombieDefault;
+
+the_final_stand.entity.ZombieDefault.prototype.attackDamage = 33;
+the_final_stand.entity.ZombieDefault.prototype.speed = 2;
 
 //------------------------------------------------------------------------------
 // Override public prototype methods (ENGINE)
@@ -48,8 +50,6 @@ the_final_stand.entity.ZombieDefault.prototype.constructor = the_final_stand.ent
  */
 the_final_stand.entity.ZombieDefault.prototype.init = function () {
     the_final_stand.entity.Zombie.prototype.init.call(this);
-
-    this.zombieDefaultSpeed = 2;
 };
 
 /**

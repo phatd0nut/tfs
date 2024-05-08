@@ -27,6 +27,7 @@ the_final_stand.entity.Zombie = function (x, y, width, height, texture) {
 
     this.game = this.application.scenes.selected;
     this.player = this.game.player;
+    this.aabb = new AABB(this.x, this.y, width, height);
 };
 
 //------------------------------------------------------------------------------
@@ -58,6 +59,10 @@ the_final_stand.entity.Zombie.prototype.init = function () {
     this.heightY = 720;
     this.aspectRatio = this.widthX / this.heightY;
 
+    this.directionChangeTimer = 0;
+    this.dxDeviation = 0;
+    this.dyDeviation = 0;
+
     this.m_initAnimation();
     this.m_initHitBox();
 };
@@ -72,12 +77,18 @@ the_final_stand.entity.Zombie.prototype.init = function () {
  */
 the_final_stand.entity.Zombie.prototype.update = function (step) {
     rune.display.Sprite.prototype.update.call(this, step);
+    this.bulletHasCollided = false;
     this.m_hitBoxDetection();
     this.m_followPlayers();
 
-    if (this.animation.currentAnimation !== "attack") {
-        this.isAttacking = false;
-    }
+    // Uppdatera aabb
+    this.aabb.x = this.x;
+    this.aabb.y = this.y;
+
+    var dx = this.player.x - this.x;
+    var dy = this.player.y - this.y;
+    this.distance = Math.sqrt(dx * dx + dy * dy);
+    this.attack();
 };
 
 /**
@@ -88,6 +99,7 @@ the_final_stand.entity.Zombie.prototype.update = function (step) {
  *
  * @returns {undefined}
  */
+
 the_final_stand.entity.Zombie.prototype.dispose = function () {
     rune.display.Sprite.prototype.dispose.call(this);
 };
@@ -95,102 +107,136 @@ the_final_stand.entity.Zombie.prototype.dispose = function () {
 the_final_stand.entity.Zombie.prototype.m_initHitBox = function () {
     this.hitbox.set(20, 12, this.width - 40, this.height - 30);
     this.hitbox.debug = true;
-    // this.registerHit = new hitTest(this.hitbox, this.hitBoxDetection, this);
 };
 
 the_final_stand.entity.Zombie.prototype.m_hitBoxDetection = function () {
-    if (this.isAlive) {
-        for (var i = 0; i < this.game.activeBullets.length; i++) {
-            var bullets = this.game.activeBullets[i];
-            bullets.hitTest(this, this.die.bind(this, bullets), this);
+    if (this.isAlive && !this.bulletHasCollided) {
+        for (let bullets of this.game.activeBullets) {
+            var bulletAABB = bullets.aabb;
+
+            if (this.aabb.intersects(bulletAABB)) {
+                this.bulletHasCollided = true;
+
+                bullets.dispose();
+                this.game.activeBullets.delete(bullets);
+
+                this.hp -= bullets.damage;
+                if (this.hp <= 0) {
+                    this.die();
+                }
+
+                break;
+            }
         }
     }
 };
 
 the_final_stand.entity.Zombie.prototype.attack = function () {
-    this.isAttacking = true;
-    if (this.isAttacking && this.isAlive && this.animation.currentAnimation !== "attack") {
-        this.animation.gotoAndPlay("attack");
-
-        // Frame counter för att räkna frames per attack
-        this.frameCounter = (this.frameCounter || 0) + 1;
-
-        // 60 är antalet frames per sekund och 3 är antalet frames per attack
-        if (this.frameCounter >= 60 / 3) {
-            this.player.hp -= this.attackDamage;
-
-        
-            if (this.player.hp < 0) {
-                this.player.playerDead();
-            }
-
-            this.player.hud.updateHp();
-            this.frameCounter -= 60 / 3; // Återställ frameCounter
+    if (this.isAlive && this.distance <= 150) {
+        if (this.animation.currentAnimation !== "attack") {
+            this.isAttacking = true;
+            this.animation.gotoAndPlay("attack");
         }
     } else {
         this.isAttacking = false;
+        if (!this.isAttacking && this.isAlive && this.animation.currentAnimation !== "walk") {
+            this.animation.gotoAndPlay("walk"); // stop the attack animation
+        }
     }
 };
 
-the_final_stand.entity.Zombie.prototype.die = function (bullet) {
-    var index = this.game.activeBullets.indexOf(bullet);
-    if (index !== -1) {
-        bullet.dispose();
+the_final_stand.entity.Zombie.prototype.doDamage = function () {
+    // Frame counter för att räkna frames per attack
+    this.frameCounter = (this.frameCounter || 0) + 1;
+
+    // 60 är antalet frames per sekund och 3 är antalet frames per attack
+    if (this.frameCounter >= 60 / 3) {
+        this.player.hp -= this.attackDamage;
+
+        if (this.player.hp < 0) {
+            this.player.playerDead();
+        }
+
+        this.player.hud.updateHp();
+        this.frameCounter -= 60 / 3; // Återställ frameCounter
     }
+};
+
+the_final_stand.entity.Zombie.prototype.die = function () {
+    if (!this.isAlive) {
+        return;
+    }
+
     this.isAlive = false;
     this.isMoving = false;
     this.isAttacking = false;
+    console.log('Zombie died');
 
-    this.animation.gotoAndPlay("die");
+    if (this.animation.currentAnimation !== "die") {
+        this.animation.gotoAndPlay("die");
+    }
 
     // Anropa killZombie metoden i ZombieSpawner klassen
     this.game.zombieSpawner.killedZombies(this);
 };
 
+
 the_final_stand.entity.Zombie.prototype.m_followPlayers = function () {
-    // Om zombien inte är vid liv, gör ingenting
     if (!this.isAlive) {
         return;
     }
 
-    var path2Player = new rune.util.Path();
-    path2Player.add(this.x, this.y); // Lägg till zombiens nuvarande position
-    path2Player.add(this.player.x, this.player.y); // Lägg till spelarens position
+    var closestPlayer = null;
+    var closestDistance = Infinity;
 
-    // Beräkna riktningen till nästa punkt på sökvägen
-    var nextPoint = path2Player.getAt(1); // Hämta nästa punkt på sökvägen
-    if (nextPoint) {
-        var dx = nextPoint.x - this.x;
-        var dy = nextPoint.y - this.y;
+    // Loopa igenom alla spelare och hitta den närmaste spelaren
+    for (var i = 0; i < this.game.players.length; i++) {
+        var player = this.game.players[i];
+        var dx = player.x - this.x;
+        var dy = player.y - this.y;
+        var distanceSquared = dx * dx + dy * dy;
+
+        if (distanceSquared < closestDistance) {
+            closestDistance = distanceSquared;
+            closestPlayer = player;
+        }
+    }
+
+    if (closestPlayer) {
+        var dx = closestPlayer.x - this.x;
+        var dy = closestPlayer.y - this.y;
         var distance = Math.sqrt(dx * dx + dy * dy);
+        dx /= distance;
+        dy /= distance;
 
-        // Normalisera riktningen
-        if (distance > 0) {
-            dx /= distance;
-            dy /= distance;
-        }
-
-        // Flytta zombien mot nästa punkt med en viss hastighet
-        // Determine the zombie's speed
-        var speed;
-        if (this instanceof the_final_stand.entity.ZombieFat) {
-            speed = this.zombieFatSpeed;
-        } else if (this instanceof the_final_stand.entity.ZombieFast) {
-            speed = this.zombieFastSpeed;
+        // Om zombien är längre bort än 150 pixlar från spelaren, slumpa en ny riktning att röra sig i
+        if (distance > 150 && this.directionChangeTimer <= 0) {
+            this.dxDeviation = dx + (Math.random() - 0.5) * 0.6;
+            this.dyDeviation = dy + (Math.random() - 0.5) * 0.6;
+            this.directionChangeTimer = 120;  // Ändra riktning var 2 sekunder (120 frames)
+        } else if (distance <= 150) {
+            this.dxDeviation = dx;
+            this.dyDeviation = dy;
         } else {
-            speed = this.zombieDefaultSpeed;
+            this.directionChangeTimer--;
         }
 
-        // Use the determined speed to move the zombie
-        this.x += dx * speed;
-        this.y += dy * speed;
-        this.isMoving = true;
-        if (this.isMoving && !this.isAttacking) {
-            this.animation.gotoAndPlay("walk");
-        }
+        // Skapar en mjukare rörelse när zombien följer spelaren genom att använda en linjär interpolation (lerp) för att röra sig mot spelaren
+        dx = this.dxDeviation * 0.9 + dx * 0.1;
+        dy = this.dyDeviation * 0.9 + dy * 0.1;
 
-        // Ändra zombiens rotation baserat på riktningen den rör sig mot
+        // Normaliserar zombiernas hastighet så att de rör sig lika snabbt oavsett avståndet till spelaren
+        var directionMagnitude = Math.sqrt(dx * dx + dy * dy);
+        dx /= directionMagnitude;
+        dy /= directionMagnitude;
+
+        // Rör zombien i riktningen mot spelaren
+        this.x += dx * this.speed;
+        this.y += dy * this.speed;
+
+        // Roterar zombien åt det håll den rör sig
         var angle = Math.atan2(dy, dx);
-        this.rotation = angle * (180 / Math.PI) - 270; // Konvertera till grader
+        this.rotation = angle * (180 / Math.PI) - 270;
     }
 };
+
