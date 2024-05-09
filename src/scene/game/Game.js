@@ -60,10 +60,11 @@ the_final_stand.scene.Game.prototype.init = function () {
 
     this.players = [];
     // this.players.push(this.player, this.player2, this.player3);
-    // this.players.push(this.player, this.player2);
-    this.players.push(this.player);
+    this.players.push(this.player, this.player2);
+    // this.players.push(this.player);
     for (var i = 0; i < this.players.length; i++) {
         this.stage.addChild(this.players[i]);
+        this.stage.setChildIndex(this.players[i], 1);
     }
 };
 
@@ -82,14 +83,16 @@ the_final_stand.scene.Game.prototype.update = function (step) {
 
     // Kontrollerar kollision mellan alla spelare och zombies
     var zombies = this.zombieSpawner.zombies;
+    var collObj = this.stage.map.back;
     for (var p = 0; p < this.players.length; p++) {
         var player = this.players[p];
-        player.hitTestAndSeparate(this.stage.map.back);
+        player.hitTestAndSeparate(collObj);
 
         for (var i = 0; i < zombies.length; i++) {
-            zombies[i].hitTestAndSeparate(this.stage.map.back);
+            zombies[i].hitTestAndSeparate(collObj);
+            // zombies[i].checkObjColl(collObj);
 
-            if (player.hitTestAndSeparate(zombies[i])) {
+            if (player.isAlive && player.hitTestAndSeparate(zombies[i])) {
                 zombies[i].doDamage();
             }
 

@@ -22,9 +22,10 @@ the_final_stand.entity.Enor = function (x, y, game, gamepadIndex) {
     /**
      * Calls the constructor method of the super class.
      */
-    the_final_stand.entity.Player.call(this, x, y, 60, 60, "3_enor_pistol_60x60");
+    the_final_stand.entity.Player.call(this, x, y, 60, 60, "3_enor");
  
     this.charName = "Enor";
+    this.charIndex = 3;
     this.game = game;
     this.gamepadIndex = gamepadIndex;
  };
@@ -63,7 +64,6 @@ the_final_stand.entity.Enor = function (x, y, game, gamepadIndex) {
     the_final_stand.entity.Player.prototype.update.call(this, step);
  
     this.m_updateInput(step);
-    this.m_initPhysics();
  };
  
  /**
@@ -76,9 +76,4 @@ the_final_stand.entity.Enor = function (x, y, game, gamepadIndex) {
   */
  the_final_stand.entity.Enor.prototype.dispose = function () {
     the_final_stand.entity.Player.prototype.dispose.call(this);
- };
- 
- the_final_stand.entity.Enor.prototype.m_initAnimation = function () {
-   this.animation.create("idle", [0], 10, true);
-   this.animation.create("run", [1, 2, 3, 4], 10, true);
  };

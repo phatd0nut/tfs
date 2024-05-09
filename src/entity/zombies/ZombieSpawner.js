@@ -67,7 +67,7 @@ the_final_stand.entity.ZombieSpawner.prototype.spawnWave = function(waveNumber) 
     if (waveNumber === 0) {
         numZombies = 25; // Antalet zombies som spawnas första vågen
     } else {
-        numZombies = 25 + Math.pow(2, waveNumber); // Ökar antalet zombies exponentiellt
+        numZombies = 1 + Math.pow(2, waveNumber); // Ökar antalet zombies exponentiellt
     }
     this.spawnInterval = Math.max(1, Math.floor(1000 / (20 * waveNumber + 1))); // Decrease the spawn interval with each wave
     this.zombiesDead = 0; // Reset the number of dead zombies
