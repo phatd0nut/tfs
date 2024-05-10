@@ -47,7 +47,7 @@ the_final_stand.entity.Weapon.prototype.fire = function (x, y, radian, rotation)
 
         // Spela upp nästa ljud i poolen
         var gunSound = this.gunSounds[this.currentSoundIndex];
-        gunSound.play();
+        // gunSound.play();
 
         // Uppdatera currentSoundIndex för nästa gång
         this.currentSoundIndex = (this.currentSoundIndex + 1) % this.gunSounds.length;

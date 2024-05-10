@@ -48,12 +48,14 @@ the_final_stand.data.Requests.prototype.m_construct = function() {
 	this.add("pistol", "./../asset/audio/guns/pistol.mp3");
 	this.add("shotgun", "./../asset/audio/guns/shotgun.mp3");
 	this.add("sniper_rifle", "./../asset/audio/guns/sniper_rifle.mp3");
+	this.add("pickup", "./../asset/audio/interaction/pickup.wav");
 	this.add("revive_sound", "./../asset/audio/interaction/revive_sound.mp3");
 	this.add("Map1-tilest", "./../asset/maps/map_1/Map1-tilest.png");
 	this.add("map1", "./../asset/maps/map_1/map1.json");
 	this.add("map2", "./../asset/maps/map_2/map2.json");
 	this.add("Newmap2", "./../asset/maps/map_2/Newmap2.png");
 	this.add("test_map", "./../asset/maps/test_map.png");
+	this.add("cash", "./../asset/pickups/cash.png");
 	this.add("1_mathias", "./../asset/players/1_mathias.png");
 	this.add("2_jesper", "./../asset/players/2_jesper.png");
 	this.add("3_enor", "./../asset/players/3_enor.png");

@@ -31,6 +31,7 @@ the_final_stand.entity.Player = function (x, y, width, height, texture) {
     this.isAlive = true;
     this.reviveButtonPresses = 0;
     this.speed = 3;
+    this.money = 0;
     this.diagonalSpeed = this.speed * this.RuneMath.cos(this.RuneMath.degreesToRadians(45));
 };
 

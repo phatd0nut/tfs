@@ -46,14 +46,6 @@ the_final_stand.scene.Game.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
     this.stage.map.load('map2');
 
-    // this.bg = new rune.display.Graphic(0, 0, 1289, 720, "standard_map");
-    // this.stage.addChild(this.bg);
-
-    this.zombieSpawner = new the_final_stand.entity.ZombieSpawner(this);
-    this.updateCounter = 0;
-
-    this.activeBullets = new Set();
-
     this.player = new the_final_stand.entity.Mathias(500, 345, this, 0);
     this.player2 = new the_final_stand.entity.Jesper(716, 345, this, 1);
     this.player3 = new the_final_stand.entity.Enor(608, 420, this, 2);
@@ -66,6 +58,14 @@ the_final_stand.scene.Game.prototype.init = function () {
         this.stage.addChild(this.players[i]);
         this.stage.setChildIndex(this.players[i], 1);
     }
+
+    // this.bg = new rune.display.Graphic(0, 0, 1289, 720, "standard_map");
+    // this.stage.addChild(this.bg);
+
+    this.zombieSpawner = new the_final_stand.entity.ZombieSpawner(this);
+    this.updateCounter = 0;
+
+    this.activeBullets = new Set();
 };
 
 /**
