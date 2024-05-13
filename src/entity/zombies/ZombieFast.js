@@ -24,8 +24,8 @@ the_final_stand.entity.ZombieFast = function (x, y, game) {
      */
     the_final_stand.entity.Zombie.call(this, x, y, 60, 60, "zombie_fast");
     this.game = game;
-
     this.hp = 50;
+    this.cashValue = Math.floor(Math.random() * 76) + 25;
 };
 
 //------------------------------------------------------------------------------

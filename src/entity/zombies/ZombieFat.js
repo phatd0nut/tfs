@@ -24,8 +24,8 @@ the_final_stand.entity.ZombieFat = function (x, y, game) {
      */
     the_final_stand.entity.Zombie.call(this, x, y, 60, 60, "zombie_fat");
     this.game = game;
-
     this.hp = 200;
+    this.cashValue = Math.floor(Math.random() * 151) + 350;
 };
 
 //------------------------------------------------------------------------------

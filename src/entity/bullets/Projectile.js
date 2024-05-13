@@ -16,7 +16,7 @@ the_final_stand.entity.Projectile.prototype = Object.create(rune.display.Graphic
 the_final_stand.entity.Projectile.prototype.constructor = the_final_stand.entity.Projectile;
 
 the_final_stand.entity.Projectile.prototype.update = function (step) {
-    this.x += this.dx; 
+    this.x += this.dx;
     this.y += this.dy;
     this.aabb.x = this.x;
     this.aabb.y = this.y;
@@ -33,11 +33,12 @@ the_final_stand.entity.Projectile.prototype.dispose = function () {
 };
 
 the_final_stand.entity.Projectile.prototype.outOfBounds = function () {
-    if (this.x < 0 || this.x > this.game.application.screen.width || this.y < 0 || this.y > this.game.application.screen.height) {
+    if (this.x < 16 || this.x > this.game.application.screen.width || this.y < 0 || this.y > this.game.application.screen.height) {
         this.dispose();
-    } else {
-        this.game.stage.map.back.hitTestAndSeparate(this, function() {
-            this.dispose();
-        })
-    }
+    } 
+    // else {
+    //     this.game.stage.map.back.hitTestAndSeparate(this, function () {
+    //         this.dispose();
+    //     })
+    // }
 };

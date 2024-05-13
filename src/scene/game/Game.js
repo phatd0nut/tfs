@@ -46,6 +46,19 @@ the_final_stand.scene.Game.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
     this.stage.map.load('map2');
 
+    this.player = new the_final_stand.entity.Mathias(500, 345, this, 0);
+    this.player2 = new the_final_stand.entity.Jesper(716, 345, this, 1);
+    this.player3 = new the_final_stand.entity.Enor(608, 420, this, 2);
+
+    this.players = [];
+    // this.players.push(this.player, this.player2, this.player3);
+    this.players.push(this.player, this.player2);
+    // this.players.push(this.player);
+    for (var i = 0; i < this.players.length; i++) {
+        this.stage.addChild(this.players[i]);
+        this.stage.setChildIndex(this.players[i], 1);
+    }
+
     // this.bg = new rune.display.Graphic(0, 0, 1289, 720, "standard_map");
     // this.stage.addChild(this.bg);
 
@@ -53,18 +66,6 @@ the_final_stand.scene.Game.prototype.init = function () {
     this.updateCounter = 0;
 
     this.activeBullets = new Set();
-
-    this.player = new the_final_stand.entity.Mathias(500, 345, this, 0);
-    this.player2 = new the_final_stand.entity.Jesper(716, 345, this, 1);
-    this.player3 = new the_final_stand.entity.Enor(608, 420, this, 2);
-
-    this.players = [];
-    // this.players.push(this.player, this.player2, this.player3);
-    // this.players.push(this.player, this.player2);
-    this.players.push(this.player);
-    for (var i = 0; i < this.players.length; i++) {
-        this.stage.addChild(this.players[i]);
-    }
 };
 
 /**
@@ -82,14 +83,16 @@ the_final_stand.scene.Game.prototype.update = function (step) {
 
     // Kontrollerar kollision mellan alla spelare och zombies
     var zombies = this.zombieSpawner.zombies;
+    var collObj = this.stage.map.back;
     for (var p = 0; p < this.players.length; p++) {
         var player = this.players[p];
-        player.hitTestAndSeparate(this.stage.map.back);
+        player.hitTestAndSeparate(collObj);
 
         for (var i = 0; i < zombies.length; i++) {
-            zombies[i].hitTestAndSeparate(this.stage.map.back);
+            zombies[i].hitTestAndSeparate(collObj);
+            // zombies[i].checkObjColl(collObj);
 
-            if (player.hitTestAndSeparate(zombies[i])) {
+            if (player.isAlive && player.hitTestAndSeparate(zombies[i])) {
                 zombies[i].doDamage();
             }
 

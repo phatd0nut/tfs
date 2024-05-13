@@ -22,9 +22,10 @@ the_final_stand.entity.Jesper = function (x, y, game, gamepadIndex) {
    /**
     * Calls the constructor method of the super class.
     */
-   the_final_stand.entity.Player.call(this, x, y, 60, 60, "2_jesper_pistol_60x60");
+   the_final_stand.entity.Player.call(this, x, y, 60, 60, "2_jesper");
 
    this.charName = "Jesper";
+   this.charIndex = 2;
    this.game = game;
    this.gamepadIndex = gamepadIndex;
 };
@@ -48,7 +49,6 @@ the_final_stand.entity.Jesper.prototype.constructor = the_final_stand.entity.Jes
  */
 the_final_stand.entity.Jesper.prototype.init = function () {
    the_final_stand.entity.Player.prototype.init.call(this);
-
 };
 
 /**
@@ -63,7 +63,6 @@ the_final_stand.entity.Jesper.prototype.update = function (step) {
    the_final_stand.entity.Player.prototype.update.call(this, step);
 
    this.m_updateInput(step);
-   this.m_initPhysics();
 };
 
 /**
@@ -76,9 +75,4 @@ the_final_stand.entity.Jesper.prototype.update = function (step) {
  */
 the_final_stand.entity.Jesper.prototype.dispose = function () {
    the_final_stand.entity.Player.prototype.dispose.call(this);
-};
-
-the_final_stand.entity.Jesper.prototype.m_initAnimation = function () {
-   this.animation.create("idle", [0], 10, true);
-   this.animation.create("run", [1, 2, 3, 4], 10, true);
 };

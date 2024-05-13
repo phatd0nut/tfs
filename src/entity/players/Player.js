@@ -28,7 +28,10 @@ the_final_stand.entity.Player = function (x, y, width, height, texture) {
     this.RuneMath = rune.util.Math;
 
     this.hp = 100;
+    this.isAlive = true;
+    this.reviveButtonPresses = 0;
     this.speed = 3;
+    this.money = 0;
     this.diagonalSpeed = this.speed * this.RuneMath.cos(this.RuneMath.degreesToRadians(45));
 };
 
@@ -58,6 +61,7 @@ the_final_stand.entity.Player.prototype.init = function () {
 
     this.m_initAnimation();
     this.getStarterWep();
+    this.m_initSounds();
     this.hud = new the_final_stand.hud.PlayerHUD(this, this.game.players, this.game.players.indexOf(this));
     this.hud.render();
 };
@@ -76,8 +80,32 @@ the_final_stand.entity.Player.prototype.update = function (step) {
     this.m_updateInput(step);
     this.hitBox();
 
+    if (this.hp <= 0) {
+        this.isAlive = false;
+    }
+
     if (this.currentWeapon) {
         this.currentWeapon.update(step);
+    }
+
+    if (!this.isAlive && this.collisionZone) {
+        for (var i = 0; i < this.game.players.length; i++) {
+            var player = this.game.players[i];
+            if (player !== this && this.isInReviveZone(player)) {
+                // Om en annan spelare är i kollisionszonen, öka reviveButtonPresses
+                if (player.gamepad.justPressed(0)) {
+                    this.reviveButtonPresses++;
+                    this.reviveBleep.play();
+
+                }
+                // Om reviveButtonPresses är 5 eller mer, återuppliva den "downed" spelaren
+                if (this.reviveButtonPresses >= 5) {
+                    this.revive();
+                    this.reviveButtonPresses = 0; // Återställ räknaren
+                    break;
+                }
+            }
+        }
     }
 };
 
@@ -93,15 +121,18 @@ the_final_stand.entity.Player.prototype.dispose = function () {
     rune.display.Sprite.prototype.dispose.call(this);
 };
 
-the_final_stand.entity.Player.prototype.m_initPhysics = function () {
-
+the_final_stand.entity.Player.prototype.m_initSounds = function () {
+    this.reviveBleep = this.game.application.sounds.sound.get("revive_sound", true);
 };
+
+
 
 the_final_stand.entity.Player.prototype.getStarterWep = function () {
-    this.currentWeapon = new the_final_stand.entity.Pistol(this.stage, this.game);
+    this.currentWeapon = new the_final_stand.entity.AssaultRifle(this.stage, this.game);
+
 };
 
-the_final_stand.entity.Player.prototype.switchWeapon = function(weaponName) {
+the_final_stand.entity.Player.prototype.switchWeapon = function (weaponName) {
     if (this.ammo[weaponName] > 0) {
         this.currentWeapon = new the_final_stand.entity[weaponName.charAt(0).toUpperCase() + weaponName.slice(1)]();
     } else {
@@ -109,19 +140,22 @@ the_final_stand.entity.Player.prototype.switchWeapon = function(weaponName) {
     }
 };
 
-
 the_final_stand.entity.Player.prototype.m_updateInput = function () {
-    var isMoving = false;
-    var gamepad = this.game.gamepads.get(this.gamepadIndex);
+    if (!this.isAlive) {
+        return;
+    }
 
-    if (gamepad) {
-        if (gamepad.justPressed(2) || (this.currentWeapon.isAutomatic && gamepad.pressed(2))) {
+    this.isMoving = false;
+    this.gamepad = this.game.gamepads.get(this.gamepadIndex);
+
+    if (this.gamepad) {
+        if (this.gamepad.justPressed(2) || (this.currentWeapon.isAutomatic && this.gamepad.pressed(2))) {
             this.shoot();
         }
 
         var threshold = 0.1;
-        var x = gamepad.m_axesOne.x;
-        var y = gamepad.m_axesOne.y;
+        var x = this.gamepad.m_axesOne.x;
+        var y = this.gamepad.m_axesOne.y;
 
         if (this.RuneMath.abs(x) > threshold || this.RuneMath.abs(y) > threshold) {
             var rotation = Math.atan2(y, x);
@@ -130,67 +164,76 @@ the_final_stand.entity.Player.prototype.m_updateInput = function () {
             }
             this.rotation = this.RuneMath.radiansToDegrees(rotation) + 90;
 
-            if (!gamepad.pressed(5)) {
+            if (!this.gamepad.pressed(5)) {
                 this.x += x * this.speed;
                 this.y += y * this.speed;
 
-                isMoving = true;
+                this.isMoving = true;
             }
         }
     }
 
     // this.m_keyboardInput(); // För testning
 
-    if (!isMoving) {
-        this.animation.gotoAndPlay("idle");
+    this.weaponName = this.currentWeapon.name;
+
+    if (!this.isMoving) {
+        this.animation.gotoAndPlay("idle_" + this.weaponName);
     } else {
-        this.animation.gotoAndPlay("run");
+        this.animation.gotoAndPlay("run_" + this.weaponName);
     }
+};
 
-
+the_final_stand.entity.Player.prototype.revive = function () {
+    console.log('reviving');
+    // Lägg till kod här för att återuppliva spelaren
+    this.isAlive = true;
+    this.hp = 100; // Eller något annat lämpligt värde
+    this.animation.gotoAndPlay("idle_" + this.weaponName);
+    this.hud.updateHp();
 };
 
 the_final_stand.entity.Player.prototype.m_keyboardInput = function () {
-       // Tangentbordsstyrning
-       if (this.keyboard.justPressed("SPACE")) {
+    // Tangentbordsstyrning
+    if (this.keyboard.justPressed("SPACE")) {
         this.shoot();
     }
     else if (this.keyboard.pressed("D") && !this.keyboard.pressed("W") && !this.keyboard.pressed("S")) {
         this.x += this.speed;
         this.rotation = 90;
-        isMoving = true;
+        this.isMoving = true;
     } else if (this.keyboard.pressed("A") && !this.keyboard.pressed("W") && !this.keyboard.pressed("S")) {
         this.rotation = -90;
         this.x -= this.speed;
-        isMoving = true;
+        this.isMoving = true;
     } else if (this.keyboard.pressed("W") && !this.keyboard.pressed("A") && !this.keyboard.pressed("D")) {
         this.rotation = 0;
         this.y -= this.speed * this.aspectRatio * Math.cos(Math.PI / 4);
-        isMoving = true;
+        this.isMoving = true;
     } else if (this.keyboard.pressed("S") && !this.keyboard.pressed("A") && !this.keyboard.pressed("D")) {
         this.rotation = 180;
         this.y += this.speed * this.aspectRatio * Math.cos(Math.PI / 4);
-        isMoving = true;
+        this.isMoving = true;
     } else if (this.keyboard.pressed("W") && this.keyboard.pressed("D")) {
         this.rotation = 45;
         this.x += this.diagonalSpeed;
         this.y -= this.diagonalSpeed * this.aspectRatio;
-        isMoving = true;
+        this.isMoving = true;
     } else if (this.keyboard.pressed("W") && this.keyboard.pressed("A")) {
         this.rotation = -45;
         this.x -= this.diagonalSpeed;
         this.y -= this.diagonalSpeed * this.aspectRatio;
-        isMoving = true;
+        this.isMoving = true;
     } else if (this.keyboard.pressed("S") && this.keyboard.pressed("D")) {
         this.rotation = 135;
         this.x += this.diagonalSpeed;
         this.y += this.diagonalSpeed * this.aspectRatio;
-        isMoving = true;
+        this.isMoving = true;
     } else if (this.keyboard.pressed("S") && this.keyboard.pressed("A")) {
         this.rotation = -135;
         this.x -= this.diagonalSpeed;
         this.y += this.diagonalSpeed * this.aspectRatio;
-        isMoving = true;
+        this.isMoving = true;
     }
 };
 
@@ -216,18 +259,43 @@ the_final_stand.entity.Player.prototype.shoot = function () {
     }
 };
 
-the_final_stand.entity.Player.prototype.playerDead = function () {
-    this.hp = 0;
-    this.x = this.x;
-    this.y = this.y; 
+the_final_stand.entity.Player.prototype.isInReviveZone = function (player) {
+    var dx = this.collisionZone.x - player.x;
+    var dy = this.collisionZone.y - player.y;
+    return Math.sqrt(dx * dx + dy * dy) <= this.collisionZone.radius;
 };
 
-// the_final_stand.entity.Player.prototype.onShootEnd = function () {
-//     console.log('Shoot animation ended');
-//     this.player_shoot.visible = false;
-// };
+the_final_stand.entity.Player.prototype.playerDowned = function () {
+    if (!this.isAlive) {
+        return;
+    }
+
+    this.isAlive = false;
+    this.isMoving = false;
+    this.hp = 0;
+    this.x = this.x;
+    this.y = this.y;
+    this.reviveButtonPresses = 0;
+
+    if (!this.isAlive) {
+        this.animation.gotoAndPlay("downed");
+    }
+
+    // Skapa en "cirkel" runt den "downade" spelaren
+    this.collisionZone = { x: this.x, y: this.y, radius: 30 };
+};
 
 the_final_stand.entity.Player.prototype.hitBox = function () {
     this.hitbox.set(20, 12, this.width - 40, this.height - 30);
     this.hitbox.debug = true;
+};
+
+the_final_stand.entity.Player.prototype.m_initAnimation = function () {
+    this.animation.create("idle_pistol", [0], 10, true);
+    this.animation.create("run_pistol", [1, 2, 3, 4], 10, true);
+    this.animation.create("idle_akimbo_uzi", [5], 10, true);
+    this.animation.create("run_akimbo_uzi", [6, 7, 8, 9], 10, true);
+    this.animation.create("idle_assault_rifle", [10], 10, true);
+    this.animation.create("run_assault_rifle", [11, 12, 13, 14], 10, true);
+    this.animation.create("downed", [15], 10, true);
 };

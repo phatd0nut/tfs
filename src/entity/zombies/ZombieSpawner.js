@@ -10,16 +10,17 @@ the_final_stand.entity.ZombieSpawner = function(game) {
         {x: 600, y: 680},
         {x: 1240, y: 310},
     ];
-    this.waveHUD = new the_final_stand.hud.WaveHUD(this); // Instansiera WaveHUD
+    this.waveHUD = new the_final_stand.hud.WaveHUD(this, this.game); // Instansiera WaveHUD
+    this.game.waveHUD = this.waveHUD;
     this.spawnTimer = 0; // Initialisera spawnTimer till 0 för att räkna tiden mellan varje spawn av en zombie
     this.spawnInterval = 60; // Initialisera spawnInterval till 60 för att bestämma hur ofta en zombie ska spawnas
     this.zombiesToSpawn = 0; // Initialisera zombiesToSpawn till 0 för att räkna antalet zombies som ska spawnas
-    this.currentWave = 1; // Initialisera currentWave till 0 för att räkna vilken våg som är aktiv
+    this.currentWave = 1; // Initialisera currentWave till 1 för att räkna vilken våg som är aktiv
     this.isWavePaused = false; // Initialisera isWavePaused till false för att bestämma om vågen är pausad eller inte
     this.wavePauseTimer = 0; // Initialisera wavePauseTimer till 0 för att räkna tiden som vågen är pausad
-    this.wavePauseDuration = 500; // Tiden som vågen är pausad
+    this.wavePauseDuration = 500; // Tiden som vågen är pausadD
 
-    this.spawnWave(this.currentWave);
+    this.m_spawnWave(this.currentWave);
     this.waveHUD.render(); // Rendera WaveHUD
 };
 
@@ -38,7 +39,7 @@ the_final_stand.entity.ZombieSpawner.prototype.update = function() {
     } else {
         this.spawnTimer++;
         if (this.spawnTimer >= this.spawnInterval && this.zombiesToSpawn > 0) {
-            this.spawnZombie();
+            this.m_spawnZombie();
             this.spawnTimer = 0;
             this.zombiesToSpawn--;
         }
@@ -48,7 +49,7 @@ the_final_stand.entity.ZombieSpawner.prototype.update = function() {
     }
 };
 
-the_final_stand.entity.ZombieSpawner.prototype.spawnZombie = function() {
+the_final_stand.entity.ZombieSpawner.prototype.m_spawnZombie = function() {
     var point = this.spawnPoints[Math.floor(Math.random() * this.spawnPoints.length)];
 
     // Select a random zombie type
@@ -59,12 +60,13 @@ the_final_stand.entity.ZombieSpawner.prototype.spawnZombie = function() {
     var zombie = new ZombieType(point.x, point.y, this.game);
 
     this.game.stage.addChild(zombie);
+    this.game.stage.setChildIndex(zombie, 0);
     this.zombies.push(zombie);
 };
 
-the_final_stand.entity.ZombieSpawner.prototype.spawnWave = function(waveNumber) {
+the_final_stand.entity.ZombieSpawner.prototype.m_spawnWave = function(waveNumber) {
     var numZombies;
-    if (waveNumber === 0) {
+    if (waveNumber === 1) {
         numZombies = 25; // Antalet zombies som spawnas första vågen
     } else {
         numZombies = 25 + Math.pow(2, waveNumber); // Ökar antalet zombies exponentiellt

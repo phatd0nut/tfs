@@ -26,7 +26,8 @@ the_final_stand.entity.Zombie = function (x, y, width, height, texture) {
 
 
     this.game = this.application.scenes.selected;
-    this.player = this.game.player;
+    this.players = this.game.players;
+    this.currentPlayerIndex = 0;
     this.aabb = new AABB(this.x, this.y, width, height);
 };
 
@@ -85,8 +86,8 @@ the_final_stand.entity.Zombie.prototype.update = function (step) {
     this.aabb.x = this.x;
     this.aabb.y = this.y;
 
-    var dx = this.player.x - this.x;
-    var dy = this.player.y - this.y;
+    var dx = this.players.x - this.x;
+    var dy = this.players.y - this.y;
     this.distance = Math.sqrt(dx * dx + dy * dy);
     this.attack();
 };
@@ -130,6 +131,24 @@ the_final_stand.entity.Zombie.prototype.m_hitBoxDetection = function () {
         }
     }
 };
+/*
+the_final_stand.entity.Zombie.prototype.checkObjColl = function (collObj) {
+    console.log('collObj', collObj);
+    for (var i = 0; i < collObj.length; i++) {
+        console.log('collObj', collObj[i]);
+        var object = collObj[i];
+        if (this.aabb.intersects(object.aabb)) {
+            console.log('collided with object', object);
+            this.changeDirection();
+            break;
+        }
+    }
+};
+
+the_final_stand.entity.Zombie.prototype.changeDirection = function () {
+    this.dxDeviation = Math.random() - 0.5;
+    this.dyDeviation = Math.random() - 0.5;
+};*/
 
 the_final_stand.entity.Zombie.prototype.attack = function () {
     if (this.isAlive && this.distance <= 150) {
@@ -146,19 +165,36 @@ the_final_stand.entity.Zombie.prototype.attack = function () {
 };
 
 the_final_stand.entity.Zombie.prototype.doDamage = function () {
-    // Frame counter för att räkna frames per attack
+    if (!this.isAlive) {
+        return
+    }
+    // Frame counter to count frames per attack
     this.frameCounter = (this.frameCounter || 0) + 1;
 
-    // 60 är antalet frames per sekund och 3 är antalet frames per attack
     if (this.frameCounter >= 60 / 3) {
-        this.player.hp -= this.attackDamage;
+        var currentPlayer = this.closestPlayer; // Use the closest player instead of the one at currentPlayerIndex
 
-        if (this.player.hp < 0) {
-            this.player.playerDead();
+        // If there is no closest player (all players are dead), stop attacking
+        if (!currentPlayer) {
+            return;
         }
 
-        this.player.hud.updateHp();
-        this.frameCounter -= 60 / 3; // Återställ frameCounter
+        currentPlayer.hp -= this.attackDamage;
+
+        // If HP is less than 0, set it to 0
+        if (currentPlayer.hp < 0) {
+            currentPlayer.hp = 0;
+        }
+
+        if (currentPlayer.hp <= 0) {
+            currentPlayer.playerDowned();
+
+            // Call m_followPlayers to start following the next closest player
+            this.m_followPlayers();
+        }
+
+        currentPlayer.hud.updateHp();
+        this.frameCounter -= 60 / 3; // Reset frameCounter
     }
 };
 
@@ -176,10 +212,22 @@ the_final_stand.entity.Zombie.prototype.die = function () {
         this.animation.gotoAndPlay("die");
     }
 
+    this.dropCash();
+
     // Anropa killZombie metoden i ZombieSpawner klassen
     this.game.zombieSpawner.killedZombies(this);
 };
 
+the_final_stand.entity.Zombie.prototype.dropCash = function () {
+    var chance = Math.random();
+    if (chance < 1) {
+        var cashX = this.x + this.width / 3;
+        var cashY = this.y + this.height / 3;
+        var cash = new the_final_stand.entity.Cash(cashX, cashY, this.cashValue, this.game);
+        cash.drop();
+        cash.animation.play();
+    }
+}
 
 the_final_stand.entity.Zombie.prototype.m_followPlayers = function () {
     if (!this.isAlive) {
@@ -189,9 +237,15 @@ the_final_stand.entity.Zombie.prototype.m_followPlayers = function () {
     var closestPlayer = null;
     var closestDistance = Infinity;
 
-    // Loopa igenom alla spelare och hitta den närmaste spelaren
+    // Loopa igenom alla spelare och hitta den närmaste levande spelaren
     for (var i = 0; i < this.game.players.length; i++) {
         var player = this.game.players[i];
+
+        // Kontrollera om spelaren är vid liv
+        if (!player.isAlive) {
+            continue;
+        }
+
         var dx = player.x - this.x;
         var dy = player.y - this.y;
         var distanceSquared = dx * dx + dy * dy;
@@ -201,6 +255,8 @@ the_final_stand.entity.Zombie.prototype.m_followPlayers = function () {
             closestPlayer = player;
         }
     }
+
+    this.closestPlayer = closestPlayer;
 
     if (closestPlayer) {
         var dx = closestPlayer.x - this.x;
