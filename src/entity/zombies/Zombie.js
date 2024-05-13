@@ -220,12 +220,12 @@ the_final_stand.entity.Zombie.prototype.die = function () {
 
 the_final_stand.entity.Zombie.prototype.dropCash = function () {
     var chance = Math.random();
-    if (chance < 0.99) {
+    if (chance < 1) {
         var cashX = this.x + this.width / 3;
         var cashY = this.y + this.height / 3;
         var cash = new the_final_stand.entity.Cash(cashX, cashY, this.cashValue, this.game);
-        this.game.stage.addChild(cash);
-        this.game.stage.setChildIndex(this, 2);
+        cash.drop();
+        cash.animation.play();
     }
 }
 

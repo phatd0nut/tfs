@@ -1,5 +1,5 @@
 the_final_stand.entity.Cash = function (x, y, value, game) {
-    rune.display.Graphic.call(this, x, y, 8, 8, 'cash');
+    rune.display.Sprite.call(this, x, y, 24, 24, 'moneybag_24x24');
     this.x = x;
     this.y = y;
     this.game = game;
@@ -12,8 +12,12 @@ the_final_stand.entity.Cash = function (x, y, value, game) {
 };
 
 // Inherit from rune.display.Graphic
-the_final_stand.entity.Cash.prototype = Object.create(rune.display.Graphic.prototype);
+the_final_stand.entity.Cash.prototype = Object.create(rune.display.Sprite.prototype);
 the_final_stand.entity.Cash.prototype.constructor = the_final_stand.entity.Cash;
+
+the_final_stand.entity.Cash.prototype.init = function () {
+    this.m_initAnimation();
+};
 
 the_final_stand.entity.Cash.prototype.update = function () {
     this.pickupDuration--;
@@ -21,12 +25,11 @@ the_final_stand.entity.Cash.prototype.update = function () {
     if (this.pickupDuration <= 0) {
         this.dispose();
     }
-}
+};
 
 the_final_stand.entity.Cash.prototype.dispose = function () {
     this.game.stage.removeChild(this);
-}
-
+};
 
 the_final_stand.entity.Cash.prototype.pickup = function () {
     var cashRadius = 20;
@@ -36,8 +39,8 @@ the_final_stand.entity.Cash.prototype.pickup = function () {
         var player = this.players[i];
         var distance = Math.sqrt(Math.pow(this.x - (player.x + player.width / 2), 2) + Math.pow(this.y - (player.y + player.height / 2), 2));
 
-        // Om spelaren är nära nog och pengarna fortfarande finns kvar, plocka upp dem
-        if (distance < cashRadius + playerRadius && this.pickupDuration > 0) {
+        // Om spelaren är nära nog, pengarna fortfarande finns kvar, och spelaren är levande, plocka upp dem
+        if (distance < cashRadius + playerRadius && this.pickupDuration > 0 && player.isAlive) {
             player.money += this.value; // Antag att spelaren har en 'money'-egenskap
             this.game.waveHUD.updateTotalMoney();
             this.pickupSound.play();
@@ -45,4 +48,16 @@ the_final_stand.entity.Cash.prototype.pickup = function () {
             return;
         }
     }
+};
+
+the_final_stand.entity.Cash.prototype.m_initAnimation = function () {
+    this.animation.create("bag_dropped", [0, 1, 2, 3], 3, true);
+    console.log('animation');
+};
+
+the_final_stand.entity.Cash.prototype.drop = function () {
+    this.game.stage.addChild(this);
+    this.game.stage.setChildIndex(this, this.game.stage.numChildren - 1);
+    this.animation.gotoAndPlay("bag_dropped", 0);
+    console.log(this.animation.current);
 };

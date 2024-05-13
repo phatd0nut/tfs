@@ -56,6 +56,7 @@ the_final_stand.data.Requests.prototype.m_construct = function() {
 	this.add("Newmap2", "./../asset/maps/map_2/Newmap2.png");
 	this.add("test_map", "./../asset/maps/test_map.png");
 	this.add("cash", "./../asset/pickups/cash.png");
+	this.add("moneybag_24x24", "./../asset/pickups/moneybag_24x24.png");
 	this.add("1_mathias", "./../asset/players/1_mathias.png");
 	this.add("2_jesper", "./../asset/players/2_jesper.png");
 	this.add("3_enor", "./../asset/players/3_enor.png");

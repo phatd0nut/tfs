@@ -20,7 +20,7 @@ the_final_stand.entity.ZombieSpawner = function(game) {
     this.wavePauseTimer = 0; // Initialisera wavePauseTimer till 0 för att räkna tiden som vågen är pausad
     this.wavePauseDuration = 500; // Tiden som vågen är pausadD
 
-    this.spawnWave(this.currentWave);
+    this.m_spawnWave(this.currentWave);
     this.waveHUD.render(); // Rendera WaveHUD
 };
 
@@ -39,7 +39,7 @@ the_final_stand.entity.ZombieSpawner.prototype.update = function() {
     } else {
         this.spawnTimer++;
         if (this.spawnTimer >= this.spawnInterval && this.zombiesToSpawn > 0) {
-            this.spawnZombie();
+            this.m_spawnZombie();
             this.spawnTimer = 0;
             this.zombiesToSpawn--;
         }
@@ -49,7 +49,7 @@ the_final_stand.entity.ZombieSpawner.prototype.update = function() {
     }
 };
 
-the_final_stand.entity.ZombieSpawner.prototype.spawnZombie = function() {
+the_final_stand.entity.ZombieSpawner.prototype.m_spawnZombie = function() {
     var point = this.spawnPoints[Math.floor(Math.random() * this.spawnPoints.length)];
 
     // Select a random zombie type
@@ -60,10 +60,11 @@ the_final_stand.entity.ZombieSpawner.prototype.spawnZombie = function() {
     var zombie = new ZombieType(point.x, point.y, this.game);
 
     this.game.stage.addChild(zombie);
+    this.game.stage.setChildIndex(zombie, 0);
     this.zombies.push(zombie);
 };
 
-the_final_stand.entity.ZombieSpawner.prototype.spawnWave = function(waveNumber) {
+the_final_stand.entity.ZombieSpawner.prototype.m_spawnWave = function(waveNumber) {
     var numZombies;
     if (waveNumber === 1) {
         numZombies = 25; // Antalet zombies som spawnas första vågen
