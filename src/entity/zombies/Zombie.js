@@ -225,7 +225,6 @@ the_final_stand.entity.Zombie.prototype.dropCash = function () {
         var cashY = this.y + this.height / 3;
         var cash = new the_final_stand.entity.Cash(cashX, cashY, this.cashValue, this.game);
         cash.drop();
-        cash.animation.play();
     }
 }
 

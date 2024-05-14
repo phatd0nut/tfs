@@ -51,5 +51,8 @@ the_final_stand.entity.Weapon.prototype.fire = function (x, y, radian, rotation)
 
         // Uppdatera currentSoundIndex för nästa gång
         this.currentSoundIndex = (this.currentSoundIndex + 1) % this.gunSounds.length;
+
+        // Uppdatera ammo
+        this.ammo--;
     }
 };

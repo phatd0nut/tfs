@@ -49,23 +49,20 @@ the_final_stand.scene.Game.prototype.init = function () {
     this.player = new the_final_stand.entity.Mathias(500, 345, this, 0);
     this.player2 = new the_final_stand.entity.Jesper(716, 345, this, 1);
     this.player3 = new the_final_stand.entity.Enor(608, 420, this, 2);
-
     this.players = [];
-    // this.players.push(this.player, this.player2, this.player3);
     this.players.push(this.player, this.player2);
-    // this.players.push(this.player);
     for (var i = 0; i < this.players.length; i++) {
         this.stage.addChild(this.players[i]);
         this.stage.setChildIndex(this.players[i], 1);
     }
 
-    // this.bg = new rune.display.Graphic(0, 0, 1289, 720, "standard_map");
-    // this.stage.addChild(this.bg);
+    this.bank = 0;
 
     this.zombieSpawner = new the_final_stand.entity.ZombieSpawner(this);
     this.updateCounter = 0;
 
     this.activeBullets = new Set();
+    this.weaponsCrate = new the_final_stand.entity.WeaponsCrate(this, this.players)
 };
 
 /**
@@ -76,10 +73,10 @@ the_final_stand.scene.Game.prototype.init = function () {
  *
  * @returns {undefined}
  */
-
 the_final_stand.scene.Game.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
     this.zombieSpawner.update();
+    this.weaponsCrate.update();
 
     // Kontrollerar kollision mellan alla spelare och zombies
     var zombies = this.zombieSpawner.zombies;

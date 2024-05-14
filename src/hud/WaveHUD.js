@@ -4,7 +4,6 @@ the_final_stand.hud.WaveHUD = function (zombieSpawner, game) {
     this.zombieCountText = null;
     this.waveText = null;
     this.totalMoneyText = null;
-    console.log(this.game.players);
 };
 
 the_final_stand.hud.WaveHUD.prototype.createBitmapField = function (text, x, y) {
@@ -47,10 +46,7 @@ the_final_stand.hud.WaveHUD.prototype.updateWaveCounter = function () {
 };
 
 the_final_stand.hud.WaveHUD.prototype.updateTotalMoney = function () {
-    var totalMoney = 0;
-    for (var i = 0; i < this.game.players.length; i++) {
-        totalMoney += this.game.players[i].money;
-    }
+    var totalMoney = this.game.bank;
     var totalMoneyString = totalMoney > 0 ? (totalMoney.toString() + " $") : "0 $";
     this.totalMoneyText.text = "Total Money: " + totalMoneyString;
 };

@@ -13,7 +13,7 @@
  * 
  * Game scene.
  */
-demo.scene.Menu = function() {
+the_final_stand.scene.Menu = function() {
 
     //--------------------------------------------------------------------------
     // Super call
@@ -29,8 +29,8 @@ demo.scene.Menu = function() {
 // Inheritance
 //------------------------------------------------------------------------------
 
-demo.scene.Menu.prototype = Object.create(rune.scene.Scene.prototype);
-demo.scene.Menu.prototype.constructor = demo.scene.Menu;
+the_final_stand.scene.Menu.prototype = Object.create(rune.scene.Scene.prototype);
+the_final_stand.scene.Menu.prototype.constructor = the_final_stand.scene.Menu;
 
 //------------------------------------------------------------------------------
 // Override public prototype methods (ENGINE)
@@ -42,14 +42,9 @@ demo.scene.Menu.prototype.constructor = demo.scene.Menu;
  *
  * @returns {undefined}
  */
-demo.scene.Menu.prototype.init = function() {
+the_final_stand.scene.Menu.prototype.init = function() {
     rune.scene.Scene.prototype.init.call(this);
     
-    var text = new rune.text.BitmapField("Hello Menufucker");
-    text.autoSize = true;
-    text.center = this.application.screen.center;
-    
-    this.stage.addChild(text);
 };
 
 /**
@@ -60,11 +55,8 @@ demo.scene.Menu.prototype.init = function() {
  *
  * @returns {undefined}
  */
-demo.scene.Menu.prototype.update = function(step) {
+the_final_stand.scene.Menu.prototype.update = function(step) {
     rune.scene.Scene.prototype.update.call(this, step);
-    if (this.keyboard.justPressed("SPACE")) {
-        this.application.scenes.load([new demo.scene.Game()]);
-    }
 };
 
 /**
@@ -75,6 +67,6 @@ demo.scene.Menu.prototype.update = function(step) {
  *
  * @returns {undefined}
  */
-demo.scene.Menu.prototype.dispose = function() {
+the_final_stand.scene.Menu.prototype.dispose = function() {
     rune.scene.Scene.prototype.dispose.call(this);
 };
