@@ -173,7 +173,7 @@ the_final_stand.entity.Player.prototype.m_updateInput = function () {
         }
     }
 
-    // this.m_keyboardInput(); // För testning
+    this.m_keyboardInput(); // För testning
 
     this.weaponName = this.currentWeapon.name;
 

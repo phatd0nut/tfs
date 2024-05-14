@@ -2,6 +2,7 @@
 // Constructor scope
 //------------------------------------------------------------------------------
 
+
 /**
  * Creates a new object.
  *
@@ -10,71 +11,165 @@
  *
  * @class
  * @classdesc
- * 
- * Game scene.
+ *
+ * Game state.
  */
-demo.scene.Menu = function() {
 
-    //--------------------------------------------------------------------------
-    // Super call
-    //--------------------------------------------------------------------------
-    
-    /**
-     * Calls the constructor method of the super class.
-     */
+
+the_final_stand.scene.Menu = function () {
+
+
+
+
     rune.scene.Scene.call(this);
+
+
 };
 
-//------------------------------------------------------------------------------
+
+//-----------------------------------------------------------A-------------------
 // Inheritance
 //------------------------------------------------------------------------------
 
-demo.scene.Menu.prototype = Object.create(rune.scene.Scene.prototype);
-demo.scene.Menu.prototype.constructor = demo.scene.Menu;
+
+the_final_stand.scene.Menu.prototype = Object.create(rune.scene.Scene.prototype);
+the_final_stand.scene.Menu.prototype.constructor = the_final_stand.scene.Menu;
+
 
 //------------------------------------------------------------------------------
 // Override public prototype methods (ENGINE)
 //------------------------------------------------------------------------------
 
+
 /**
- * This method is automatically executed once after the scene is instantiated. 
- * The method is used to create objects to be used within the scene.
- *
- * @returns {undefined}
+ * @inheritDoc
  */
-demo.scene.Menu.prototype.init = function() {
+
+
+the_final_stand.scene.Menu.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
-    
-    var text = new rune.text.BitmapField("Hello Menufucker");
-    text.autoSize = true;
-    text.center = this.application.screen.center;
-    
-    this.stage.addChild(text);
-};
+    this.m_initBackground();
+    this.m_initMenu();
+    this.m_initController();
+
+
+}
+
 
 /**
- * This method is automatically executed once per "tick". The method is used for 
- * calculations such as application logic.
- *
- * @param {number} step Fixed time step.
- *
- * @returns {undefined}
+ * @inheritDoc
  */
-demo.scene.Menu.prototype.update = function(step) {
+
+
+
+
+
+
+the_final_stand.scene.Menu.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
-    if (this.keyboard.justPressed("SPACE")) {
-        this.application.scenes.load([new demo.scene.Game()]);
+    if (this.gamepads.get(0).justPressed(12)) {
+        if (this.menu.up()) {
+        }
     }
-};
 
-/**
- * This method is automatically called once just before the scene ends. Use 
- * the method to reset references and remove objects that no longer need to 
- * exist when the scene is destroyed. The process is performed in order to 
- * avoid memory leaks.
- *
- * @returns {undefined}
- */
-demo.scene.Menu.prototype.dispose = function() {
-    rune.scene.Scene.prototype.dispose.call(this);
-};
+
+    if (this.gamepads.get(0).justPressed(13)) {
+        if (this.menu.down()) {
+        }
+    }
+
+
+    if (this.gamepads.get(0).justPressed(0)) {
+        this.menu.select();
+
+
+    }
+}
+
+
+//------------------------------------------------------------------------------
+
+
+the_final_stand.scene.Menu.prototype.m_initBackground = function () {
+    this.background = new rune.display.Graphic(
+        0,
+        0,
+        this.application.screen.width,
+        this.application.screen.height, "MENUSCENE"
+    );
+    this.stage.addChild(this.background);
+}
+
+
+//------------------------------------------------------------------------------
+
+
+// Method to initialize the controller graphic
+the_final_stand.scene.Menu.prototype.m_initController = function () {
+    // this.controllerGraphic = new rune.display.Graphic(
+    //     0,
+    //     0,
+    //     400,
+    //     400, "controller"
+    // );
+    // this.controllerGraphic.center = this.application.screen.center;
+    // this.text = new rune.text.BitmapField("JKLMNOPQRSTUVXYZ0123456789");
+    // this.text.autoSize = true;
+    // this.text.x = 200;
+    // this.text.y = 200;
+    // // this.text.x = this.controllerGraphic.x + 100;
+    // // this.text.y = this.controllerGraphic.y + 50;
+    // this.text.scaleX = 2;
+    // this.text.scaleY = 2;
+    // this.stage.addChild(this.text);
+    // this.stage.addChild(this.controllerGraphic);
+}
+
+
+//Method to initialize the menu
+the_final_stand.scene.Menu.prototype.m_initMenu = function () {
+    this.menu = new rune.ui.VTMenu();
+    this.menu.add("Single Player");
+    this.menu.add("Multiplayer");
+    this.menu.add("Highscore");
+    this.menu.add("How to play");
+    this.menu.x = 480;
+    this.menu.y = 500;
+    this.menu.scaleX = 3;
+    this.menu.scaleY = 3;
+    this.menu.onSelect(this.selectOption, this);
+    this.stage.addChild(this.menu);
+}
+
+
+
+
+
+//Method to select the option
+the_final_stand.scene.Menu.prototype.selectOption = function (option) {
+    switch (option.text) {
+        case "Single Player":
+            this.application.scenes.load([
+                new the_final_stand.scene.Game()
+            ]);
+            break;
+        case "Multiplayer":
+            this.application.scenes.load([
+                new the_final_stand.scene.Game()
+            ]);
+            break;
+        case "How to play":
+            this.application.scenes.load([
+                new the_final_stand.scene.HowToPlay()
+            ]);
+            break;
+        case "Highscore":
+            this.application.scenes.load([
+                new the_final_stand.scene.Highscore()
+            ]);
+            break;
+    }
+}
+
+
+

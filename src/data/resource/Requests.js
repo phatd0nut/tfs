@@ -50,11 +50,15 @@ the_final_stand.data.Requests.prototype.m_construct = function() {
 	this.add("sniper_rifle", "./../asset/audio/guns/sniper_rifle.mp3");
 	this.add("pickup", "./../asset/audio/interaction/pickup.wav");
 	this.add("revive_sound", "./../asset/audio/interaction/revive_sound.mp3");
+	this.add("font", "./../asset/font.png");
 	this.add("Map1-tilest", "./../asset/maps/map_1/Map1-tilest.png");
 	this.add("map1", "./../asset/maps/map_1/map1.json");
 	this.add("map2", "./../asset/maps/map_2/map2.json");
 	this.add("Newmap2", "./../asset/maps/map_2/Newmap2.png");
 	this.add("test_map", "./../asset/maps/test_map.png");
+	this.add("MENUSCENE", "./../asset/MENUSCENE.png");
+	this.add("menu_bg", "./../asset/menu_bg.png");
+	this.add("myfont", "./../asset/myfont.png");
 	this.add("cash", "./../asset/pickups/cash.png");
 	this.add("moneybag_24x24", "./../asset/pickups/moneybag_24x24.png");
 	this.add("1_mathias", "./../asset/players/1_mathias.png");
@@ -65,6 +69,8 @@ the_final_stand.data.Requests.prototype.m_construct = function() {
 	this.add("bullet12x12", "./../asset/projectiles/bullet12x12.png");
 	this.add("bullet6x6", "./../asset/projectiles/bullet6x6.png");
 	this.add("bullet8x8", "./../asset/projectiles/bullet8x8.png");
+	this.add("tutorial", "./../asset/tutorial.png");
+	this.add("Zombie", "./../asset/zombies/Zombie.png");
 	this.add("zombie_default", "./../asset/zombies/zombie_default.png");
 	this.add("zombie_fast", "./../asset/zombies/zombie_fast.png");
 	this.add("zombie_fat", "./../asset/zombies/zombie_fat.png");
