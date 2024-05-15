@@ -24,7 +24,7 @@ the_final_stand.entity.Jesper = function (x, y, game, gamepadIndex) {
     */
    the_final_stand.entity.Player.call(this, x, y, 60, 60, "2_jesper");
 
-   this.charName = "Jesper";
+   this.charName = "JESPER";
    this.charIndex = 2;
    this.game = game;
    this.gamepadIndex = gamepadIndex;

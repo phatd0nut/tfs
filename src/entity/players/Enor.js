@@ -24,7 +24,7 @@ the_final_stand.entity.Enor = function (x, y, game, gamepadIndex) {
      */
     the_final_stand.entity.Player.call(this, x, y, 60, 60, "3_enor");
  
-    this.charName = "Enor";
+    this.charName = "ENOR";
     this.charIndex = 3;
     this.game = game;
     this.gamepadIndex = gamepadIndex;

@@ -72,6 +72,7 @@ the_final_stand.entity.Player.prototype.update = function (step) {
     rune.display.Sprite.prototype.update.call(this, step);
 
     this.m_updateInput(step);
+    // this.m_keyboardInput(step);
     this.hitBox();
 
     if (this.hp <= 0) {
@@ -183,14 +184,10 @@ the_final_stand.entity.Player.prototype.revive = function () {
 };
 
 the_final_stand.entity.Player.prototype.m_keyboardInput = function () {
-
-    /*
-this.widthX = 1280; // Spelets upplösning i X-led
-this.heightY = 720; // Spelets upplösning i Y-led
-this.aspectRatio = this.widthX / this.heightY; // Aspect ratio för att få korrekt diagonal hastighet
-this.diagonalSpeed = this.speed * this.RuneMath.cos(this.RuneMath.degreesToRadians(45));
-};
-*/
+    this.widthX = 1280; // Spelets upplösning i X-led
+    this.heightY = 720; // Spelets upplösning i Y-led
+    this.aspectRatio = this.widthX / this.heightY; // Aspect ratio för att få korrekt diagonal hastighet
+    this.diagonalSpeed = this.speed * this.RuneMath.cos(this.RuneMath.degreesToRadians(45));
 
     // Tangentbordsstyrning
     if (this.keyboard.justPressed("SPACE")) {

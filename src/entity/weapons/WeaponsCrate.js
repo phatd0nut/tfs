@@ -3,7 +3,8 @@ the_final_stand.entity.WeaponsCrate = function (game, players) {
     this.players = players;
     this.gamepadIndex = this.players[0].gamepadIndex; // Get the gamepad index from the player
     this.gamepad = this.game.gamepads.get(this.gamepadIndex); // Get the gamepad from the game
-    this.drawRect();
+
+    this.init();
 };
 
 the_final_stand.entity.WeaponsCrate.prototype.update = function () {
@@ -11,7 +12,7 @@ the_final_stand.entity.WeaponsCrate.prototype.update = function () {
 };
 
 the_final_stand.entity.WeaponsCrate.prototype.drawRect = function () {
-    this.canvas = new rune.display.Graphic(0,0,1280, 720);
+    this.canvas = new rune.display.Graphic(0, 0, 1280, 720);
     var x = 590;
     var y = 350;
     var width = 100;
@@ -22,13 +23,28 @@ the_final_stand.entity.WeaponsCrate.prototype.drawRect = function () {
     // Create a new Rectangle
     var rect = new rune.geom.Rectangle(x, y, width, height);
     this.canvas.graphics.drawRect(rect.x, rect.y, rect.width, rect.height, color, thickness);
-    this.game.stage.addChild(this.canvas); 
-}
+    this.game.stage.addChild(this.canvas);
+};
 
+the_final_stand.entity.WeaponsCrate.prototype.init = function () {
+    this.m_initSprite();
+    this.m_initAnimation();
+};
+
+the_final_stand.entity.WeaponsCrate.prototype.m_initSprite = function () {
+    this.buyInstruction = new rune.display.Sprite(565, 305, 150, 32, "buy_weapon_instruction_icon_150x32");
+    this.game.stage.addChild(this.buyInstruction);
+
+};
+
+the_final_stand.entity.WeaponsCrate.prototype.m_initAnimation = function () {
+    this.animation = new rune.animation.Animation("instruction", [0, 1], 7, true);
+    this.buyInstruction.animation.add(this.animation);
+};
 
 the_final_stand.entity.WeaponsCrate.prototype.m_checkPlayerNearCrate = function () {
-    var rectCenterX = 590 + 100 / 2; // x + width / 2
-    var rectCenterY = 350 + 50 / 2; // y + height / 2
+    var rectCenterX = 590 + 100 / 2;
+    var rectCenterY = 350 + 50 / 2;
 
     for (var i = 0; i < this.players.length; i++) {
         var playerCenterX = this.players[i].centerX;
@@ -38,7 +54,15 @@ the_final_stand.entity.WeaponsCrate.prototype.m_checkPlayerNearCrate = function 
 
         // Check if the player is near the crate
         if (distance <= 100) {
+            if (!this.buyInstruction.visible) {
+                this.buyInstruction.visible = true;
+                this.animation.play();
+            }
             this.m_buyWeapon();
+        } else {
+            this.buyInstruction.visible = false;
+            this.animation.stop();
+
         }
     }
 };
@@ -59,7 +83,7 @@ the_final_stand.entity.WeaponsCrate.prototype.m_buyWeapon = function () {
 
                 // Switch to the random weapon
                 this.players[i].switchWeapon(randomWeaponName);
-                console.log("Player " + (i+1) + " bought " + randomWeaponName + " for 5000. Remaining money in bank: " + this.game.bank); // Replace 'this.game.bank' with the actual reference to your shared bank
+                console.log("Player " + (i + 1) + " bought " + randomWeaponName + " for 5000. Remaining money in bank: " + this.game.bank); // Replace 'this.game.bank' with the actual reference to your shared bank
             } else {
                 console.log("Not enough money in the bank to buy a weapon. Current money in bank: " + this.game.bank); // Replace 'this.game.bank' with the actual reference to your shared bank
             }

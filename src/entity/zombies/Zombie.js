@@ -27,8 +27,9 @@ the_final_stand.entity.Zombie = function (x, y, width, height, texture) {
 
     this.game = this.application.scenes.selected;
     this.players = this.game.players;
-    this.currentPlayerIndex = 0;
-    this.aabb = new AABB(this.x, this.y, width, height);
+    this.centerX = this.x + this.width / 2;
+    this.centerY = this.y + this.height / 2;
+    this.aabb = new AABB(this.centerX, this.centerY, width, height);
 };
 
 //------------------------------------------------------------------------------
@@ -56,10 +57,6 @@ the_final_stand.entity.Zombie.prototype.init = function () {
     this.isMoving = false;
     this.isAttacking = false;
 
-    this.widthX = 1280;
-    this.heightY = 720;
-    this.aspectRatio = this.widthX / this.heightY;
-
     this.directionChangeTimer = 0;
     this.dxDeviation = 0;
     this.dyDeviation = 0;
@@ -83,11 +80,11 @@ the_final_stand.entity.Zombie.prototype.update = function (step) {
     this.m_followPlayers();
 
     // Uppdatera aabb
-    this.aabb.x = this.x;
-    this.aabb.y = this.y;
+    this.aabb.x = this.centerX;
+    this.aabb.y = this.centerY;
 
-    var dx = this.players.x - this.x;
-    var dy = this.players.y - this.y;
+    var dx = this.players.centerX - this.centerX;
+    var dy = this.players.centerY - this.centerY;
     this.distance = Math.sqrt(dx * dx + dy * dy);
     this.attack();
 };
@@ -112,7 +109,9 @@ the_final_stand.entity.Zombie.prototype.m_initHitBox = function () {
 
 the_final_stand.entity.Zombie.prototype.m_hitBoxDetection = function () {
     if (this.isAlive && !this.bulletHasCollided) {
-        for (let bullets of this.game.activeBullets) {
+        var bulletsArray = Array.from(this.game.activeBullets);
+        for (var i = 0; i < bulletsArray.length; i++) {
+            var bullets = bulletsArray[i];
             var bulletAABB = bullets.aabb;
 
             if (this.aabb.intersects(bulletAABB)) {
@@ -206,7 +205,6 @@ the_final_stand.entity.Zombie.prototype.die = function () {
     this.isAlive = false;
     this.isMoving = false;
     this.isAttacking = false;
-    console.log('Zombie died');
 
     if (this.animation.currentAnimation !== "die") {
         this.animation.gotoAndPlay("die");
@@ -245,8 +243,8 @@ the_final_stand.entity.Zombie.prototype.m_followPlayers = function () {
             continue;
         }
 
-        var dx = player.x - this.x;
-        var dy = player.y - this.y;
+        var dx = player.centerX - this.centerX;
+        var dy = player.centerY - this.centerY;
         var distanceSquared = dx * dx + dy * dy;
 
         if (distanceSquared < closestDistance) {
@@ -258,8 +256,8 @@ the_final_stand.entity.Zombie.prototype.m_followPlayers = function () {
     this.closestPlayer = closestPlayer;
 
     if (closestPlayer) {
-        var dx = closestPlayer.x - this.x;
-        var dy = closestPlayer.y - this.y;
+        var dx = closestPlayer.centerX - this.centerX;
+        var dy = closestPlayer.centerY - this.centerY;
         var distance = Math.sqrt(dx * dx + dy * dy);
         dx /= distance;
         dy /= distance;
@@ -294,4 +292,3 @@ the_final_stand.entity.Zombie.prototype.m_followPlayers = function () {
         this.rotation = angle * (180 / Math.PI) - 270;
     }
 };
-

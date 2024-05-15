@@ -17,7 +17,8 @@ the_final_stand.entity.Cash.prototype.init = function () {
     this.m_initAnimation();
 };
 
-the_final_stand.entity.Cash.prototype.update = function () {
+the_final_stand.entity.Cash.prototype.update = function (step) {
+    rune.display.Sprite.prototype.update.call(this, step);
     this.pickupDuration--;
     this.pickup();
     if (this.pickupDuration <= 0) {
@@ -35,8 +36,12 @@ the_final_stand.entity.Cash.prototype.pickup = function () {
 
     for (var i = 0; i < this.players.length; i++) {
         var player = this.players[i];
-        var distance = Math.sqrt(Math.pow(this.x - (player.x + player.width / 2), 2) + Math.pow(this.y - (player.y + player.height / 2), 2));
-
+        var playerCenterX = player.centerX;
+        var playerCenterY = player.centerY;
+    
+        // Använd rune.geom.Point.distance för att beräkna avståndet
+        var distance = rune.geom.Point.distance(this.x, this.y, playerCenterX, playerCenterY);
+    
         // Om spelaren är nära nog, pengarna fortfarande finns kvar, och spelaren är levande, plocka upp dem
         if (distance < cashRadius + playerRadius && this.pickupDuration > 0 && player.isAlive) {
             this.game.bank += this.value; // Add the value to the shared bank
@@ -49,7 +54,7 @@ the_final_stand.entity.Cash.prototype.pickup = function () {
 };
 
 the_final_stand.entity.Cash.prototype.m_initAnimation = function () {
-    this.animation.create("bag_dropped", [0, 1, 2, 3], 3, true);
+    this.animation.create("bag_dropped", [0, 1, 2, 3], 7, true);
 };
 
 the_final_stand.entity.Cash.prototype.drop = function () {

@@ -50,12 +50,15 @@ the_final_stand.data.Requests.prototype.m_construct = function() {
 	this.add("sniper_rifle", "./../asset/audio/guns/sniper_rifle.mp3");
 	this.add("pickup", "./../asset/audio/interaction/pickup.wav");
 	this.add("revive_sound", "./../asset/audio/interaction/revive_sound.mp3");
+	this.add("menu_bg", "./../asset/backgrounds/menu_bg.png");
+	this.add("tutorial_bg", "./../asset/backgrounds/tutorial_bg.png");
+	this.add("tfs_font", "./../asset/font/tfs_font.png");
+	this.add("buy_weapon_instruction_icon_150x32", "./../asset/icons/buy_weapon_instruction_icon_150x32.png");
 	this.add("Map1-tilest", "./../asset/maps/map_1/Map1-tilest.png");
 	this.add("map1", "./../asset/maps/map_1/map1.json");
 	this.add("map2", "./../asset/maps/map_2/map2.json");
 	this.add("Newmap2", "./../asset/maps/map_2/Newmap2.png");
 	this.add("test_map", "./../asset/maps/test_map.png");
-	this.add("cash", "./../asset/pickups/cash.png");
 	this.add("moneybag_24x24", "./../asset/pickups/moneybag_24x24.png");
 	this.add("1_mathias", "./../asset/players/1_mathias.png");
 	this.add("2_jesper", "./../asset/players/2_jesper.png");

@@ -13,7 +13,7 @@
  * 
  * Game scene.
  */
-the_final_stand.scene.Game = function () {
+the_final_stand.scene.Game = function (numPlayers) {
 
     //--------------------------------------------------------------------------
     // Super call
@@ -23,6 +23,8 @@ the_final_stand.scene.Game = function () {
      * Calls the constructor method of the super class.
      */
     rune.scene.Scene.call(this);
+
+    this.numPlayers = numPlayers;
 };
 
 //------------------------------------------------------------------------------
@@ -46,14 +48,22 @@ the_final_stand.scene.Game.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
     this.stage.map.load('map2');
 
-    this.player = new the_final_stand.entity.Mathias(500, 345, this, 0);
-    this.player2 = new the_final_stand.entity.Jesper(716, 345, this, 1);
-    this.player3 = new the_final_stand.entity.Enor(608, 420, this, 2);
-    this.players = [];
-    this.players.push(this.player, this.player2);
+    // Skapa en array med alla möjliga spelare
+    var allPlayers = [
+        new the_final_stand.entity.Mathias(500, 345, this, 0),
+        new the_final_stand.entity.Jesper(716, 345, this, 1),
+        new the_final_stand.entity.Enor(608, 420, this, 2),
+        new the_final_stand.entity.Danny(608, 270, this, 3)
+    ];
+
+    this.numPlayers = 1;
+
+    // Välj de första 'numPlayers' spelarna
+    this.players = allPlayers.slice(0, this.numPlayers);
+
     for (var i = 0; i < this.players.length; i++) {
-        this.stage.addChild(this.players[i]);
-        this.stage.setChildIndex(this.players[i], 1);
+        this.stage.addChild(this.players[0]);
+        this.stage.setChildIndex(this.players[0], 1);
     }
 
     this.bank = 0;
@@ -110,7 +120,6 @@ the_final_stand.scene.Game.prototype.update = function (step) {
         bullet.update();
     });
 };
-
 
 /**
  * This method is automatically called once just before the scene ends. Use 

@@ -7,11 +7,13 @@ the_final_stand.hud.PlayerHUD = function(player, playerArray, index) {
 };
 
 the_final_stand.hud.PlayerHUD.prototype.createBitmapField = function(text, x, y) {
-    var field = new rune.text.BitmapField(text);
+    var field = new rune.text.BitmapField(text, 'tfs_font');
     field.x = x;
     field.y = y;
-    field.scaleX = 2.5;
-    field.scaleY = 2.5;
+    field.autoSize = true;
+    
+    field.scaleX = 1;
+    field.scaleY = 1;
     return field;
 };
 
@@ -31,12 +33,12 @@ the_final_stand.hud.PlayerHUD.prototype.render = function() {
     this.hpText = this.createBitmapField("HP: " + this.player.hp, 10 + xOffset, 90);
     this.player.stage.addChild(this.hpText);
 
-    this.ammoText = this.createBitmapField("Ammo: " + this.player.currentWeapon.ammo, 10 + xOffset, 60);
+    this.ammoText = this.createBitmapField("AMMO: " + this.player.currentWeapon.ammo, 10 + xOffset, 60);
     this.player.stage.addChild(this.ammoText);
 };
 
 the_final_stand.hud.PlayerHUD.prototype.updateAmmo = function() {
-    this.ammoText.text = "Ammo: " + this.player.currentWeapon.ammo;
+    this.ammoText.text = "AMMO: " + this.player.currentWeapon.ammo;
 };
 
 the_final_stand.hud.PlayerHUD.prototype.updateHp = function() {
