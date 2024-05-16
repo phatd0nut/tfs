@@ -45,6 +45,7 @@ the_final_stand.entity.WeaponsCrate.prototype.m_initAnimation = function () {
 the_final_stand.entity.WeaponsCrate.prototype.m_checkPlayerNearCrate = function () {
     var rectCenterX = 590 + 100 / 2;
     var rectCenterY = 350 + 50 / 2;
+    var playersNearCrate = 0;
 
     for (var i = 0; i < this.players.length; i++) {
         var playerCenterX = this.players[i].centerX;
@@ -54,16 +55,18 @@ the_final_stand.entity.WeaponsCrate.prototype.m_checkPlayerNearCrate = function 
 
         // Check if the player is near the crate
         if (distance <= 100) {
+            playersNearCrate++;
             if (!this.buyInstruction.visible) {
                 this.buyInstruction.visible = true;
                 this.animation.play();
             }
             this.m_buyWeapon();
-        } else {
-            this.buyInstruction.visible = false;
-            this.animation.stop();
-
         }
+    }
+
+    if (playersNearCrate === 0) {
+        this.buyInstruction.visible = false;
+        this.animation.stop();
     }
 };
 

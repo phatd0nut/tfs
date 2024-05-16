@@ -26,15 +26,17 @@ the_final_stand.entity.Weapon.prototype.update = function (step) {
     this.timeSinceLastFire += step;
 
     // Kontrollerar om ljudet har spelats klart och tar bort det från activeSounds.
-    this.activeSounds.forEach((sound) => {
+    var that = this;
+    this.activeSounds.forEach(function(sound) {
         if (sound.ended) {
-            this.dispose(sound);
+            that.dispose(sound);
         }
     });
 };
 
 the_final_stand.entity.Weapon.prototype.dispose = function (sound) {
     this.activeSounds.delete(sound);
+    console.log(sound + " disposed");
 }
 
 the_final_stand.entity.Weapon.prototype.fire = function (x, y, radian, rotation) {

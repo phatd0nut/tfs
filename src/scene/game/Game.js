@@ -56,14 +56,14 @@ the_final_stand.scene.Game.prototype.init = function () {
         new the_final_stand.entity.Danny(608, 270, this, 3)
     ];
 
-    this.numPlayers = 1;
+    // this.numPlayers = 1;
 
     // Välj de första 'numPlayers' spelarna
     this.players = allPlayers.slice(0, this.numPlayers);
 
     for (var i = 0; i < this.players.length; i++) {
-        this.stage.addChild(this.players[0]);
-        this.stage.setChildIndex(this.players[0], 1);
+        this.stage.addChild(this.players[i]);
+        this.stage.setChildIndex(this.players[i], 1);
     }
 
     this.bank = 0;

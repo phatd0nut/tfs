@@ -29,7 +29,7 @@ the_final_stand.entity.Zombie = function (x, y, width, height, texture) {
     this.players = this.game.players;
     this.centerX = this.x + this.width / 2;
     this.centerY = this.y + this.height / 2;
-    this.aabb = new AABB(this.centerX, this.centerY, width, height);
+    this.aabb = new AABB(this.x, this.y, width, height);
 };
 
 //------------------------------------------------------------------------------
@@ -80,8 +80,8 @@ the_final_stand.entity.Zombie.prototype.update = function (step) {
     this.m_followPlayers();
 
     // Uppdatera aabb
-    this.aabb.x = this.centerX;
-    this.aabb.y = this.centerY;
+    this.aabb.x = this.x;
+    this.aabb.y = this.y;
 
     var dx = this.players.centerX - this.centerX;
     var dy = this.players.centerY - this.centerY;
@@ -104,7 +104,7 @@ the_final_stand.entity.Zombie.prototype.dispose = function () {
 
 the_final_stand.entity.Zombie.prototype.m_initHitBox = function () {
     this.hitbox.set(20, 12, this.width - 40, this.height - 30);
-    this.hitbox.debug = true;
+    this.hitbox.debug = false;
 };
 
 the_final_stand.entity.Zombie.prototype.m_hitBoxDetection = function () {

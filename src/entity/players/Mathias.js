@@ -25,6 +25,7 @@ the_final_stand.entity.Mathias = function (x, y, game, gamepadIndex) {
    the_final_stand.entity.Player.call(this, x, y, 60, 60, "1_mathias");
 
    this.charName = "MATHIAS";
+   this.charIndex = 1;
    this.game = game;
    this.gamepadIndex = gamepadIndex;
 };

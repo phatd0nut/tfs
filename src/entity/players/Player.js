@@ -13,7 +13,7 @@
  * 
  * Game scene.
  */
-the_final_stand.entity.Player = function (x, y, width, height, texture) {
+the_final_stand.entity.Player = function (x, y, width, height, texture, gamepadIndex) {
 
     //--------------------------------------------------------------------------
     // Super call
@@ -24,10 +24,14 @@ the_final_stand.entity.Player = function (x, y, width, height, texture) {
      */
     rune.display.Sprite.call(this, x, y, width, height, texture);
 
+    console.log(x, y, width, height, texture, gamepadIndex);
+
     this.hp = 100;
     this.isAlive = true;
     this.reviveButtonPresses = 0;
     this.speed = 3;
+    this.gamepadIndex = gamepadIndex;
+    console.log(this.gamepadIndex);
     this.centerX = x + width / 2; // Centrum av spelaren i X-led
     this.centerY = y + height / 2; // Centrum av spelaren i Y-led
 };
@@ -88,7 +92,9 @@ the_final_stand.entity.Player.prototype.update = function (step) {
     }
 
     if (!this.isAlive && this.collisionZone) {
-        var playerInReviveZone = this.game.players.find(player => player !== this && this.isInReviveZone(player));
+        var playerInReviveZone = this.game.players.find(function (player) {
+            return player !== this && this.isInReviveZone(player);
+        }.bind(this));
 
         if (playerInReviveZone && playerInReviveZone.gamepad.justPressed(1)) {
             this.reviveButtonPresses++;
@@ -282,7 +288,7 @@ the_final_stand.entity.Player.prototype.playerDowned = function () {
 
 the_final_stand.entity.Player.prototype.hitBox = function () {
     this.hitbox.set(20, 12, this.width - 40, this.height - 30);
-    this.hitbox.debug = true;
+    this.hitbox.debug = false;
 };
 
 the_final_stand.entity.Player.prototype.m_initAnimation = function () {

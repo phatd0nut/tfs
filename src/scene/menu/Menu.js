@@ -127,7 +127,7 @@ the_final_stand.scene.Menu.prototype.selectOption = function (option) {
             break;
         case "MULTIPLAYER":
             this.application.scenes.load([
-                new the_final_stand.scene.Game()
+                new the_final_stand.scene.Multiplayer()
             ]);
             break;
         case "HOW TO PLAY":
