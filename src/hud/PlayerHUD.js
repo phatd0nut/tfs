@@ -7,10 +7,11 @@ the_final_stand.hud.PlayerHUD = function(player, playerArray, index) {
 };
 
 the_final_stand.hud.PlayerHUD.prototype.createBitmapField = function(text, x, y) {
-    var field = new rune.text.BitmapField(text, "myfont");
+    var field = new rune.text.BitmapField(text, 'tfs_font');
     field.x = x;
     field.y = y;
     field.autoSize = true;
+    
     field.scaleX = 1;
     field.scaleY = 1;
     return field;

@@ -33,7 +33,7 @@ the_final_stand.entity.ZombieSpawner.prototype.update = function() {
             this.wavePauseTimer = 0;
             this.currentWave++;
             this.dispose();
-            this.spawnWave(this.currentWave);
+            this.m_spawnWave(this.currentWave);
             this.waveHUD.updateWaveCounter();
         }
     } else {

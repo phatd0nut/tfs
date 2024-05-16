@@ -1,5 +1,5 @@
 the_final_stand.entity.AkimboUzi = function (stage, game) {
-    the_final_stand.entity.Weapon.call(this, "akimbo_uzi", Infinity, -26, 0, stage, game, true);
+    the_final_stand.entity.Weapon.call(this, "akimbo_uzi", 400, -26, 0, stage, game, true);
     this.weaponDamage = 9;
     this.fireRate = 100;
 };
@@ -34,5 +34,7 @@ the_final_stand.entity.AkimboUzi.prototype.fire = function (x, y, radian, rotati
         // Uppdatera currentSoundIndex för nästa gång
         this.currentSoundIndex = (this.currentSoundIndex + 1) % this.gunSounds.length;
 
+        // Uppdatera ammo
+        this.ammo--;
     }
 };
