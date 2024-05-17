@@ -130,24 +130,6 @@ the_final_stand.entity.Zombie.prototype.m_hitBoxDetection = function () {
         }
     }
 };
-/*
-the_final_stand.entity.Zombie.prototype.checkObjColl = function (collObj) {
-    console.log('collObj', collObj);
-    for (var i = 0; i < collObj.length; i++) {
-        console.log('collObj', collObj[i]);
-        var object = collObj[i];
-        if (this.aabb.intersects(object.aabb)) {
-            console.log('collided with object', object);
-            this.changeDirection();
-            break;
-        }
-    }
-};
-
-the_final_stand.entity.Zombie.prototype.changeDirection = function () {
-    this.dxDeviation = Math.random() - 0.5;
-    this.dyDeviation = Math.random() - 0.5;
-};*/
 
 the_final_stand.entity.Zombie.prototype.attack = function () {
     if (this.isAlive && this.distance <= 150) {
@@ -263,15 +245,40 @@ the_final_stand.entity.Zombie.prototype.m_followPlayers = function () {
         dy /= distance;
 
         // Om zombien är längre bort än 150 pixlar från spelaren, slumpa en ny riktning att röra sig i
+        // Om zombien är längre bort än 150 pixlar från spelaren, slumpa en ny riktning att röra sig i
         if (distance > 150 && this.directionChangeTimer <= 0) {
             this.dxDeviation = dx + (Math.random() - 0.5) * 0.6;
             this.dyDeviation = dy + (Math.random() - 0.5) * 0.6;
-            this.directionChangeTimer = 120;  // Ändra riktning var 2 sekunder (120 frames)
+            this.directionChangeTimer = 120;
         } else if (distance <= 150) {
-            this.dxDeviation = dx;
-            this.dyDeviation = dy;
+            if (this.isObstacleInFront && this.directionChangeTimer <= 0) {
+                if (!this.hasChangedDirection) {
+                    this.changeDirection();
+                    this.hasChangedDirection = true;
+                    this.isChangingDirection = true;
+                    this.directionChangeTimer = 0;  // Starta räkningen från 0
+                }
+                if (this.directionChangeTimer < 45) {
+                    this.directionChangeTimer++;  // Räkna upp till 90
+                }
+            } else if (!this.isChangingDirection) {
+                this.dxDeviation = dx;
+                this.dyDeviation = dy;
+                if (this.directionChangeTimer > 0) {
+                    this.directionChangeTimer--;  // Räkna ner från 180
+                }
+            }
+            if (this.directionChangeTimer <= 0) {
+                this.isChangingDirection = false;
+            }
         } else {
-            this.directionChangeTimer--;
+            if (this.directionChangeTimer > 0) {
+                this.directionChangeTimer--;
+            }
+            if (this.directionChangeTimer <= 0) {
+                this.hasChangedDirection = false;
+                this.isChangingDirection = false;
+            }
         }
 
         // Skapar en mjukare rörelse när zombien följer spelaren genom att använda en linjär interpolation (lerp) för att röra sig mot spelaren
@@ -287,8 +294,58 @@ the_final_stand.entity.Zombie.prototype.m_followPlayers = function () {
         this.x += dx * this.speed;
         this.y += dy * this.speed;
 
-        // Roterar zombien åt det håll den rör sig
+        // Uppdatera zombiens rotation
         var angle = Math.atan2(dy, dx);
-        this.rotation = angle * (180 / Math.PI) - 270;
+        this.rotation = angle * (180 / Math.PI);
+        if (this.rotation < 0) {
+            this.rotation += 360;
+        }
+        this.rotation -= 270;
+        if (this.rotation < 0) {
+            this.rotation += 360;
+        }
+
     }
+};
+
+
+the_final_stand.entity.Zombie.prototype.checkObjColl = function (tileMap) {
+    var tilesToCheck = [
+        23, 24, 25, 26, 30, 31, 32, 33, 37, 38, 39, 47, 48, 49, 50, 51, 52, 53, 54, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 81, 84, 90, 91, 92, 93, 94, 95, 96, 97, 98, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109
+    ];
+
+    var scanPoint = this.getPointInFront();
+    var tileValue = tileMap.getTileValueOfPoint(scanPoint);
+
+    if (tilesToCheck.includes(tileValue)) {
+        this.isObstacleInFront = true;  // Set the flag
+        this.changeDirection();
+    } else {
+        this.isObstacleInFront = false;  // Reset the flag if there's no obstacle
+    }
+};
+
+the_final_stand.entity.Zombie.prototype.getPointInFront = function () {
+    var distance = 20;
+
+    // Justera för att 0 grader är uppåt
+    var adjustedRotation = this.rotation - 90;
+
+    // Omvandla den justerade rotationen till radianer
+    var angleInRadians = adjustedRotation * (Math.PI / 180);
+
+    // Beräkna den nya punktens koordinater
+    var newX = this.centerX + Math.cos(angleInRadians) * distance;
+    var newY = this.centerY + Math.sin(angleInRadians) * distance;
+
+    // Skapa och returnera den nya punkten
+    return new rune.geom.Point(newX, newY);
+}
+
+the_final_stand.entity.Zombie.prototype.changeDirection = function () {
+    console.log('changing direction'); // Change direction every second
+    console.log(this.directionChangeTimer);
+
+    this.dxDeviation = Math.random() - 0.2;
+    this.dyDeviation = Math.random() - 0.2;
 };

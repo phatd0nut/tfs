@@ -56,7 +56,7 @@ the_final_stand.scene.Game.prototype.init = function () {
         new the_final_stand.entity.Danny(608, 270, this, 3)
     ];
 
-    // this.numPlayers = 1;
+    this.numPlayers = 1;
 
     // Välj de första 'numPlayers' spelarna
     this.players = allPlayers.slice(0, this.numPlayers);
@@ -97,10 +97,10 @@ the_final_stand.scene.Game.prototype.update = function (step) {
 
         for (var i = 0; i < zombies.length; i++) {
             zombies[i].hitTestAndSeparate(collObj);
-            // zombies[i].checkObjColl(collObj);
+            zombies[i].checkObjColl(collObj);
 
             if (player.isAlive && player.hitTestAndSeparate(zombies[i])) {
-                zombies[i].doDamage();
+                // zombies[i].doDamage();
             }
 
             // Kontrollerar kollision mellan zombies

@@ -24,14 +24,11 @@ the_final_stand.entity.Player = function (x, y, width, height, texture, gamepadI
      */
     rune.display.Sprite.call(this, x, y, width, height, texture);
 
-    console.log(x, y, width, height, texture, gamepadIndex);
-
     this.hp = 100;
     this.isAlive = true;
     this.reviveButtonPresses = 0;
     this.speed = 3;
     this.gamepadIndex = gamepadIndex;
-    console.log(this.gamepadIndex);
     this.centerX = x + width / 2; // Centrum av spelaren i X-led
     this.centerY = y + height / 2; // Centrum av spelaren i Y-led
 };
