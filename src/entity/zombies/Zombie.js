@@ -115,18 +115,6 @@ the_final_stand.entity.Zombie.prototype.m_initAnimation = function () {
     this.lastFrame = this.dieFrames[this.dieFrames.length - 1];
 };
 
-the_final_stand.entity.Zombie.prototype.m_initAnimation = function () {
-    this.animation.create("walk", this.walkFrames, 10, true);
-    this.animation.create("attack", this.attackFrames, 3, true);
-    this.animation.create("die", this.dieFrames, 7, false);
-
-    // Skapa en ny instans av AnimationScripts
-    this.dieAnimationScript = new rune.animation.AnimationScripts();
-
-    // Lägg till en callback till den sista keyframe i "die"-animationen
-    this.lastFrame = this.dieFrames[this.dieFrames.length - 1];
-};
-
 the_final_stand.entity.Zombie.prototype.m_initHitBox = function () {
     this.hitbox.set(20, 12, this.width - 40, this.height - 30);
     this.hitbox.debug = false;
@@ -154,17 +142,6 @@ the_final_stand.entity.Zombie.prototype.m_hitBoxDetection = function () {
             }
         }
     }
-};
-
-the_final_stand.entity.Zombie.prototype.m_initAnimation = function () {
-    this.animation.create("walk", this.walkFrames, 10, true);
-    this.animation.create("attack", this.attackFrames, 3, true);
-    this.animation.create("die", this.dieFrames, 7, false);
-
-    this.dieAnimationScript = new rune.animation.AnimationScripts();
-
-    // Lägg till en callback till den sista keyframe i "die"-animationen
-    this.lastFrame = this.dieFrames[this.dieFrames.length - 1];
 };
 
 the_final_stand.entity.Zombie.prototype.attack = function () {

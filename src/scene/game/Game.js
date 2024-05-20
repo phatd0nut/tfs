@@ -127,8 +127,6 @@ the_final_stand.scene.Game.prototype.update = function (step) {
     this.activeBullets.forEach(function (bullet) {
         bullet.update();
     });
-    this.updatePlayerZIndex();
-    this.updateZombieGraphicZIndex();
 };
 
 /**
@@ -142,19 +140,4 @@ the_final_stand.scene.Game.prototype.update = function (step) {
 the_final_stand.scene.Game.prototype.dispose = function () {
     rune.scene.Scene.prototype.dispose.call(this);
     // this.zombieSpawner.dispose();
-};
-
-the_final_stand.scene.Game.prototype.updatePlayerZIndex = function () {
-    for (var i = 0; i < this.players.length; i++) {
-        this.stage.setChildIndex(this.players[i], this.stage.numChildren - 1);
-    }
-};
-
-the_final_stand.scene.Game.prototype.updateZombieGraphicZIndex = function () {
-    var zombies = this.zombieSpawner.zombies;
-    for (var i = 0; i < zombies.length; i++) {
-        if (zombies[i].graphic) {
-            this.stage.setChildIndex(zombies[i].graphic, 0);
-        }
-    }
 };
