@@ -37,6 +37,10 @@ the_final_stand.entity.ZombieDefault.prototype.constructor = the_final_stand.ent
 
 the_final_stand.entity.ZombieDefault.prototype.attackDamage = 33;
 the_final_stand.entity.ZombieDefault.prototype.speed = 2;
+the_final_stand.entity.ZombieDefault.prototype.type = "default";
+the_final_stand.entity.ZombieDefault.prototype.walkFrames = [1, 2, 3, 4, 5];
+the_final_stand.entity.ZombieDefault.prototype.attackFrames = [6, 7];
+the_final_stand.entity.ZombieDefault.prototype.dieFrames = [8, 9, 10, 11];
 
 //------------------------------------------------------------------------------
 // Override public prototype methods (ENGINE)
@@ -77,8 +81,8 @@ the_final_stand.entity.ZombieDefault.prototype.dispose = function () {
     the_final_stand.entity.Zombie.prototype.dispose.call(this);
 };
 
-the_final_stand.entity.ZombieDefault.prototype.m_initAnimation = function () {
-    this.animation.create("walk", [1, 2, 3, 4, 5], 10, true);
-    this.animation.create("attack", [6, 7], 3, true);
-    this.animation.create("die", [8, 9, 10, 11], 7, false);
-};
+// the_final_stand.entity.ZombieDefault.prototype.m_initAnimation = function () {
+//     this.animation.create("walk", [1, 2, 3, 4, 5], 10, true);
+//     this.animation.create("attack", [6, 7], 3, true);
+//     this.animation.create("die", [8, 9, 10, 11], 7, false);
+// };

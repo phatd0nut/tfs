@@ -69,6 +69,9 @@ the_final_stand.data.Requests.prototype.m_construct = function() {
 	this.add("bullet6x6", "./../asset/projectiles/bullet6x6.png");
 	this.add("bullet8x8", "./../asset/projectiles/bullet8x8.png");
 	this.add("zombie_default", "./../asset/zombies/zombie_default.png");
+	this.add("zombie_default_dead_60x60", "./../asset/zombies/zombie_default_dead_60x60.png");
 	this.add("zombie_fast", "./../asset/zombies/zombie_fast.png");
+	this.add("zombie_fast_dead_60x60", "./../asset/zombies/zombie_fast_dead_60x60.png");
 	this.add("zombie_fat", "./../asset/zombies/zombie_fat.png");
+	this.add("zombie_fat_dead_60x60", "./../asset/zombies/zombie_fat_dead_60x60.png");
 };

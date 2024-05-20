@@ -59,7 +59,6 @@ the_final_stand.entity.Cash.prototype.m_initAnimation = function () {
 
 the_final_stand.entity.Cash.prototype.drop = function () {
     this.game.stage.addChild(this);
-    this.game.stage.setChildIndex(this, this.game.stage.numChildren - 1);
+    this.game.stage.setChildIndex(this, this.game.stage.numChildren - 2);
     this.animation.gotoAndPlay("bag_dropped", 0);
-
 };
