@@ -41,10 +41,6 @@ the_final_stand.entity.ZombieFast.prototype.type = "fast";
 the_final_stand.entity.ZombieFast.prototype.walkFrames = [1, 2, 3, 4, 5];
 the_final_stand.entity.ZombieFast.prototype.attackFrames = [6, 7, 8];
 the_final_stand.entity.ZombieFast.prototype.dieFrames = [9, 10, 11, 12, 13];
-the_final_stand.entity.ZombieFast.prototype.type = "fast";
-the_final_stand.entity.ZombieFast.prototype.walkFrames = [1, 2, 3, 4, 5];
-the_final_stand.entity.ZombieFast.prototype.attackFrames = [6, 7, 8];
-the_final_stand.entity.ZombieFast.prototype.dieFrames = [9, 10, 11, 12, 13];
 
 //------------------------------------------------------------------------------
 // Override public prototype methods (ENGINE)

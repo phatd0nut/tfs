@@ -41,10 +41,6 @@ the_final_stand.entity.ZombieFat.prototype.type = "fat";
 the_final_stand.entity.ZombieFat.prototype.walkFrames = [1, 2, 3, 4];
 the_final_stand.entity.ZombieFat.prototype.attackFrames = [5, 6];
 the_final_stand.entity.ZombieFat.prototype.dieFrames = [7, 8, 9, 10, 11, 12, 13, 14, 15];
-the_final_stand.entity.ZombieFat.prototype.type = "fat";
-the_final_stand.entity.ZombieFat.prototype.walkFrames = [1, 2, 3, 4];
-the_final_stand.entity.ZombieFat.prototype.attackFrames = [5, 6];
-the_final_stand.entity.ZombieFat.prototype.dieFrames = [7, 8, 9, 10, 11, 12, 13, 14, 15];
 
 //------------------------------------------------------------------------------
 // Override public prototype methods (ENGINE)

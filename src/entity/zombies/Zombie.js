@@ -312,7 +312,7 @@ the_final_stand.entity.Zombie.prototype.m_followPlayers = function () {
 
         // Om zombien är längre bort än 150 pixlar från spelaren, slumpa en ny riktning att röra sig i
         // Om zombien är längre bort än 150 pixlar från spelaren, slumpa en ny riktning att röra sig i
-        if (distance > 150 && this.directionChangeTimer <= 0) {
+        if (this.distance > 150 && this.directionChangeTimer <= 0) {
             this.dxDeviation = dx + (Math.random() - 0.5) * 0.6;
             this.dyDeviation = dy + (Math.random() - 0.5) * 0.6;
             this.directionChangeTimer = 120;
@@ -374,7 +374,6 @@ the_final_stand.entity.Zombie.prototype.m_followPlayers = function () {
     }
 };
 
-
 the_final_stand.entity.Zombie.prototype.checkObjColl = function (tileMap) {
     if (!this.isAlive) {
         return;
@@ -413,9 +412,6 @@ the_final_stand.entity.Zombie.prototype.getPointInFront = function () {
 }
 
 the_final_stand.entity.Zombie.prototype.changeDirection = function () {
-    console.log('changing direction'); // Change direction every second
-    console.log(this.directionChangeTimer);
-
     this.dxDeviation = Math.random() - 0.2;
     this.dyDeviation = Math.random() - 0.2;
 };
