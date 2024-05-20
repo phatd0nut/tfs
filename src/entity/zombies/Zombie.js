@@ -56,6 +56,7 @@ the_final_stand.entity.Zombie.prototype.init = function () {
     this.isAlive = true;
     this.isMoving = false;
     this.isAttacking = false;
+    this.distance = 0;
 
     this.directionChangeTimer = 0;
     this.dxDeviation = 0;
@@ -100,6 +101,30 @@ the_final_stand.entity.Zombie.prototype.dispose = function () {
     console.log('Zombie disposed');
     this.game.stage.removeChild(this);
     console.log('Zombie removed from stage');
+};
+
+the_final_stand.entity.Zombie.prototype.m_initAnimation = function () {
+    this.animation.create("walk", this.walkFrames, 10, true);
+    this.animation.create("attack", this.attackFrames, 3, true);
+    this.animation.create("die", this.dieFrames, 7, false);
+
+    // Skapa en ny instans av AnimationScripts
+    this.dieAnimationScript = new rune.animation.AnimationScripts();
+
+    // Lägg till en callback till den sista keyframe i "die"-animationen
+    this.lastFrame = this.dieFrames[this.dieFrames.length - 1];
+};
+
+the_final_stand.entity.Zombie.prototype.m_initAnimation = function () {
+    this.animation.create("walk", this.walkFrames, 10, true);
+    this.animation.create("attack", this.attackFrames, 3, true);
+    this.animation.create("die", this.dieFrames, 7, false);
+
+    // Skapa en ny instans av AnimationScripts
+    this.dieAnimationScript = new rune.animation.AnimationScripts();
+
+    // Lägg till en callback till den sista keyframe i "die"-animationen
+    this.lastFrame = this.dieFrames[this.dieFrames.length - 1];
 };
 
 the_final_stand.entity.Zombie.prototype.m_initHitBox = function () {
@@ -147,6 +172,7 @@ the_final_stand.entity.Zombie.prototype.attack = function () {
         if (this.animation.currentAnimation !== "attack") {
             this.isAttacking = true;
             this.animation.gotoAndPlay("attack");
+
         }
     } else {
         this.isAttacking = false;
@@ -208,6 +234,31 @@ the_final_stand.entity.Zombie.prototype.die = function () {
 
     // Anropa killZombie metoden i ZombieSpawner klassen
     this.game.zombieSpawner.killedZombies(this);
+};
+
+the_final_stand.entity.Zombie.prototype.printZombieToCanvas = function () {
+    console.log('printZombieToCanvas');
+    var deadImage;
+    switch (this.type) {
+        case "default":
+            deadImage = "zombie_default_dead_60x60";
+            break;
+        case "fat":
+            deadImage = "zombie_fat_dead_60x60";
+            break;
+        case "fast":
+            deadImage = "zombie_fast_dead_60x60";
+            break;
+    }
+
+    this.graphic = new rune.display.Graphic(this.x, this.y, 60, 60, deadImage);
+
+    // Använd zombiens rotation för att rotera grafiken
+    this.graphic.rotation = this.rotation;
+
+    this.game.canvas.drawImage(this.graphic.m_texture.m_resource, this.x, this.y, 60, 60);
+    this.game.stage.addChild(this.graphic);
+    this.game.stage.setChildIndex(this.graphic, 0);
 };
 
 the_final_stand.entity.Zombie.prototype.dropCash = function () {
@@ -284,7 +335,7 @@ the_final_stand.entity.Zombie.prototype.m_followPlayers = function () {
 
         // Om zombien är längre bort än 150 pixlar från spelaren, slumpa en ny riktning att röra sig i
         // Om zombien är längre bort än 150 pixlar från spelaren, slumpa en ny riktning att röra sig i
-        if (this.distance > 150 && this.directionChangeTimer <= 0) {
+        if (distance > 150 && this.directionChangeTimer <= 0) {
             this.dxDeviation = dx + (Math.random() - 0.5) * 0.6;
             this.dyDeviation = dy + (Math.random() - 0.5) * 0.6;
             this.directionChangeTimer = 120;
@@ -297,13 +348,13 @@ the_final_stand.entity.Zombie.prototype.m_followPlayers = function () {
                     this.directionChangeTimer = 0;  // Starta räkningen från 0
                 }
                 if (this.directionChangeTimer < 45) {
-                    this.directionChangeTimer++;  // Räkna upp till 90
+                    this.directionChangeTimer++; // Räkna upp till 45
                 }
             } else if (!this.isChangingDirection) {
                 this.dxDeviation = dx;
                 this.dyDeviation = dy;
                 if (this.directionChangeTimer > 0) {
-                    this.directionChangeTimer--;  // Räkna ner från 180
+                    this.directionChangeTimer--;  // Räkna ner om det inte finns något hinder framför
                 }
             }
             if (this.directionChangeTimer <= 0) {
@@ -348,6 +399,10 @@ the_final_stand.entity.Zombie.prototype.m_followPlayers = function () {
 
 
 the_final_stand.entity.Zombie.prototype.checkObjColl = function (tileMap) {
+    if (!this.isAlive) {
+        return;
+    }
+
     var tilesToCheck = [
         23, 24, 25, 26, 30, 31, 32, 33, 37, 38, 39, 47, 48, 49, 50, 51, 52, 53, 54, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 81, 84, 90, 91, 92, 93, 94, 95, 96, 97, 98, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109
     ];

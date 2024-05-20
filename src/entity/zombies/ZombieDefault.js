@@ -41,6 +41,10 @@ the_final_stand.entity.ZombieDefault.prototype.type = "default";
 the_final_stand.entity.ZombieDefault.prototype.walkFrames = [1, 2, 3, 4, 5];
 the_final_stand.entity.ZombieDefault.prototype.attackFrames = [6, 7];
 the_final_stand.entity.ZombieDefault.prototype.dieFrames = [8, 9, 10, 11];
+the_final_stand.entity.ZombieDefault.prototype.type = "default";
+the_final_stand.entity.ZombieDefault.prototype.walkFrames = [1, 2, 3, 4, 5];
+the_final_stand.entity.ZombieDefault.prototype.attackFrames = [6, 7];
+the_final_stand.entity.ZombieDefault.prototype.dieFrames = [8, 9, 10, 11];
 
 //------------------------------------------------------------------------------
 // Override public prototype methods (ENGINE)

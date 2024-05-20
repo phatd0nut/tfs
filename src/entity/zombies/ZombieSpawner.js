@@ -79,7 +79,6 @@ the_final_stand.entity.ZombieSpawner.prototype.m_spawnWave = function(waveNumber
 };
 
 the_final_stand.entity.ZombieSpawner.prototype.dispose = function() {
-    console.log('disposing zombies');
     for (var i = 0; i < this.zombies.length; i++) {
         var zombie = this.zombies[i];
         this.game.stage.removeChild(zombie);
