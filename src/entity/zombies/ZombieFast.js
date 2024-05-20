@@ -37,6 +37,10 @@ the_final_stand.entity.ZombieFast.prototype.constructor = the_final_stand.entity
 
 the_final_stand.entity.ZombieFast.prototype.attackDamage = 25;
 the_final_stand.entity.ZombieFast.prototype.speed = 3.2;
+the_final_stand.entity.ZombieFast.prototype.type = "fast";
+the_final_stand.entity.ZombieFast.prototype.walkFrames = [1, 2, 3, 4, 5];
+the_final_stand.entity.ZombieFast.prototype.attackFrames = [6, 7, 8];
+the_final_stand.entity.ZombieFast.prototype.dieFrames = [9, 10, 11, 12, 13];
 
 //------------------------------------------------------------------------------
 // Override public prototype methods (ENGINE)
@@ -75,10 +79,4 @@ the_final_stand.entity.ZombieFast.prototype.update = function (step) {
  */
 the_final_stand.entity.ZombieFast.prototype.dispose = function () {
     the_final_stand.entity.Zombie.prototype.dispose.call(this);
-};
-
-the_final_stand.entity.ZombieFast.prototype.m_initAnimation = function () {
-    this.animation.create("walk", [1, 2, 3, 4, 5], 10, true);
-    this.animation.create("attack", [6, 7, 8], 3, true);
-    this.animation.create("die", [9, 10, 11, 12, 13], 7, false);
 };

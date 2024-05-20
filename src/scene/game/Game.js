@@ -47,6 +47,7 @@ the_final_stand.scene.Game.prototype.constructor = the_final_stand.scene.Game;
 the_final_stand.scene.Game.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
     this.stage.map.load('map2');
+    this.canvas = new rune.display.Canvas(1280, 720);
 
     // Skapa en array med alla möjliga spelare
     var allPlayers = [
@@ -63,7 +64,7 @@ the_final_stand.scene.Game.prototype.init = function () {
 
     for (var i = 0; i < this.players.length; i++) {
         this.stage.addChild(this.players[i]);
-        this.stage.setChildIndex(this.players[i], 1);
+        this.stage.setChildIndex(this.players[i], this.stage.numChildren - 1);
     }
 
     this.bank = 0;
@@ -94,18 +95,20 @@ the_final_stand.scene.Game.prototype.update = function (step) {
     for (var p = 0; p < this.players.length; p++) {
         var player = this.players[p];
         player.hitTestAndSeparate(collObj);
-
         for (var i = 0; i < zombies.length; i++) {
-            zombies[i].hitTestAndSeparate(collObj);
-            zombies[i].checkObjColl(collObj);
-
-            if (player.isAlive && player.hitTestAndSeparate(zombies[i])) {
-                // zombies[i].doDamage();
-            }
-
-            // Kontrollerar kollision mellan zombies
-            for (var j = i + 1; j < zombies.length; j++) {
-                zombies[i].hitTestAndSeparate(zombies[j]);
+            if (zombies[i].isAlive) {
+                zombies[i].hitTestAndSeparate(collObj);
+                zombies[i].checkObjColl(collObj);
+                if (player.isAlive && player.hitTestAndSeparate(zombies[i])) {
+                    // zombies[i].doDamage();
+                }
+        
+                // Kontrollerar kollision mellan zombies
+                for (var j = i + 1; j < zombies.length; j++) {
+                    if (zombies[j].isAlive) {
+                        zombies[i].hitTestAndSeparate(zombies[j]);
+                    }
+                }
             }
         }
 

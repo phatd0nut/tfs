@@ -83,9 +83,6 @@ the_final_stand.entity.Zombie.prototype.update = function (step) {
     this.aabb.x = this.x;
     this.aabb.y = this.y;
 
-    var dx = this.players.centerX - this.centerX;
-    var dy = this.players.centerY - this.centerY;
-    this.distance = Math.sqrt(dx * dx + dy * dy);
     this.attack();
 };
 
@@ -100,6 +97,9 @@ the_final_stand.entity.Zombie.prototype.update = function (step) {
 
 the_final_stand.entity.Zombie.prototype.dispose = function () {
     rune.display.Sprite.prototype.dispose.call(this);
+    console.log('Zombie disposed');
+    this.game.stage.removeChild(this);
+    console.log('Zombie removed from stage');
 };
 
 the_final_stand.entity.Zombie.prototype.m_initHitBox = function () {
@@ -129,6 +129,14 @@ the_final_stand.entity.Zombie.prototype.m_hitBoxDetection = function () {
             }
         }
     }
+};
+
+the_final_stand.entity.Zombie.prototype.m_initAnimation = function () {
+    this.animation.create("walk", this.walkFrames, 10, true);
+    this.animation.create("attack", this.attackFrames, 3, true);
+    this.animation.create("die", this.dieFrames, 7, false);
+
+    this.dieAnimationScript = new rune.animation.AnimationScripts();
 };
 
 the_final_stand.entity.Zombie.prototype.attack = function () {
@@ -190,6 +198,7 @@ the_final_stand.entity.Zombie.prototype.die = function () {
 
     if (this.animation.currentAnimation !== "die") {
         this.animation.gotoAndPlay("die");
+        this.dieAnimationScript.add(this.lastFrame, this.printZombieToCanvas(), this);
     }
 
     this.dropCash();
@@ -207,6 +216,33 @@ the_final_stand.entity.Zombie.prototype.dropCash = function () {
         cash.drop();
     }
 }
+
+the_final_stand.entity.Zombie.prototype.printZombieToCanvas = function () {
+    var deadImage;
+    switch (this.type) {
+        case "default":
+            deadImage = "zombie_default_dead_60x60";
+            break;
+        case "fat":
+            deadImage = "zombie_fat_dead_60x60";
+            break;
+        case "fast":
+            deadImage = "zombie_fast_dead_60x60";
+            break;
+    }
+
+    var graphic = new rune.display.Graphic(this.x, this.y, 60, 60, deadImage);
+    console.log(graphic);
+
+    // Använd zombiens rotation för att rotera grafiken
+    graphic.rotation = this.rotation;
+
+    this.game.canvas.drawImage(graphic.m_texture.m_resource, this.x, this.y, 60, 60);
+    this.game.stage.addChild(graphic);
+    this.game.stage.setChildIndex(graphic, 0);
+    this.dispose();
+};
+
 
 the_final_stand.entity.Zombie.prototype.m_followPlayers = function () {
     if (!this.isAlive) {
@@ -240,17 +276,17 @@ the_final_stand.entity.Zombie.prototype.m_followPlayers = function () {
     if (closestPlayer) {
         var dx = closestPlayer.centerX - this.centerX;
         var dy = closestPlayer.centerY - this.centerY;
-        var distance = Math.sqrt(dx * dx + dy * dy);
-        dx /= distance;
-        dy /= distance;
+        this.distance = Math.sqrt(dx * dx + dy * dy);
+        dx /= this.distance;
+        dy /= this.distance;
 
         // Om zombien är längre bort än 150 pixlar från spelaren, slumpa en ny riktning att röra sig i
         // Om zombien är längre bort än 150 pixlar från spelaren, slumpa en ny riktning att röra sig i
-        if (distance > 150 && this.directionChangeTimer <= 0) {
+        if (this.distance > 150 && this.directionChangeTimer <= 0) {
             this.dxDeviation = dx + (Math.random() - 0.5) * 0.6;
             this.dyDeviation = dy + (Math.random() - 0.5) * 0.6;
             this.directionChangeTimer = 120;
-        } else if (distance <= 150) {
+        } else if (this.distance <= 150) {
             if (this.isObstacleInFront && this.directionChangeTimer <= 0) {
                 if (!this.hasChangedDirection) {
                     this.changeDirection();

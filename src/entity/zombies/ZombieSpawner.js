@@ -60,7 +60,7 @@ the_final_stand.entity.ZombieSpawner.prototype.m_spawnZombie = function() {
     var zombie = new ZombieType(point.x, point.y, this.game);
 
     this.game.stage.addChild(zombie);
-    this.game.stage.setChildIndex(zombie, 0);
+    this.game.stage.setChildIndex(zombie, 1);
     this.zombies.push(zombie);
 };
 
