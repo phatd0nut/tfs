@@ -239,6 +239,7 @@ the_final_stand.entity.Zombie.prototype.printZombieToCanvas = function () {
 
     this.game.canvas.drawImage(this.graphic.m_texture.m_resource, this.x, this.y, 60, 60);
     this.game.corpseLayer.addChild(this.graphic);
+    this.game.zombieSpawner.removePrintedZombies(this.graphic);
     this.dispose();
 };
 

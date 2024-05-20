@@ -1,14 +1,15 @@
-the_final_stand.entity.ZombieSpawner = function(game) {
+the_final_stand.entity.ZombieSpawner = function (game) {
     this.game = game;
     this.zombies = [];
+    this.printedZombiesArray = [];
     this.zombieTypes = [the_final_stand.entity.ZombieDefault, the_final_stand.entity.ZombieFat, the_final_stand.entity.ZombieFast];
     this.zombiesDead = 0;
     this.totalZombiesInWave = 0;
     this.spawnPoints = [
-        {x: -10, y: 310},
-        {x: 600, y: -20},
-        {x: 600, y: 680},
-        {x: 1240, y: 310},
+        { x: -10, y: 310 },
+        { x: 600, y: -20 },
+        { x: 600, y: 680 },
+        { x: 1240, y: 310 },
     ];
     this.waveHUD = new the_final_stand.hud.WaveHUD(this, this.game); // Instansiera WaveHUD
     this.game.waveHUD = this.waveHUD;
@@ -24,7 +25,7 @@ the_final_stand.entity.ZombieSpawner = function(game) {
     this.waveHUD.render(); // Rendera WaveHUD
 };
 
-the_final_stand.entity.ZombieSpawner.prototype.update = function() {
+the_final_stand.entity.ZombieSpawner.prototype.update = function () {
     this.waveHUD.update();
     if (this.isWavePaused) {
         this.wavePauseTimer++;
@@ -49,7 +50,7 @@ the_final_stand.entity.ZombieSpawner.prototype.update = function() {
     }
 };
 
-the_final_stand.entity.ZombieSpawner.prototype.m_spawnZombie = function() {
+the_final_stand.entity.ZombieSpawner.prototype.m_spawnZombie = function () {
     var point = this.spawnPoints[Math.floor(Math.random() * this.spawnPoints.length)];
 
     // Select a random zombie type
@@ -64,7 +65,7 @@ the_final_stand.entity.ZombieSpawner.prototype.m_spawnZombie = function() {
     this.zombies.push(zombie);
 };
 
-the_final_stand.entity.ZombieSpawner.prototype.m_spawnWave = function(waveNumber) {
+the_final_stand.entity.ZombieSpawner.prototype.m_spawnWave = function (waveNumber) {
     var numZombies;
     if (waveNumber === 1) {
         numZombies = 1; // Antalet zombies som spawnas första vågen
@@ -78,15 +79,26 @@ the_final_stand.entity.ZombieSpawner.prototype.m_spawnWave = function(waveNumber
     this.waveHUD.updateWaveCounter();
 };
 
-the_final_stand.entity.ZombieSpawner.prototype.dispose = function() {
+the_final_stand.entity.ZombieSpawner.prototype.dispose = function () {
     this.zombiesDead += this.zombies.length; // Räkna alla zombies som döda för att starta nästa våg
+
+    for (var i = 0; i < this.printedZombiesArray.length; i++) {
+        this.game.corpseLayer.removeChild(this.printedZombiesArray[i]);
+    }
+
     this.zombies = [];
+    this.printedZombiesArray = [];
 };
 
-the_final_stand.entity.ZombieSpawner.prototype.killedZombies = function(zombie) {
+the_final_stand.entity.ZombieSpawner.prototype.killedZombies = function (zombie) {
     var index = this.zombies.indexOf(zombie);
     if (index > -1) {
         this.zombiesDead++;
         this.waveHUD.updateZombieCount(this.totalZombiesInWave - this.zombiesDead);
     }
+};
+
+the_final_stand.entity.ZombieSpawner.prototype.removePrintedZombies = function (printedZombie) {
+    this.printedZombies = printedZombie;
+    this.printedZombiesArray.push(this.printedZombies);
 };
