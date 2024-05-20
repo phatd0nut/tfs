@@ -27,7 +27,8 @@ the_final_stand.entity.Zombie = function (x, y, width, height, texture) {
 
     this.game = this.application.scenes.selected;
     this.players = this.game.players;
-    this.currentPlayerIndex = 0;
+    this.centerX = this.x + this.width / 2;
+    this.centerY = this.y + this.height / 2;
     this.aabb = new AABB(this.x, this.y, width, height);
 };
 
@@ -56,10 +57,6 @@ the_final_stand.entity.Zombie.prototype.init = function () {
     this.isMoving = false;
     this.isAttacking = false;
 
-    this.widthX = 1280;
-    this.heightY = 720;
-    this.aspectRatio = this.widthX / this.heightY;
-
     this.directionChangeTimer = 0;
     this.dxDeviation = 0;
     this.dyDeviation = 0;
@@ -86,8 +83,8 @@ the_final_stand.entity.Zombie.prototype.update = function (step) {
     this.aabb.x = this.x;
     this.aabb.y = this.y;
 
-    var dx = this.players.x - this.x;
-    var dy = this.players.y - this.y;
+    var dx = this.players.centerX - this.centerX;
+    var dy = this.players.centerY - this.centerY;
     this.distance = Math.sqrt(dx * dx + dy * dy);
     this.attack();
 };
@@ -107,12 +104,14 @@ the_final_stand.entity.Zombie.prototype.dispose = function () {
 
 the_final_stand.entity.Zombie.prototype.m_initHitBox = function () {
     this.hitbox.set(20, 12, this.width - 40, this.height - 30);
-    this.hitbox.debug = true;
+    this.hitbox.debug = false;
 };
 
 the_final_stand.entity.Zombie.prototype.m_hitBoxDetection = function () {
     if (this.isAlive && !this.bulletHasCollided) {
-        for (let bullets of this.game.activeBullets) {
+        var bulletsArray = Array.from(this.game.activeBullets);
+        for (var i = 0; i < bulletsArray.length; i++) {
+            var bullets = bulletsArray[i];
             var bulletAABB = bullets.aabb;
 
             if (this.aabb.intersects(bulletAABB)) {
@@ -131,24 +130,6 @@ the_final_stand.entity.Zombie.prototype.m_hitBoxDetection = function () {
         }
     }
 };
-/*
-the_final_stand.entity.Zombie.prototype.checkObjColl = function (collObj) {
-    console.log('collObj', collObj);
-    for (var i = 0; i < collObj.length; i++) {
-        console.log('collObj', collObj[i]);
-        var object = collObj[i];
-        if (this.aabb.intersects(object.aabb)) {
-            console.log('collided with object', object);
-            this.changeDirection();
-            break;
-        }
-    }
-};
-
-the_final_stand.entity.Zombie.prototype.changeDirection = function () {
-    this.dxDeviation = Math.random() - 0.5;
-    this.dyDeviation = Math.random() - 0.5;
-};*/
 
 the_final_stand.entity.Zombie.prototype.attack = function () {
     if (this.isAlive && this.distance <= 150) {
@@ -206,7 +187,6 @@ the_final_stand.entity.Zombie.prototype.die = function () {
     this.isAlive = false;
     this.isMoving = false;
     this.isAttacking = false;
-    console.log('Zombie died');
 
     if (this.animation.currentAnimation !== "die") {
         this.animation.gotoAndPlay("die");
@@ -225,7 +205,6 @@ the_final_stand.entity.Zombie.prototype.dropCash = function () {
         var cashY = this.y + this.height / 3;
         var cash = new the_final_stand.entity.Cash(cashX, cashY, this.cashValue, this.game);
         cash.drop();
-        cash.animation.play();
     }
 }
 
@@ -246,8 +225,8 @@ the_final_stand.entity.Zombie.prototype.m_followPlayers = function () {
             continue;
         }
 
-        var dx = player.x - this.x;
-        var dy = player.y - this.y;
+        var dx = player.centerX - this.centerX;
+        var dy = player.centerY - this.centerY;
         var distanceSquared = dx * dx + dy * dy;
 
         if (distanceSquared < closestDistance) {
@@ -259,8 +238,8 @@ the_final_stand.entity.Zombie.prototype.m_followPlayers = function () {
     this.closestPlayer = closestPlayer;
 
     if (closestPlayer) {
-        var dx = closestPlayer.x - this.x;
-        var dy = closestPlayer.y - this.y;
+        var dx = closestPlayer.centerX - this.centerX;
+        var dy = closestPlayer.centerY - this.centerY;
         var distance = Math.sqrt(dx * dx + dy * dy);
         dx /= distance;
         dy /= distance;
@@ -290,9 +269,49 @@ the_final_stand.entity.Zombie.prototype.m_followPlayers = function () {
         this.x += dx * this.speed;
         this.y += dy * this.speed;
 
-        // Roterar zombien åt det håll den rör sig
+        // Uppdatera zombiens rotation
         var angle = Math.atan2(dy, dx);
-        this.rotation = angle * (180 / Math.PI) - 270;
+        this.rotation = angle * (180 / Math.PI);
+        if (this.rotation < 0) {
+            this.rotation += 360;
+        }
+        this.rotation -= 270;
+        if (this.rotation < 0) {
+            this.rotation += 360;
+        }
+
     }
 };
 
+
+the_final_stand.entity.Zombie.prototype.checkObjColl = function (tileMap) {
+    var tileMap = tileMap;
+    var tilesToCheck = [
+        23, 24, 25, 26, 30, 31, 32, 33, 37, 38, 39, 47, 48, 49, 50, 51, 52, 53, 54, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 81, 84, 90, 91, 92, 93, 94, 95, 96, 97, 98, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109
+    ];
+
+// Antag att 'distance' är avståndet du vill att punkten ska vara framför zombien
+var distance = 20;
+
+// Justera för att 0 grader är uppåt
+var adjustedRotation = this.rotation - 90;
+
+// Omvandla den justerade rotationen till radianer
+var angleInRadians = adjustedRotation * (Math.PI / 180);
+
+// Beräkna den nya punktens koordinater
+var newX = this.centerX + Math.cos(angleInRadians) * distance;
+var newY = this.centerY + Math.sin(angleInRadians) * distance;
+
+// Skapa den nya punkten
+var pointInFront = new rune.geom.Point(newX, newY);
+
+console.log(tileMap.getTileValueOfPoint(pointInFront));
+
+};
+
+the_final_stand.entity.Zombie.prototype.changeDirection = function () {
+    console.log('changing direction');
+    this.dxDeviation = Math.random() - 0.5;
+    this.dyDeviation = Math.random() - 0.5;
+};

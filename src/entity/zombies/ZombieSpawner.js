@@ -33,7 +33,7 @@ the_final_stand.entity.ZombieSpawner.prototype.update = function() {
             this.wavePauseTimer = 0;
             this.currentWave++;
             this.dispose();
-            this.spawnWave(this.currentWave);
+            this.m_spawnWave(this.currentWave);
             this.waveHUD.updateWaveCounter();
         }
     } else {
@@ -61,13 +61,14 @@ the_final_stand.entity.ZombieSpawner.prototype.m_spawnZombie = function() {
 
     this.game.stage.addChild(zombie);
     this.game.stage.setChildIndex(zombie, 0);
+    
     this.zombies.push(zombie);
 };
 
 the_final_stand.entity.ZombieSpawner.prototype.m_spawnWave = function(waveNumber) {
     var numZombies;
     if (waveNumber === 1) {
-        numZombies = 25; // Antalet zombies som spawnas första vågen
+        numZombies = 1; // Antalet zombies som spawnas första vågen
     } else {
         numZombies = 25 + Math.pow(2, waveNumber); // Ökar antalet zombies exponentiellt
     }

@@ -4,11 +4,10 @@ the_final_stand.hud.WaveHUD = function (zombieSpawner, game) {
     this.zombieCountText = null;
     this.waveText = null;
     this.totalMoneyText = null;
-    console.log(this.game.players);
 };
 
 the_final_stand.hud.WaveHUD.prototype.createBitmapField = function (text, x, y) {
-    var field = new rune.text.BitmapField(text, "myfont");
+    var field = new rune.text.BitmapField(text, 'tfs_font');
     field.x = x;
     field.y = y;
     field.autoSize = true;
@@ -21,7 +20,7 @@ the_final_stand.hud.WaveHUD.prototype.render = function () {
     this.zombieCountText = this.createBitmapField("ZOMBIES: ", 280, 10);
     this.zombieSpawner.game.stage.addChild(this.zombieCountText);
 
-    this.waveText = this.createBitmapField("ZOMBIES: ", 640, 10);
+    this.waveText = this.createBitmapField("WAVE: ", 640, 10);
     this.zombieSpawner.game.stage.addChild(this.waveText);
 
     this.totalMoneyText = this.createBitmapField("TOTAL MONEY: ", 800, 10);
@@ -48,10 +47,7 @@ the_final_stand.hud.WaveHUD.prototype.updateWaveCounter = function () {
 };
 
 the_final_stand.hud.WaveHUD.prototype.updateTotalMoney = function () {
-    var totalMoney = 0;
-    for (var i = 0; i < this.game.players.length; i++) {
-        totalMoney += this.game.players[i].money;
-    }
+    var totalMoney = this.game.bank;
     var totalMoneyString = totalMoney > 0 ? (totalMoney.toString() + " $") : "0 $";
     this.totalMoneyText.text = "TOTAL MONEY: " + totalMoneyString;
 };

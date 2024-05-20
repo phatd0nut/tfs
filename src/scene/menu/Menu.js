@@ -17,13 +17,7 @@
 
 
 the_final_stand.scene.Menu = function () {
-
-
-
-
     rune.scene.Scene.call(this);
-
-
 };
 
 
@@ -53,17 +47,7 @@ the_final_stand.scene.Menu.prototype.init = function () {
     this.m_initController();
 
 
-}
-
-
-/**
- * @inheritDoc
- */
-
-
-
-
-
+};
 
 the_final_stand.scene.Menu.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
@@ -84,26 +68,23 @@ the_final_stand.scene.Menu.prototype.update = function (step) {
 
 
     }
-}
-
-
-//------------------------------------------------------------------------------
-
+};
 
 the_final_stand.scene.Menu.prototype.m_initBackground = function () {
-    this.background = new rune.display.Graphic(
+    this.background = new rune.display.Sprite(
         0,
         0,
         this.application.screen.width,
-        this.application.screen.height, "MENUSCENE"
+        this.application.screen.height, "MENUSCENE-Sheet"
     );
+
+    this.background.animation.create("play", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32], 10, false);
     this.stage.addChild(this.background);
-}
+};
+
 
 
 //------------------------------------------------------------------------------
-
-
 // Method to initialize the controller graphic
 the_final_stand.scene.Menu.prototype.m_initController = function () {
     // this.controllerGraphic = new rune.display.Graphic(
@@ -123,53 +104,48 @@ the_final_stand.scene.Menu.prototype.m_initController = function () {
     // this.text.scaleY = 2;
     // this.stage.addChild(this.text);
     // this.stage.addChild(this.controllerGraphic);
-}
-
+};
 
 //Method to initialize the menu
 the_final_stand.scene.Menu.prototype.m_initMenu = function () {
-    this.menu = new rune.ui.VTMenu();
-    this.menu.add("Single Player");
-    this.menu.add("Multiplayer");
-    this.menu.add("Highscore");
-    this.menu.add("How to play");
-    this.menu.x = 480;
-    this.menu.y = 500;
-    this.menu.scaleX = 3;
-    this.menu.scaleY = 3;
+    this.menu = new rune.ui.VTMenu({resource: "tfs_font"});
+    this.menu.add("SINGLE PLAYER");
+    this.menu.add("MULTIPLAYER");
+    this.menu.add("HIGHSCORE");
+    this.menu.add("HOW TO PLAY");
+    this.menu.x = 415;
+    this.menu.y = 480;
+    this.menu.scaleX = 2;
+    this.menu.scaleY = 2;
     this.menu.onSelect(this.selectOption, this);
     this.stage.addChild(this.menu);
-}
-
-
-
-
+    this.music = this.application.sounds.sound.get("menumusic");
+    this.music.play();
+    this.music.loop = true;
+};
 
 //Method to select the option
 the_final_stand.scene.Menu.prototype.selectOption = function (option) {
     switch (option.text) {
-        case "Single Player":
+        case "SINGLE PLAYER":
             this.application.scenes.load([
-                new the_final_stand.scene.Game()
+                new the_final_stand.scene.Game(1)
             ]);
             break;
-        case "Multiplayer":
+        case "MULTIPLAYER":
             this.application.scenes.load([
-                new the_final_stand.scene.Game()
+                new the_final_stand.scene.Multiplayer()
             ]);
             break;
-        case "How to play":
+        case "HOW TO PLAY":
             this.application.scenes.load([
                 new the_final_stand.scene.HowToPlay()
             ]);
             break;
-        case "Highscore":
+        case "HIGHSCORE":
             this.application.scenes.load([
                 new the_final_stand.scene.Highscore()
             ]);
             break;
     }
-}
-
-
-
+};

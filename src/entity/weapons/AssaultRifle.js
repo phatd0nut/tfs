@@ -1,5 +1,5 @@
 the_final_stand.entity.AssaultRifle = function(stage, game) {
-    the_final_stand.entity.Weapon.call(this, "assault_rifle", Infinity, -26, 5, stage, game, true);
+    the_final_stand.entity.Weapon.call(this, "assault_rifle", 120, -26, 5, stage, game, true);
     this.weaponDamage = 44;
     this.fireRate = 130;
 };
