@@ -17,7 +17,7 @@ the_final_stand.entity.WeaponsCrate.prototype.init = function () {
 };
 
 the_final_stand.entity.WeaponsCrate.prototype.m_initSprite = function () {
-    this.buyInstruction = new rune.display.Sprite(565, 305, 150, 32, "buy_weapon_instruction_icon_150x32");
+    this.buyInstruction = new rune.display.Sprite(565, 305, 150, 32, "buy_weapon_instruction_150x32");
     this.game.shopTextLayer.addChild(this.buyInstruction);
 
 };

@@ -22,7 +22,7 @@ the_final_stand.entity.Danny = function (x, y, game, gamepadIndex) {
     /**
      * Calls the constructor method of the super class.
      */
-    the_final_stand.entity.Player.call(this, x, y, 60, 60, "4_danny");
+    the_final_stand.entity.Player.call(this, x, y, 60, 60, "4_danny_60x60");
  
     this.charName = "DANNY";
     this.charIndex = 4;

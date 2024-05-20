@@ -22,7 +22,7 @@ the_final_stand.entity.Enor = function (x, y, game, gamepadIndex) {
     /**
      * Calls the constructor method of the super class.
      */
-    the_final_stand.entity.Player.call(this, x, y, 60, 60, "3_enor");
+    the_final_stand.entity.Player.call(this, x, y, 60, 60, "3_enor_60x60");
  
     this.charName = "ENOR";
     this.charIndex = 3;

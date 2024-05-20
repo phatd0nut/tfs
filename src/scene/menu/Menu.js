@@ -71,14 +71,18 @@ the_final_stand.scene.Menu.prototype.update = function (step) {
 };
 
 the_final_stand.scene.Menu.prototype.m_initBackground = function () {
-    this.background = new rune.display.Graphic(
+    this.background = new rune.display.Sprite(
         0,
         0,
         this.application.screen.width,
         this.application.screen.height, "menu_bg"
     );
+
+    this.background.animation.create("play", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32], 10, false);
     this.stage.addChild(this.background);
 };
+
+
 
 //------------------------------------------------------------------------------
 // Method to initialize the controller graphic
@@ -115,6 +119,9 @@ the_final_stand.scene.Menu.prototype.m_initMenu = function () {
     this.menu.scaleY = 2;
     this.menu.onSelect(this.selectOption, this);
     this.stage.addChild(this.menu);
+    this.music = this.application.sounds.sound.get("menumusic");
+    this.music.play();
+    this.music.loop = true;
 };
 
 //Method to select the option

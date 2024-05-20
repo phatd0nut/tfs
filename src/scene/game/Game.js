@@ -54,7 +54,7 @@ the_final_stand.scene.Game.prototype.init = function () {
     this.shopTextLayer = new rune.display.DisplayObjectContainer(0, 0, 1280, 720);
     this.bulletLayer = new rune.display.DisplayObjectContainer(0, 0, 1280, 720);
     this.playerLayer = new rune.display.DisplayObjectContainer(0, 0, 1280, 720);
-    
+
 
     // Skapa en array med alla möjliga spelare
     var allPlayers = [
@@ -64,7 +64,7 @@ the_final_stand.scene.Game.prototype.init = function () {
         new the_final_stand.entity.Danny(608, 270, this, 3)
     ];
 
-    this.numPlayers = 2;
+    this.numPlayers = 1;
 
     // Välj de första 'numPlayers' spelarna
     this.players = allPlayers.slice(0, this.numPlayers);
@@ -117,7 +117,7 @@ the_final_stand.scene.Game.prototype.update = function (step) {
                     zombies[i].checkObjColl(collObj);
 
                     if (player.isAlive && player.hitTestAndSeparate(zombies[i])) {
-                        // zombies[i].doDamage();
+                        zombies[i].doDamage();
                     }
 
                     // Kontrollerar kollision mellan zombies
@@ -140,6 +140,10 @@ the_final_stand.scene.Game.prototype.update = function (step) {
     this.activeBullets.forEach(function (bullet) {
         bullet.update();
     });
+
+    if (this.checkAllPlayersDead()) {
+        this.gameOver();
+    }
 };
 
 /**
@@ -152,5 +156,29 @@ the_final_stand.scene.Game.prototype.update = function (step) {
  */
 the_final_stand.scene.Game.prototype.dispose = function () {
     rune.scene.Scene.prototype.dispose.call(this);
-    
+    if (this.stage) {
+        if (this.corpseLayer) this.stage.removeChild(this.corpseLayer, true);
+        if (this.zombieLayer) this.stage.removeChild(this.zombieLayer, true);
+        if (this.pickupLayer) this.stage.removeChild(this.pickupLayer, true);
+        if (this.shopTextLayer) this.stage.removeChild(this.shopTextLayer, true);
+        if (this.bulletLayer) this.stage.removeChild(this.bulletLayer, true);
+        if (this.playerLayer) this.stage.removeChild(this.playerLayer, true);
+        if (this.canvas) this.stage.removeChild(this.canvas, true);
+    }
+};
+
+the_final_stand.scene.Game.prototype.checkAllPlayersDead = function () {
+    for (var i = 0; i < this.players.length; i++) {
+        var player = this.players[i];
+
+        if (player.isAlive) {
+            return false;
+        }
+    }
+    return true;
+};
+
+the_final_stand.scene.Game.prototype.gameOver = function () {
+    var gameOverScene = new the_final_stand.scene.GameOver(this);
+    this.application.scenes.load([gameOverScene]);
 };

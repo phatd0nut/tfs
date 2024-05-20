@@ -295,5 +295,11 @@ the_final_stand.entity.Player.prototype.m_initAnimation = function () {
     this.animation.create("run_akimbo_uzi", [6, 7, 8, 9], 10, true);
     this.animation.create("idle_assault_rifle", [10], 10, true);
     this.animation.create("run_assault_rifle", [11, 12, 13, 14], 10, true);
-    this.animation.create("downed", [15], 10, true);
+    this.animation.create("idle_shotgun", [15], 10, true);
+    this.animation.create("run_shotgun", [16, 17, 18, 19], 10, true);
+    this.animation.create("idle_sniper_rifle", [20], 10, true);
+    this.animation.create("run_sniper_rifle", [21, 22, 23, 24], 10, true);
+    this.animation.create("idle_rpg", [25], 10, true);
+    this.animation.create("run_rpg", [26, 27, 28, 29], 10, true);
+    this.animation.create("downed", [30, 31, 32, 33, 34], 10, true);
 };
