@@ -99,7 +99,7 @@ the_final_stand.entity.Zombie.prototype.update = function (step) {
 the_final_stand.entity.Zombie.prototype.dispose = function () {
     rune.display.Sprite.prototype.dispose.call(this);
     console.log('Zombie disposed');
-    this.game.stage.removeChild(this);
+    this.game.zombieLayer.removeChild(this);
     console.log('Zombie removed from stage');
 };
 
@@ -107,12 +107,7 @@ the_final_stand.entity.Zombie.prototype.m_initAnimation = function () {
     this.animation.create("walk", this.walkFrames, 10, true);
     this.animation.create("attack", this.attackFrames, 3, true);
     this.animation.create("die", this.dieFrames, 7, false);
-
-    // Skapa en ny instans av AnimationScripts
-    this.dieAnimationScript = new rune.animation.AnimationScripts();
-
-    // Lägg till en callback till den sista keyframe i "die"-animationen
-    this.lastFrame = this.dieFrames[this.dieFrames.length - 1];
+    this.animation.find("die").scripts.add(this.dieFrames.length - 1, this.printZombieToCanvas, this);
 };
 
 the_final_stand.entity.Zombie.prototype.m_initHitBox = function () {
@@ -204,7 +199,6 @@ the_final_stand.entity.Zombie.prototype.die = function () {
 
     if (this.animation.currentAnimation !== "die") {
         this.animation.gotoAndPlay("die");
-        this.dieAnimationScript.add(this.lastFrame, this.printZombieToCanvas(), this);
     }
 
     this.dropCash();
@@ -212,6 +206,16 @@ the_final_stand.entity.Zombie.prototype.die = function () {
     // Anropa killZombie metoden i ZombieSpawner klassen
     this.game.zombieSpawner.killedZombies(this);
 };
+
+the_final_stand.entity.Zombie.prototype.dropCash = function () {
+    var chance = Math.random();
+    if (chance < 1) {
+        var cashX = this.x + this.width / 3;
+        var cashY = this.y + this.height / 3;
+        var cash = new the_final_stand.entity.Cash(cashX, cashY, this.cashValue, this.game);
+        cash.drop();
+    }
+}
 
 the_final_stand.entity.Zombie.prototype.printZombieToCanvas = function () {
     console.log('printZombieToCanvas');
@@ -234,42 +238,7 @@ the_final_stand.entity.Zombie.prototype.printZombieToCanvas = function () {
     this.graphic.rotation = this.rotation;
 
     this.game.canvas.drawImage(this.graphic.m_texture.m_resource, this.x, this.y, 60, 60);
-    this.game.stage.addChild(this.graphic);
-    this.game.stage.setChildIndex(this.graphic, 0);
-};
-
-the_final_stand.entity.Zombie.prototype.dropCash = function () {
-    var chance = Math.random();
-    if (chance < 1) {
-        var cashX = this.x + this.width / 3;
-        var cashY = this.y + this.height / 3;
-        var cash = new the_final_stand.entity.Cash(cashX, cashY, this.cashValue, this.game);
-        cash.drop();
-    }
-}
-
-the_final_stand.entity.Zombie.prototype.printZombieToCanvas = function () {
-    var deadImage;
-    switch (this.type) {
-        case "default":
-            deadImage = "zombie_default_dead_60x60";
-            break;
-        case "fat":
-            deadImage = "zombie_fat_dead_60x60";
-            break;
-        case "fast":
-            deadImage = "zombie_fast_dead_60x60";
-            break;
-    }
-
-    this.graphic = new rune.display.Graphic(this.x, this.y, 60, 60, deadImage);
-
-    // Använd zombiens rotation för att rotera grafiken
-    this.graphic.rotation = this.rotation;
-
-    this.game.canvas.drawImage(this.graphic.m_texture.m_resource, this.x, this.y, 60, 60);
-    this.game.stage.addChild(this.graphic);
-    this.game.stage.setChildIndex(this.graphic, 0);
+    this.game.corpseLayer.addChild(this.graphic);
     this.dispose();
 };
 

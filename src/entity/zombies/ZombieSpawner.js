@@ -59,8 +59,8 @@ the_final_stand.entity.ZombieSpawner.prototype.m_spawnZombie = function() {
     // Spawn a new zombie of the selected type
     var zombie = new ZombieType(point.x, point.y, this.game);
 
-    this.game.stage.addChild(zombie);
-    this.game.stage.setChildIndex(zombie, 1);
+    this.game.zombieLayer.addChild(zombie);
+    // this.game.stage.setChildIndex(zombie, 1);
     this.zombies.push(zombie);
 };
 
@@ -79,10 +79,6 @@ the_final_stand.entity.ZombieSpawner.prototype.m_spawnWave = function(waveNumber
 };
 
 the_final_stand.entity.ZombieSpawner.prototype.dispose = function() {
-    for (var i = 0; i < this.zombies.length; i++) {
-        var zombie = this.zombies[i];
-        this.game.stage.removeChild(zombie);
-    }
     this.zombiesDead += this.zombies.length; // Räkna alla zombies som döda för att starta nästa våg
     this.zombies = [];
 };

@@ -24,17 +24,17 @@ the_final_stand.hud.PlayerHUD.prototype.render = function() {
     var xOffset = this.index * (hudWidth + hudSpacing);
 
     var charName = this.createBitmapField(this.player.charName, 10 + xOffset, 30);
-    this.player.stage.addChild(charName);
+    this.player.game.stage.addChild(charName);
 
     if (this.hpText) {
         this.player.stage.removeChild(this.hpText);
     }
 
     this.hpText = this.createBitmapField("HP: " + this.player.hp, 10 + xOffset, 90);
-    this.player.stage.addChild(this.hpText);
+    this.player.game.stage.addChild(this.hpText);
 
     this.ammoText = this.createBitmapField("AMMO: " + this.player.currentWeapon.ammo, 10 + xOffset, 60);
-    this.player.stage.addChild(this.ammoText);
+    this.player.game.stage.addChild(this.ammoText);
 };
 
 the_final_stand.hud.PlayerHUD.prototype.updateAmmo = function() {

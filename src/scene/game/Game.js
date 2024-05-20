@@ -48,6 +48,13 @@ the_final_stand.scene.Game.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
     this.stage.map.load('map2');
     this.canvas = new rune.display.Canvas(1280, 720);
+    this.corpseLayer = new rune.display.DisplayObjectContainer(0, 0, 1280, 720);
+    this.zombieLayer = new rune.display.DisplayObjectContainer(0, 0, 1280, 720);
+    this.pickupLayer = new rune.display.DisplayObjectContainer(0, 0, 1280, 720);
+    this.shopTextLayer = new rune.display.DisplayObjectContainer(0, 0, 1280, 720);
+    this.bulletLayer = new rune.display.DisplayObjectContainer(0, 0, 1280, 720);
+    this.playerLayer = new rune.display.DisplayObjectContainer(0, 0, 1280, 720);
+    
 
     // Skapa en array med alla möjliga spelare
     var allPlayers = [
@@ -63,8 +70,7 @@ the_final_stand.scene.Game.prototype.init = function () {
     this.players = allPlayers.slice(0, this.numPlayers);
 
     for (var i = 0; i < this.players.length; i++) {
-        this.stage.addChild(this.players[i]);
-        this.stage.setChildIndex(this.players[i], this.stage.numChildren - 1);
+        this.playerLayer.addChild(this.players[i]);
     }
 
     this.bank = 0;
@@ -73,7 +79,14 @@ the_final_stand.scene.Game.prototype.init = function () {
     this.updateCounter = 0;
 
     this.activeBullets = new Set();
-    this.weaponsCrate = new the_final_stand.entity.WeaponsCrate(this, this.players)
+    this.weaponsCrate = new the_final_stand.entity.WeaponsCrate(this, this.players);
+
+    this.stage.addChild(this.corpseLayer);
+    this.stage.addChild(this.zombieLayer);
+    this.stage.addChild(this.pickupLayer);
+    this.stage.addChild(this.shopTextLayer);
+    this.stage.addChild(this.bulletLayer);
+    this.stage.addChild(this.playerLayer);
 };
 
 /**
@@ -139,5 +152,5 @@ the_final_stand.scene.Game.prototype.update = function (step) {
  */
 the_final_stand.scene.Game.prototype.dispose = function () {
     rune.scene.Scene.prototype.dispose.call(this);
-    // this.zombieSpawner.dispose();
+    
 };

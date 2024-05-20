@@ -11,21 +11,6 @@ the_final_stand.entity.WeaponsCrate.prototype.update = function () {
     this.m_checkPlayerNearCrate();
 };
 
-the_final_stand.entity.WeaponsCrate.prototype.drawRect = function () {
-    this.canvas = new rune.display.Graphic(0, 0, 1280, 720);
-    var x = 590;
-    var y = 350;
-    var width = 100;
-    var height = 50;
-    var color = '#FF0000'; // Red color
-    var thickness = 1; // Line thickness
-
-    // Create a new Rectangle
-    var rect = new rune.geom.Rectangle(x, y, width, height);
-    this.canvas.graphics.drawRect(rect.x, rect.y, rect.width, rect.height, color, thickness);
-    this.game.stage.addChild(this.canvas);
-};
-
 the_final_stand.entity.WeaponsCrate.prototype.init = function () {
     this.m_initSprite();
     this.m_initAnimation();
@@ -33,7 +18,7 @@ the_final_stand.entity.WeaponsCrate.prototype.init = function () {
 
 the_final_stand.entity.WeaponsCrate.prototype.m_initSprite = function () {
     this.buyInstruction = new rune.display.Sprite(565, 305, 150, 32, "buy_weapon_instruction_icon_150x32");
-    this.game.stage.addChild(this.buyInstruction);
+    this.game.shopTextLayer.addChild(this.buyInstruction);
 
 };
 
@@ -76,9 +61,9 @@ the_final_stand.entity.WeaponsCrate.prototype.m_buyWeapon = function () {
 
         if (gamepad.justPressed(0)) { // Check if the current player has pressed the button
             // Check if there is enough money in the shared bank
-            if (this.game.bank >= 100) { // Replace 'this.game.bank' with the actual reference to your shared bank
+            if (this.game.bank >= 100) {
                 // Deduct the cost of the weapon from the shared bank
-                this.game.bank -= 100; // Replace 'this.game.bank' with the actual reference to your shared bank
+                this.game.bank -= 100;
 
                 // Randomly select a weapon name
                 var weaponNames = ['AssaultRifle', 'AkimboUzi'];
@@ -86,9 +71,9 @@ the_final_stand.entity.WeaponsCrate.prototype.m_buyWeapon = function () {
 
                 // Switch to the random weapon
                 this.players[i].switchWeapon(randomWeaponName);
-                console.log("Player " + (i + 1) + " bought " + randomWeaponName + " for 5000. Remaining money in bank: " + this.game.bank); // Replace 'this.game.bank' with the actual reference to your shared bank
+                console.log("Player " + (i + 1) + " bought " + randomWeaponName + " for 5000. Remaining money in bank: " + this.game.bank); 
             } else {
-                console.log("Not enough money in the bank to buy a weapon. Current money in bank: " + this.game.bank); // Replace 'this.game.bank' with the actual reference to your shared bank
+                console.log("Not enough money in the bank to buy a weapon. Current money in bank: " + this.game.bank);
             }
         }
     }

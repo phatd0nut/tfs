@@ -42,8 +42,7 @@ the_final_stand.entity.Weapon.prototype.dispose = function (sound) {
 the_final_stand.entity.Weapon.prototype.fire = function (x, y, radian, rotation) {
     if (this.ammo > 0 && this.timeSinceLastFire >= this.fireRate) {
         var projectile = new the_final_stand.entity.Projectile(x, y, radian, rotation, this.game, this.weaponDamage);
-        this.stage.addChild(projectile);
-        this.stage.setChildIndex(projectile, 0);
+        this.game.bulletLayer.addChild(projectile);
         this.game.activeBullets.add(projectile);
         this.timeSinceLastFire = 0;
 
