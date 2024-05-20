@@ -71,6 +71,7 @@ the_final_stand.entity.Player.prototype.init = function () {
  */
 the_final_stand.entity.Player.prototype.update = function (step) {
     rune.display.Sprite.prototype.update.call(this, step);
+    this.hud.update();
 
     this.m_updateInput(step);
     // this.m_keyboardInput(step);

@@ -40,7 +40,7 @@ the_final_stand.entity.ZombieSpawner.prototype.update = function () {
     } else {
         this.spawnTimer++;
         if (this.spawnTimer >= this.spawnInterval && this.zombiesToSpawn > 0) {
-            this.m_spawnZombie();
+            // this.m_spawnZombie();
             this.spawnTimer = 0;
             this.zombiesToSpawn--;
         }

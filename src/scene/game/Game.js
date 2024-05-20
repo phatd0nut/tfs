@@ -73,7 +73,7 @@ the_final_stand.scene.Game.prototype.init = function () {
         this.playerLayer.addChild(this.players[i]);
     }
 
-    this.bank = 0;
+    this.bank = 3000;
 
     this.zombieSpawner = new the_final_stand.entity.ZombieSpawner(this);
     this.updateCounter = 0;
@@ -117,7 +117,7 @@ the_final_stand.scene.Game.prototype.update = function (step) {
                     zombies[i].checkObjColl(collObj);
 
                     if (player.isAlive && player.hitTestAndSeparate(zombies[i])) {
-                        zombies[i].doDamage();
+                        // zombies[i].doDamage();
                     }
 
                     // Kontrollerar kollision mellan zombies
