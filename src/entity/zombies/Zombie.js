@@ -137,6 +137,9 @@ the_final_stand.entity.Zombie.prototype.m_initAnimation = function () {
     this.animation.create("die", this.dieFrames, 7, false);
 
     this.dieAnimationScript = new rune.animation.AnimationScripts();
+
+    // Lägg till en callback till den sista keyframe i "die"-animationen
+    this.lastFrame = this.dieFrames[this.dieFrames.length - 1];
 };
 
 the_final_stand.entity.Zombie.prototype.attack = function () {
@@ -231,15 +234,14 @@ the_final_stand.entity.Zombie.prototype.printZombieToCanvas = function () {
             break;
     }
 
-    var graphic = new rune.display.Graphic(this.x, this.y, 60, 60, deadImage);
-    console.log(graphic);
+    this.graphic = new rune.display.Graphic(this.x, this.y, 60, 60, deadImage);
 
     // Använd zombiens rotation för att rotera grafiken
-    graphic.rotation = this.rotation;
+    this.graphic.rotation = this.rotation;
 
-    this.game.canvas.drawImage(graphic.m_texture.m_resource, this.x, this.y, 60, 60);
-    this.game.stage.addChild(graphic);
-    this.game.stage.setChildIndex(graphic, 0);
+    this.game.canvas.drawImage(this.graphic.m_texture.m_resource, this.x, this.y, 60, 60);
+    this.game.stage.addChild(this.graphic);
+    this.game.stage.setChildIndex(this.graphic, 0);
     this.dispose();
 };
 
