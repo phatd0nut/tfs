@@ -47,27 +47,46 @@ the_final_stand.scene.Game.prototype.constructor = the_final_stand.scene.Game;
 the_final_stand.scene.Game.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
     this.stage.map.load('map2');
+    this.canvas = new rune.display.Canvas(1280, 720);
+    this.corpseLayer = new rune.display.DisplayObjectContainer(0, 0, 1280, 720);
+    this.zombieLayer = new rune.display.DisplayObjectContainer(0, 0, 1280, 720);
+    this.pickupLayer = new rune.display.DisplayObjectContainer(0, 0, 1280, 720);
+    this.shopTextLayer = new rune.display.DisplayObjectContainer(0, 0, 1280, 720);
+    this.bulletLayer = new rune.display.DisplayObjectContainer(0, 0, 1280, 720);
+    this.playerLayer = new rune.display.DisplayObjectContainer(0, 0, 1280, 720);
 
-    this.player = new the_final_stand.entity.Mathias(500, 345, this, 0);
-    this.player2 = new the_final_stand.entity.Jesper(716, 345, this, 1);
-    this.player3 = new the_final_stand.entity.Enor(608, 420, this, 2);
 
-    this.players = [];
-    // this.players.push(this.player, this.player2, this.player3);
-    this.players.push(this.player, this.player2);
-    // this.players.push(this.player);
+    // Skapa en array med alla möjliga spelare
+    var allPlayers = [
+        new the_final_stand.entity.Mathias(500, 345, this, 0),
+        new the_final_stand.entity.Jesper(716, 345, this, 1),
+        new the_final_stand.entity.Enor(608, 420, this, 2),
+        new the_final_stand.entity.Danny(608, 270, this, 3)
+    ];
+
+    this.numPlayers = 1;
+
+    // Välj de första 'numPlayers' spelarna
+    this.players = allPlayers.slice(0, this.numPlayers);
+
     for (var i = 0; i < this.players.length; i++) {
-        this.stage.addChild(this.players[i]);
-        this.stage.setChildIndex(this.players[i], 1);
+        this.playerLayer.addChild(this.players[i]);
     }
 
-    this.bank = 0;
+    this.bank = 3000;
 
     this.zombieSpawner = new the_final_stand.entity.ZombieSpawner(this);
     this.updateCounter = 0;
 
     this.activeBullets = new Set();
-    this.weaponsCrate = new the_final_stand.entity.WeaponsCrate(this, this.players)
+    this.weaponsCrate = new the_final_stand.entity.WeaponsCrate(this, this.players);
+
+    this.stage.addChild(this.corpseLayer);
+    this.stage.addChild(this.zombieLayer);
+    this.stage.addChild(this.pickupLayer);
+    this.stage.addChild(this.shopTextLayer);
+    this.stage.addChild(this.bulletLayer);
+    this.stage.addChild(this.playerLayer);
 };
 
 /**
@@ -90,18 +109,24 @@ the_final_stand.scene.Game.prototype.update = function (step) {
         var player = this.players[p];
         player.hitTestAndSeparate(collObj);
 
-        for (var i = 0; i < zombies.length; i++) {
-            zombies[i].hitTestAndSeparate(collObj);
-            // console.log(collObj);
-            // zombies[i].checkObjColl(collObj);
+        // Kontrollera om det finns zombies innan du utför hit-test
+        if (zombies.length > 0) {
+            for (var i = 0; i < zombies.length; i++) {
+                if (zombies[i].isAlive) {
+                    zombies[i].hitTestAndSeparate(collObj);
+                    zombies[i].checkObjColl(collObj);
 
-            if (player.isAlive && player.hitTestAndSeparate(zombies[i])) {
-                zombies[i].doDamage();
-            }
+                    if (player.isAlive && player.hitTestAndSeparate(zombies[i])) {
+                        // zombies[i].doDamage();
+                    }
 
-            // Kontrollerar kollision mellan zombies
-            for (var j = i + 1; j < zombies.length; j++) {
-                zombies[i].hitTestAndSeparate(zombies[j]);
+                    // Kontrollerar kollision mellan zombies
+                    for (var j = i + 1; j < zombies.length; j++) {
+                        if (zombies[j].isAlive) {
+                            zombies[i].hitTestAndSeparate(zombies[j]);
+                        }
+                    }
+                }
             }
         }
 
@@ -115,6 +140,10 @@ the_final_stand.scene.Game.prototype.update = function (step) {
     this.activeBullets.forEach(function (bullet) {
         bullet.update();
     });
+
+    if (this.checkAllPlayersDead()) {
+        this.gameOver();
+    }
 };
 
 /**
@@ -127,5 +156,29 @@ the_final_stand.scene.Game.prototype.update = function (step) {
  */
 the_final_stand.scene.Game.prototype.dispose = function () {
     rune.scene.Scene.prototype.dispose.call(this);
-    // this.zombieSpawner.dispose();
+    if (this.stage) {
+        if (this.corpseLayer) this.stage.removeChild(this.corpseLayer, true);
+        if (this.zombieLayer) this.stage.removeChild(this.zombieLayer, true);
+        if (this.pickupLayer) this.stage.removeChild(this.pickupLayer, true);
+        if (this.shopTextLayer) this.stage.removeChild(this.shopTextLayer, true);
+        if (this.bulletLayer) this.stage.removeChild(this.bulletLayer, true);
+        if (this.playerLayer) this.stage.removeChild(this.playerLayer, true);
+        if (this.canvas) this.stage.removeChild(this.canvas, true);
+    }
+};
+
+the_final_stand.scene.Game.prototype.checkAllPlayersDead = function () {
+    for (var i = 0; i < this.players.length; i++) {
+        var player = this.players[i];
+
+        if (player.isAlive) {
+            return false;
+        }
+    }
+    return true;
+};
+
+the_final_stand.scene.Game.prototype.gameOver = function () {
+    var gameOverScene = new the_final_stand.scene.GameOver(this);
+    this.application.scenes.load([gameOverScene]);
 };

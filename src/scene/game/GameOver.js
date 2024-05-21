@@ -6,15 +6,15 @@
  * Creates a new object.
  *
  * @constructor
- * @extends the_final_stand.entity.Zombie
+ * @extends rune.scene.Scene
  *
  * @class
  * @classdesc
  * 
  * Game scene.
  */
-the_final_stand.entity.ZombieFast = function (x, y, game) {
-    
+the_final_stand.scene.GameOver = function (game) {
+
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
@@ -22,25 +22,18 @@ the_final_stand.entity.ZombieFast = function (x, y, game) {
     /**
      * Calls the constructor method of the super class.
      */
-    the_final_stand.entity.Zombie.call(this, x, y, 60, 60, "zombie_fast");
+    rune.scene.Scene.call(this);
+    this.camera = new rune.camera.Camera();
     this.game = game;
-    this.hp = 50;
-    this.cashValue = Math.floor(Math.random() * 76) + 25;
+
 };
 
 //------------------------------------------------------------------------------
 // Inheritance
 //------------------------------------------------------------------------------
 
-the_final_stand.entity.ZombieFast.prototype = Object.create(the_final_stand.entity.Zombie.prototype);
-the_final_stand.entity.ZombieFast.prototype.constructor = the_final_stand.entity.ZombieFast;
-
-the_final_stand.entity.ZombieFast.prototype.attackDamage = 25;
-the_final_stand.entity.ZombieFast.prototype.speed = 3.2;
-the_final_stand.entity.ZombieFast.prototype.type = "fast";
-the_final_stand.entity.ZombieFast.prototype.walkFrames = [1, 2, 3, 4, 5];
-the_final_stand.entity.ZombieFast.prototype.attackFrames = [6, 7, 8];
-the_final_stand.entity.ZombieFast.prototype.dieFrames = [9, 10, 11, 12, 13];
+the_final_stand.scene.GameOver.prototype = Object.create(rune.scene.Scene.prototype);
+the_final_stand.scene.GameOver.prototype.constructor = the_final_stand.scene.GameOver;
 
 //------------------------------------------------------------------------------
 // Override public prototype methods (ENGINE)
@@ -52,8 +45,12 @@ the_final_stand.entity.ZombieFast.prototype.dieFrames = [9, 10, 11, 12, 13];
  *
  * @returns {undefined}
  */
-the_final_stand.entity.ZombieFast.prototype.init = function () {
-    the_final_stand.entity.Zombie.prototype.init.call(this);
+the_final_stand.scene.GameOver.prototype.init = function () {
+    rune.scene.Scene.prototype.init.call(this);
+    this.game.dispose();
+    // this.camera.m_fade.in(2000, this.m_renderGameOver, this);
+    // console.log(this.camera);
+    this.m_renderGameOver();
 };
 
 /**
@@ -64,9 +61,8 @@ the_final_stand.entity.ZombieFast.prototype.init = function () {
  *
  * @returns {undefined}
  */
-the_final_stand.entity.ZombieFast.prototype.update = function (step) {
-    the_final_stand.entity.Zombie.prototype.update.call(this, step);
-    
+the_final_stand.scene.GameOver.prototype.update = function (step) {
+    rune.scene.Scene.prototype.update.call(this, step);
 };
 
 /**
@@ -77,6 +73,24 @@ the_final_stand.entity.ZombieFast.prototype.update = function (step) {
  *
  * @returns {undefined}
  */
-the_final_stand.entity.ZombieFast.prototype.dispose = function () {
-    the_final_stand.entity.Zombie.prototype.dispose.call(this);
+the_final_stand.scene.GameOver.prototype.dispose = function () {
+    rune.scene.Scene.prototype.dispose.call(this);
+
+};
+
+the_final_stand.scene.GameOver.prototype.m_renderGameOver = function () {
+    console.log("Game over");
+    this.background = new rune.display.Sprite(
+        0,
+        0,
+        this.application.screen.width,
+        this.application.screen.height,
+        "gameover_bg"
+    );
+    this.stage.addChild(this.background);
+    this.background.animation.create("gameover", [0, 1, 2, 3, 4, 5, 6, 7], 5, false);
+    this.background.animation.find("gameover").scripts.add(7, function () {
+        this.background.animation.gotoAndStop(7);
+    }, this);
+    this.background.animation.gotoAndPlay("gameover");
 };

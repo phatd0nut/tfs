@@ -29,7 +29,7 @@ the_final_stand.entity.Projectile.prototype.dispose = function () {
 
     // this.game.activeBullets.splice(this.game.activeBullets.indexOf(this), 1);
     this.game.activeBullets.delete(this);
-    this.game.stage.removeChild(this);
+    this.game.bulletLayer.removeChild(this);
 };
 
 the_final_stand.entity.Projectile.prototype.outOfBounds = function () {

@@ -29,8 +29,6 @@ the_final_stand.entity.Zombie = function (x, y, width, height, texture) {
     this.players = this.game.players;
     this.centerX = this.x + this.width / 2;
     this.centerY = this.y + this.height / 2;
-    this.centerX = this.x + this.width / 2;
-    this.centerY = this.y + this.height / 2;
     this.aabb = new AABB(this.x, this.y, width, height);
 };
 
@@ -58,6 +56,7 @@ the_final_stand.entity.Zombie.prototype.init = function () {
     this.isAlive = true;
     this.isMoving = false;
     this.isAttacking = false;
+    this.distance = 0;
 
     this.directionChangeTimer = 0;
     this.dxDeviation = 0;
@@ -85,11 +84,6 @@ the_final_stand.entity.Zombie.prototype.update = function (step) {
     this.aabb.x = this.x;
     this.aabb.y = this.y;
 
-    var dx = this.players.centerX - this.centerX;
-    var dy = this.players.centerY - this.centerY;
-    var dx = this.players.centerX - this.centerX;
-    var dy = this.players.centerY - this.centerY;
-    this.distance = Math.sqrt(dx * dx + dy * dy);
     this.attack();
 };
 
@@ -104,19 +98,25 @@ the_final_stand.entity.Zombie.prototype.update = function (step) {
 
 the_final_stand.entity.Zombie.prototype.dispose = function () {
     rune.display.Sprite.prototype.dispose.call(this);
+    console.log('Zombie disposed');
+    this.game.zombieLayer.removeChild(this);
+    console.log('Zombie removed from stage');
+};
+
+the_final_stand.entity.Zombie.prototype.m_initAnimation = function () {
+    this.animation.create("walk", this.walkFrames, 10, true);
+    this.animation.create("attack", this.attackFrames, 3, true);
+    this.animation.create("die", this.dieFrames, 7, false);
+    this.animation.find("die").scripts.add(this.dieFrames.length - 1, this.printZombieToCanvas, this);
 };
 
 the_final_stand.entity.Zombie.prototype.m_initHitBox = function () {
     this.hitbox.set(20, 12, this.width - 40, this.height - 30);
     this.hitbox.debug = false;
-    this.hitbox.debug = false;
 };
 
 the_final_stand.entity.Zombie.prototype.m_hitBoxDetection = function () {
     if (this.isAlive && !this.bulletHasCollided) {
-        var bulletsArray = Array.from(this.game.activeBullets);
-        for (var i = 0; i < bulletsArray.length; i++) {
-            var bullets = bulletsArray[i];
         var bulletsArray = Array.from(this.game.activeBullets);
         for (var i = 0; i < bulletsArray.length; i++) {
             var bullets = bulletsArray[i];
@@ -144,6 +144,7 @@ the_final_stand.entity.Zombie.prototype.attack = function () {
         if (this.animation.currentAnimation !== "attack") {
             this.isAttacking = true;
             this.animation.gotoAndPlay("attack");
+
         }
     } else {
         this.isAttacking = false;
@@ -216,6 +217,33 @@ the_final_stand.entity.Zombie.prototype.dropCash = function () {
     }
 }
 
+the_final_stand.entity.Zombie.prototype.printZombieToCanvas = function () {
+    console.log('printZombieToCanvas');
+    var deadImage;
+    switch (this.type) {
+        case "default":
+            deadImage = "zombie_default_dead_60x60";
+            break;
+        case "fat":
+            deadImage = "zombie_fat_dead_60x60";
+            break;
+        case "fast":
+            deadImage = "zombie_fast_dead_60x60";
+            break;
+    }
+
+    this.graphic = new rune.display.Graphic(this.x, this.y, 60, 60, deadImage);
+
+    // Använd zombiens rotation för att rotera grafiken
+    this.graphic.rotation = this.rotation;
+
+    this.game.canvas.drawImage(this.graphic.m_texture.m_resource, this.x, this.y, 60, 60);
+    this.game.corpseLayer.addChild(this.graphic);
+    this.game.zombieSpawner.removePrintedZombies(this.graphic);
+    this.dispose();
+};
+
+
 the_final_stand.entity.Zombie.prototype.m_followPlayers = function () {
     if (!this.isAlive) {
         return;
@@ -248,20 +276,45 @@ the_final_stand.entity.Zombie.prototype.m_followPlayers = function () {
     if (closestPlayer) {
         var dx = closestPlayer.centerX - this.centerX;
         var dy = closestPlayer.centerY - this.centerY;
-        var distance = Math.sqrt(dx * dx + dy * dy);
-        dx /= distance;
-        dy /= distance;
+        this.distance = Math.sqrt(dx * dx + dy * dy);
+        dx /= this.distance;
+        dy /= this.distance;
 
         // Om zombien är längre bort än 150 pixlar från spelaren, slumpa en ny riktning att röra sig i
-        if (distance > 150 && this.directionChangeTimer <= 0) {
+        // Om zombien är längre bort än 150 pixlar från spelaren, slumpa en ny riktning att röra sig i
+        if (this.distance > 150 && this.directionChangeTimer <= 0) {
             this.dxDeviation = dx + (Math.random() - 0.5) * 0.6;
             this.dyDeviation = dy + (Math.random() - 0.5) * 0.6;
-            this.directionChangeTimer = 120;  // Ändra riktning var 2 sekunder (120 frames)
-        } else if (distance <= 150) {
-            this.dxDeviation = dx;
-            this.dyDeviation = dy;
+            this.directionChangeTimer = 120;
+        } else if (this.distance <= 150) {
+            if (this.isObstacleInFront && this.directionChangeTimer <= 0) {
+                if (!this.hasChangedDirection) {
+                    this.changeDirection();
+                    this.hasChangedDirection = true;
+                    this.isChangingDirection = true;
+                    this.directionChangeTimer = 0;  // Starta räkningen från 0
+                }
+                if (this.directionChangeTimer < 45) {
+                    this.directionChangeTimer++; // Räkna upp till 45
+                }
+            } else if (!this.isChangingDirection) {
+                this.dxDeviation = dx;
+                this.dyDeviation = dy;
+                if (this.directionChangeTimer > 0) {
+                    this.directionChangeTimer--;  // Räkna ner om det inte finns något hinder framför
+                }
+            }
+            if (this.directionChangeTimer <= 0) {
+                this.isChangingDirection = false;
+            }
         } else {
-            this.directionChangeTimer--;
+            if (this.directionChangeTimer > 0) {
+                this.directionChangeTimer--;
+            }
+            if (this.directionChangeTimer <= 0) {
+                this.hasChangedDirection = false;
+                this.isChangingDirection = false;
+            }
         }
 
         // Skapar en mjukare rörelse när zombien följer spelaren genom att använda en linjär interpolation (lerp) för att röra sig mot spelaren
@@ -292,33 +345,43 @@ the_final_stand.entity.Zombie.prototype.m_followPlayers = function () {
 };
 
 the_final_stand.entity.Zombie.prototype.checkObjColl = function (tileMap) {
-    var tileMap = tileMap;
+    if (!this.isAlive) {
+        return;
+    }
+
     var tilesToCheck = [
         23, 24, 25, 26, 30, 31, 32, 33, 37, 38, 39, 47, 48, 49, 50, 51, 52, 53, 54, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 81, 84, 90, 91, 92, 93, 94, 95, 96, 97, 98, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109
     ];
 
-// Antag att 'distance' är avståndet du vill att punkten ska vara framför zombien
-var distance = 20;
+    var scanPoint = this.getPointInFront();
+    var tileValue = tileMap.getTileValueOfPoint(scanPoint);
 
-// Justera för att 0 grader är uppåt
-var adjustedRotation = this.rotation - 90;
-
-// Omvandla den justerade rotationen till radianer
-var angleInRadians = adjustedRotation * (Math.PI / 180);
-
-// Beräkna den nya punktens koordinater
-var newX = this.centerX + Math.cos(angleInRadians) * distance;
-var newY = this.centerY + Math.sin(angleInRadians) * distance;
-
-// Skapa den nya punkten
-var pointInFront = new rune.geom.Point(newX, newY);
-
-console.log(tileMap.getTileValueOfPoint(pointInFront));
-
+    if (tilesToCheck.includes(tileValue)) {
+        this.isObstacleInFront = true;  // Set the flag
+        this.changeDirection();
+    } else {
+        this.isObstacleInFront = false;  // Reset the flag if there's no obstacle
+    }
 };
 
+the_final_stand.entity.Zombie.prototype.getPointInFront = function () {
+    var distance = 20;
+
+    // Justera för att 0 grader är uppåt
+    var adjustedRotation = this.rotation - 90;
+
+    // Omvandla den justerade rotationen till radianer
+    var angleInRadians = adjustedRotation * (Math.PI / 180);
+
+    // Beräkna den nya punktens koordinater
+    var newX = this.centerX + Math.cos(angleInRadians) * distance;
+    var newY = this.centerY + Math.sin(angleInRadians) * distance;
+
+    // Skapa och returnera den nya punkten
+    return new rune.geom.Point(newX, newY);
+}
+
 the_final_stand.entity.Zombie.prototype.changeDirection = function () {
-    console.log('changing direction');
-    this.dxDeviation = Math.random() - 0.5;
-    this.dyDeviation = Math.random() - 0.5;
+    this.dxDeviation = Math.random() - 0.2;
+    this.dyDeviation = Math.random() - 0.2;
 };

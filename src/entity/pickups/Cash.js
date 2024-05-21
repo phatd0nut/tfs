@@ -27,7 +27,7 @@ the_final_stand.entity.Cash.prototype.update = function (step) {
 };
 
 the_final_stand.entity.Cash.prototype.dispose = function () {
-    this.game.stage.removeChild(this);
+    this.game.pickupLayer.removeChild(this);
 };
 
 the_final_stand.entity.Cash.prototype.pickup = function () {
@@ -58,8 +58,7 @@ the_final_stand.entity.Cash.prototype.m_initAnimation = function () {
 };
 
 the_final_stand.entity.Cash.prototype.drop = function () {
-    this.game.stage.addChild(this);
-    this.game.stage.setChildIndex(this, this.game.stage.numChildren - 1);
+    this.game.pickupLayer.addChild(this);
+    // this.game.stage.setChildIndex(this, this.game.stage.numChildren - 2);
     this.animation.gotoAndPlay("bag_dropped", 0);
-
 };
