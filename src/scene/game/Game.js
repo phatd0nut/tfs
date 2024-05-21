@@ -48,19 +48,14 @@ the_final_stand.scene.Game.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
     this.stage.map.load('map2');
 
-    // Skapa en array med alla möjliga spelare
-    var allPlayers = [
-        new the_final_stand.entity.Mathias(500, 345, this, 0),
-        new the_final_stand.entity.Jesper(716, 345, this, 1),
-        new the_final_stand.entity.Enor(608, 420, this, 2),
-        new the_final_stand.entity.Danny(608, 270, this, 3)
-    ];
+    this.player = new the_final_stand.entity.Mathias(500, 345, this, 0);
+    this.player2 = new the_final_stand.entity.Jesper(716, 345, this, 1);
+    this.player3 = new the_final_stand.entity.Enor(608, 420, this, 2);
 
-    this.numPlayers = 1;
-
-    // Välj de första 'numPlayers' spelarna
-    this.players = allPlayers.slice(0, this.numPlayers);
-
+    this.players = [];
+    // this.players.push(this.player, this.player2, this.player3);
+    this.players.push(this.player, this.player2);
+    // this.players.push(this.player);
     for (var i = 0; i < this.players.length; i++) {
         this.stage.addChild(this.players[i]);
         this.stage.setChildIndex(this.players[i], 1);

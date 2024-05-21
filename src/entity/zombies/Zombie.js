@@ -29,6 +29,8 @@ the_final_stand.entity.Zombie = function (x, y, width, height, texture) {
     this.players = this.game.players;
     this.centerX = this.x + this.width / 2;
     this.centerY = this.y + this.height / 2;
+    this.centerX = this.x + this.width / 2;
+    this.centerY = this.y + this.height / 2;
     this.aabb = new AABB(this.x, this.y, width, height);
 };
 
@@ -85,6 +87,8 @@ the_final_stand.entity.Zombie.prototype.update = function (step) {
 
     var dx = this.players.centerX - this.centerX;
     var dy = this.players.centerY - this.centerY;
+    var dx = this.players.centerX - this.centerX;
+    var dy = this.players.centerY - this.centerY;
     this.distance = Math.sqrt(dx * dx + dy * dy);
     this.attack();
 };
@@ -105,10 +109,14 @@ the_final_stand.entity.Zombie.prototype.dispose = function () {
 the_final_stand.entity.Zombie.prototype.m_initHitBox = function () {
     this.hitbox.set(20, 12, this.width - 40, this.height - 30);
     this.hitbox.debug = false;
+    this.hitbox.debug = false;
 };
 
 the_final_stand.entity.Zombie.prototype.m_hitBoxDetection = function () {
     if (this.isAlive && !this.bulletHasCollided) {
+        var bulletsArray = Array.from(this.game.activeBullets);
+        for (var i = 0; i < bulletsArray.length; i++) {
+            var bullets = bulletsArray[i];
         var bulletsArray = Array.from(this.game.activeBullets);
         for (var i = 0; i < bulletsArray.length; i++) {
             var bullets = bulletsArray[i];
@@ -282,7 +290,6 @@ the_final_stand.entity.Zombie.prototype.m_followPlayers = function () {
 
     }
 };
-
 
 the_final_stand.entity.Zombie.prototype.checkObjColl = function (tileMap) {
     var tileMap = tileMap;

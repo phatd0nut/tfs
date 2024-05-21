@@ -14,6 +14,7 @@
  * Game scene.
  */
 the_final_stand.entity.Player = function (x, y, width, height, texture, gamepadIndex) {
+the_final_stand.entity.Player = function (x, y, width, height, texture, gamepadIndex) {
 
     //--------------------------------------------------------------------------
     // Super call
@@ -54,6 +55,7 @@ the_final_stand.entity.Player.prototype.constructor = the_final_stand.entity.Pla
 the_final_stand.entity.Player.prototype.init = function () {
     rune.display.Sprite.prototype.init.call(this);
     this.RuneMath = rune.util.Math;
+    this.RuneMath = rune.util.Math;
     this.m_initAnimation();
     this.getStarterWep();
     this.m_initSounds();
@@ -76,6 +78,7 @@ the_final_stand.entity.Player.prototype.update = function (step) {
 
     this.m_updateInput(step);
     // this.m_keyboardInput(step);
+    // this.m_keyboardInput(step);
     this.hitBox();
     this.hud.update();
 
@@ -85,6 +88,10 @@ the_final_stand.entity.Player.prototype.update = function (step) {
 
     if (this.currentWeapon) {
         this.currentWeapon.update(step);
+
+        if (this.currentWeapon.ammo <= 0) {
+            this.switchWeapon('Pistol');
+        }
 
         if (this.currentWeapon.ammo <= 0) {
             this.switchWeapon('Pistol');
@@ -99,7 +106,17 @@ the_final_stand.entity.Player.prototype.update = function (step) {
         if (playerInReviveZone && playerInReviveZone.gamepad.justPressed(1)) {
             this.reviveButtonPresses++;
             this.reviveBleep.play();
+        var playerInReviveZone = this.game.players.find(function (player) {
+            return player !== this && this.isInReviveZone(player);
+        }.bind(this));
 
+        if (playerInReviveZone && playerInReviveZone.gamepad.justPressed(1)) {
+            this.reviveButtonPresses++;
+            this.reviveBleep.play();
+
+            if (this.reviveButtonPresses >= 5) {
+                this.revive();
+                this.reviveButtonPresses = 0; // Reset the counter
             if (this.reviveButtonPresses >= 5) {
                 this.revive();
                 this.reviveButtonPresses = 0; // Reset the counter
@@ -126,6 +143,7 @@ the_final_stand.entity.Player.prototype.m_initSounds = function () {
 
 
 the_final_stand.entity.Player.prototype.getStarterWep = function () {
+    this.currentWeapon = new the_final_stand.entity.Pistol(this.stage, this.game);
     this.currentWeapon = new the_final_stand.entity.Pistol(this.stage, this.game);
 
 };

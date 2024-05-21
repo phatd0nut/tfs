@@ -39,10 +39,11 @@ the_final_stand.hud.PlayerHUD.prototype.update = function() {
 
 the_final_stand.hud.PlayerHUD.prototype.createBitmapField = function(text, x, y) {
     var field = new rune.text.BitmapField(text, 'tfs_font');
+    var field = new rune.text.BitmapField(text, 'tfs_font');
     field.x = x;
     field.y = y;
     field.autoSize = true;
-
+    
     field.scaleX = 1;
     field.scaleY = 1;
     return field;
