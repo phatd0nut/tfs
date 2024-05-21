@@ -65,7 +65,7 @@ the_final_stand.scene.Game.prototype.init = function () {
         new the_final_stand.entity.Danny(608, 270, this, 3)
     ];
 
-    this.numPlayers = 4;
+    this.numPlayers = 1;
 
     // Välj de första 'numPlayers' spelarna
     this.players = allPlayers.slice(0, this.numPlayers);
@@ -77,7 +77,7 @@ the_final_stand.scene.Game.prototype.init = function () {
 
     this.bank = 5000;
 
-    this.zombieSpawner = new the_final_stand.entity.ZombieSpawner(this);
+    this.zombieSpawner = new the_final_stand.managers.ZombieSpawner(this);
     this.updateCounter = 0;
 
     this.activeBullets = new Set();
@@ -90,6 +90,8 @@ the_final_stand.scene.Game.prototype.init = function () {
     this.stage.addChild(this.bulletLayer);
     this.stage.addChild(this.playerLayer);
     this.stage.addChild(this.playerHUDLayer);
+
+    this.highscoreManager = new the_final_stand.managers.HighscoreManager();
 };
 
 /**
@@ -104,6 +106,7 @@ the_final_stand.scene.Game.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
     this.zombieSpawner.update();
     this.weaponsCrate.update();
+
 
     // Kontrollerar kollision mellan alla spelare och zombies
     var zombies = this.zombieSpawner.zombies;
@@ -184,4 +187,10 @@ the_final_stand.scene.Game.prototype.checkAllPlayersDead = function () {
 the_final_stand.scene.Game.prototype.gameOver = function () {
     var gameOverScene = new the_final_stand.scene.GameOver(this);
     this.application.scenes.load([gameOverScene]);
+
+    var numPlayers = this.numPlayers;
+    var zombiesKilled = this.zombieSpawner.getZombiesDead();
+    var currentWave = this.zombieSpawner.getCurrentWave();
+
+    this.highscoreManager.addHighscore(numPlayers, currentWave, zombiesKilled);
 };

@@ -52,6 +52,7 @@ the_final_stand.data.Requests.prototype.m_construct = function() {
 	this.add("revive_sound", "./../asset/audio/interaction/revive_sound.mp3");
 	this.add("menumusic", "./../asset/audio/music/menumusic.mp3");
 	this.add("gameover_bg", "./../asset/backgrounds/gameover_bg.png");
+	this.add("highscore_bg", "./../asset/backgrounds/highscore_bg.png");
 	this.add("menu_bg", "./../asset/backgrounds/menu_bg.png");
 	this.add("tutorial_bg", "./../asset/backgrounds/tutorial_bg.png");
 	this.add("tfs_font", "./../asset/font/tfs_font.png");
