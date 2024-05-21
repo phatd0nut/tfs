@@ -14,7 +14,6 @@
  * Game scene.
  */
 the_final_stand.entity.Player = function (x, y, width, height, texture, gamepadIndex) {
-the_final_stand.entity.Player = function (x, y, width, height, texture, gamepadIndex) {
 
     //--------------------------------------------------------------------------
     // Super call
@@ -55,13 +54,11 @@ the_final_stand.entity.Player.prototype.constructor = the_final_stand.entity.Pla
 the_final_stand.entity.Player.prototype.init = function () {
     rune.display.Sprite.prototype.init.call(this);
     this.RuneMath = rune.util.Math;
-    this.RuneMath = rune.util.Math;
     this.m_initAnimation();
     this.getStarterWep();
     this.m_initSounds();
     this.hud = new the_final_stand.hud.PlayerHUD(this, this.game.players, this.game.players.indexOf(this));
     this.hud.render();
-
 };
 
 /**
@@ -76,12 +73,9 @@ the_final_stand.entity.Player.prototype.update = function (step) {
     rune.display.Sprite.prototype.update.call(this, step);
     this.hud.update();
 
-
     this.m_updateInput(step);
     // this.m_keyboardInput(step);
-    // this.m_keyboardInput(step);
     this.hitBox();
-    this.hud.update();
 
     if (this.hp <= 0) {
         this.isAlive = false;
@@ -89,10 +83,6 @@ the_final_stand.entity.Player.prototype.update = function (step) {
 
     if (this.currentWeapon) {
         this.currentWeapon.update(step);
-
-        if (this.currentWeapon.ammo <= 0) {
-            this.switchWeapon('Pistol');
-        }
 
         if (this.currentWeapon.ammo <= 0) {
             this.switchWeapon('Pistol');
@@ -107,17 +97,7 @@ the_final_stand.entity.Player.prototype.update = function (step) {
         if (playerInReviveZone && playerInReviveZone.gamepad.justPressed(1)) {
             this.reviveButtonPresses++;
             this.reviveBleep.play();
-        var playerInReviveZone = this.game.players.find(function (player) {
-            return player !== this && this.isInReviveZone(player);
-        }.bind(this));
 
-        if (playerInReviveZone && playerInReviveZone.gamepad.justPressed(1)) {
-            this.reviveButtonPresses++;
-            this.reviveBleep.play();
-
-            if (this.reviveButtonPresses >= 5) {
-                this.revive();
-                this.reviveButtonPresses = 0; // Reset the counter
             if (this.reviveButtonPresses >= 5) {
                 this.revive();
                 this.reviveButtonPresses = 0; // Reset the counter
@@ -145,11 +125,11 @@ the_final_stand.entity.Player.prototype.m_initSounds = function () {
 
 the_final_stand.entity.Player.prototype.getStarterWep = function () {
     this.currentWeapon = new the_final_stand.entity.Pistol(this.stage, this.game);
-    this.currentWeapon = new the_final_stand.entity.Pistol(this.stage, this.game);
 
 };
 
 the_final_stand.entity.Player.prototype.switchWeapon = function (weaponName) {
+    console.log("Switching to " + weaponName);
     this.currentWeapon = null;
     this.currentWeapon = new the_final_stand.entity[weaponName](this.stage, this.game);
     this.ammo = this.currentWeapon.ammo;
@@ -189,7 +169,7 @@ the_final_stand.entity.Player.prototype.m_updateInput = function () {
         }
     }
 
-    this.m_keyboardInput(); // För testning
+    // this.m_keyboardInput(); // För testning
 
     this.weaponName = this.currentWeapon.name;
 
@@ -324,3 +304,4 @@ the_final_stand.entity.Player.prototype.m_initAnimation = function () {
     this.animation.create("run_rpg", [26, 27, 28, 29], 10, true);
     this.animation.create("downed", [30, 31, 32, 33, 34], 10, true);
 };
+

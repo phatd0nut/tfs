@@ -53,6 +53,16 @@ the_final_stand.scene.HowToPlay.prototype.update = function (step) {
     }
 };
 
+the_final_stand.scene.HowToPlay.prototype.createBitmapField = function (text, x, y) {
+    var field = new rune.text.BitmapField(text, 'tfs_font');
+    field.x = x;
+    field.y = y;
+    field.autoSize = true;
+    field.scaleX = 1;
+    field.scaleY = 1;
+    return field;
+};
+
 the_final_stand.scene.HowToPlay.prototype.m_initBackground = function () {
     this.background = new rune.display.Graphic(
         0,
@@ -61,6 +71,22 @@ the_final_stand.scene.HowToPlay.prototype.m_initBackground = function () {
         this.application.screen.height, "tutorial_bg"
     );
     this.stage.addChild(this.background);
+
+    this.lines = [
+        "THE FINAL STAND IS A SURVIVAL GAME",
+        "WHERE YOU TRY TO SURVIVE",
+        "AS MANY WAVES AS POSSIBLE AS A TEAM"
+    ];
+    this.lineHeight = 20; // Justera efter behov
+    
+    for (var i = 0; i < this.lines.length; i++) {
+        this.line = this.createBitmapField(
+            this.lines[i],
+            20,
+            80 + i * this.lineHeight
+        );
+        this.stage.addChild(this.line);
+    }
 };
 
 the_final_stand.scene.HowToPlay.prototype.m_initMenu = function () {
@@ -73,6 +99,8 @@ the_final_stand.scene.HowToPlay.prototype.m_initMenu = function () {
     this.menu.onSelect(this.selectOption, this);
     this.stage.addChild(this.menu);
 };
+
+
 
 the_final_stand.scene.HowToPlay.prototype.selectOption = function (option) {
     switch (option.text) {
