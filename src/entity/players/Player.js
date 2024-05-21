@@ -57,8 +57,8 @@ the_final_stand.entity.Player.prototype.init = function () {
     this.m_initAnimation();
     this.getStarterWep();
     this.m_initSounds();
-    this.hud = new the_final_stand.hud.PlayerHUD(this, this.game.players, this.game.players.indexOf(this));
-    this.hud.render();
+    this.hud = new the_final_stand.hud.PlayerHUD(this);
+    // this.hud.render();
 };
 
 /**
@@ -79,6 +79,7 @@ the_final_stand.entity.Player.prototype.update = function (step) {
 
     if (this.hp <= 0) {
         this.isAlive = false;
+        this.hud.dispose();
     }
 
     if (this.currentWeapon) {
@@ -184,7 +185,7 @@ the_final_stand.entity.Player.prototype.revive = function () {
     this.isAlive = true;
     this.hp = 100;
     this.animation.gotoAndPlay("idle_" + this.weaponName);
-    this.hud.updateHp();
+    this.hud.render();
 };
 
 the_final_stand.entity.Player.prototype.m_keyboardInput = function () {

@@ -40,7 +40,7 @@ the_final_stand.entity.ZombieSpawner.prototype.update = function () {
     } else {
         this.spawnTimer++;
         if (this.spawnTimer >= this.spawnInterval && this.zombiesToSpawn > 0) {
-            // this.m_spawnZombie();
+            this.m_spawnZombie();
             this.spawnTimer = 0;
             this.zombiesToSpawn--;
         }
@@ -67,7 +67,7 @@ the_final_stand.entity.ZombieSpawner.prototype.m_spawnZombie = function () {
 
 the_final_stand.entity.ZombieSpawner.prototype.m_spawnWave = function (waveNumber) {
     var numZombies;
-    if (waveNumber === 1) {
+    if (waveNumber === 0) {
         numZombies = 1; // Antalet zombies som spawnas första vågen
     } else {
         numZombies = 25 + Math.pow(2, waveNumber); // Ökar antalet zombies exponentiellt
