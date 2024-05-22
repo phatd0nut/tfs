@@ -47,6 +47,7 @@ the_final_stand.scene.Menu.prototype.init = function () {
     this.m_initController();
 
 
+
 };
 
 the_final_stand.scene.Menu.prototype.update = function (step) {
@@ -68,6 +69,11 @@ the_final_stand.scene.Menu.prototype.update = function (step) {
 
 
     }
+
+    if (this.gamepads.get(0).justPressed(12) || this.gamepads.get(0).justPressed(13)) {
+        this.selectSound.play();
+    }
+
 };
 
 the_final_stand.scene.Menu.prototype.m_initBackground = function () {
@@ -75,7 +81,7 @@ the_final_stand.scene.Menu.prototype.m_initBackground = function () {
         0,
         0,
         this.application.screen.width,
-        this.application.screen.height, "MENUSCENE-Sheet"
+        this.application.screen.height, "menu_bg"
     );
 
     this.background.animation.create("play", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32], 10, false);
@@ -122,10 +128,16 @@ the_final_stand.scene.Menu.prototype.m_initMenu = function () {
     this.music = this.application.sounds.sound.get("menumusic");
     this.music.play();
     this.music.loop = true;
+    this.selectSound = this.application.sounds.sound.get("click");
+    this.clickSound = this.application.sounds.sound.get("select");
 };
 
 //Method to select the option
 the_final_stand.scene.Menu.prototype.selectOption = function (option) {
+
+    this.clickSound.play();
+
+
     switch (option.text) {
         case "SINGLE PLAYER":
             this.application.scenes.load([

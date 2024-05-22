@@ -56,6 +56,9 @@ the_final_stand.scene.Game.prototype.init = function () {
     this.playerLayer = new rune.display.DisplayObjectContainer(0, 0, 1280, 720);
     this.playerHUDLayer = new rune.display.DisplayObjectContainer(0, 0, 1280, 720);
 
+    this.music = this.application.sounds.sound.get("game");
+    this.music.play();
+    this.music.loop = true;
 
     // Skapa en array med alla möjliga spelare
     var allPlayers = [

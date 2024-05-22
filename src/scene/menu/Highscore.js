@@ -118,9 +118,11 @@ the_final_stand.scene.Highscore.prototype.m_initMenu = function () {
     this.menu.scaleY = 2;
     this.menu.onSelect(this.selectOption, this);
     this.stage.addChild(this.menu);
+    this.selectSound = this.application.sounds.sound.get("click");
 };
 
 the_final_stand.scene.Highscore.prototype.selectOption = function (option) {
+    this.selectSound.play();
     switch (option.text) {
         case "BACK TO MENU":
             this.application.scenes.load([

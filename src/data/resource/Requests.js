@@ -43,16 +43,21 @@ the_final_stand.data.Requests.prototype.constructor = the_final_stand.data.Reque
  */
 the_final_stand.data.Requests.prototype.m_construct = function() {
     rune.resource.Requests.prototype.m_construct.call(this);
-    this.add("akimbo_uzi", "./../asset/audio/guns/akimbo_uzi.mp3");
+    this.add("game", "./../asset/audio/game.mp3");
+	this.add("akimbo_uzi", "./../asset/audio/guns/akimbo_uzi.mp3");
 	this.add("assault_rifle", "./../asset/audio/guns/assault_rifle.mp3");
 	this.add("pistol", "./../asset/audio/guns/pistol.mp3");
 	this.add("shotgun", "./../asset/audio/guns/shotgun.mp3");
 	this.add("sniper_rifle", "./../asset/audio/guns/sniper_rifle.mp3");
+	this.add("click", "./../asset/audio/interaction/click.wav");
 	this.add("pickup", "./../asset/audio/interaction/pickup.wav");
 	this.add("revive_sound", "./../asset/audio/interaction/revive_sound.mp3");
+	this.add("select", "./../asset/audio/interaction/select.wav");
+	this.add("menumusic", "./../asset/audio/menumusic.wav");
 	this.add("menumusic", "./../asset/audio/music/menumusic.mp3");
 	this.add("gameover_bg", "./../asset/backgrounds/gameover_bg.png");
 	this.add("highscore_bg", "./../asset/backgrounds/highscore_bg.png");
+	this.add("MENUSCENE-Sheet", "./../asset/backgrounds/MENUSCENE-Sheet.png");
 	this.add("menu_bg", "./../asset/backgrounds/menu_bg.png");
 	this.add("tutorial_bg", "./../asset/backgrounds/tutorial_bg.png");
 	this.add("tfs_font", "./../asset/font/tfs_font.png");

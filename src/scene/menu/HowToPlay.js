@@ -98,11 +98,14 @@ the_final_stand.scene.HowToPlay.prototype.m_initMenu = function () {
     this.menu.scaleY = 2;
     this.menu.onSelect(this.selectOption, this);
     this.stage.addChild(this.menu);
+    this.clickSound = this.application.sounds.sound.get("select");
 };
 
 
 
 the_final_stand.scene.HowToPlay.prototype.selectOption = function (option) {
+
+    this.clickSound.play();
     switch (option.text) {
         case "BACK TO MENU":
             this.application.scenes.load([
