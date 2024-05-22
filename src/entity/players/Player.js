@@ -58,7 +58,8 @@ the_final_stand.entity.Player.prototype.init = function () {
     this.getStarterWep();
     this.m_initSounds();
     this.hud = new the_final_stand.hud.PlayerHUD(this);
-    // this.hud.render();
+    this.damageSound = this.application.sounds.sound.get("damage");
+    this.lastHp = this.hp;
 };
 
 /**
@@ -81,6 +82,11 @@ the_final_stand.entity.Player.prototype.update = function (step) {
         this.isAlive = false;
         this.hud.dispose();
     }
+
+    if (this.hp < this.lastHp) {
+        this.damageSound.play();
+    }
+    this.lastHp = this.hp;
 
     if (this.currentWeapon) {
         this.currentWeapon.update(step);

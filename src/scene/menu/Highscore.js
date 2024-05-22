@@ -53,40 +53,32 @@ the_final_stand.scene.Highscore.prototype.init = function () {
 
     for (var i = 0; i < highscores.length; i++) {
         var text1 = "TEAM: KEBAB";
-        var teamText = new rune.text.BitmapField(text1, "tfs_font");
-
-        var text2 = "PLAYERS: " + highscores[i].players;
-        var playerText = new rune.text.BitmapField(text2, "tfs_font");
+        var teamText = new rune.text.BitmapField(text1, "tfs_font_black");
 
         var text3 = "WAVE: " + highscores[i].wave;
-        var waveText = new rune.text.BitmapField(text3, "tfs_font");
+        var waveText = new rune.text.BitmapField(text3, "tfs_font_black");
 
         var text4 = "ZOMBIES KILLED: " + highscores[i].zombiesKilled;
-        var zombiesKilledText = new rune.text.BitmapField(text4, "tfs_font");
+        var zombiesKilledText = new rune.text.BitmapField(text4, "tfs_font_black");
 
         teamText.autoSize = true;
-        playerText.autoSize = true;
         waveText.autoSize = true;
         zombiesKilledText.autoSize = true;
 
-        teamText.x = 200; // Mitten av skärmen i x-led
-        teamText.y = 300 + i * 30; // Mitten av skärmen i y-led plus ett konstant avstånd mellan varje highscore
+            teamText.x = 200; // Mitten av skärmen i x-led
+            teamText.y = 300 + i * 30; // Mitten av skärmen i y-led plus ett konstant avstånd mellan varje highscore
 
-        playerText.x = 460; // Mitten av skärmen i x-led
-        playerText.y = 300 + i * 30; // Mitten av skärmen i y-led plus ett konstant avstånd mellan varje highscore
+            waveText.x = 680; // Mitten av skärmen i x-led
+            waveText.y = 300 + i * 30; // Mitten av skärmen i y-led plus ett konstant avstånd mellan varje highscore
 
-        waveText.x = 680; // Mitten av skärmen i x-led
-        waveText.y = 300 + i * 30; // Mitten av skärmen i y-led plus ett konstant avstånd mellan varje highscore
-
-        zombiesKilledText.x = 830; // Mitten av skärmen i x-led
-        zombiesKilledText.y = 300 + i * 30; // Mitten av skärmen i y-led plus ett konstant avstånd mellan varje highscore
+            zombiesKilledText.x = 830; // Mitten av skärmen i x-led
+            zombiesKilledText.y = 300 + i * 30; // Mitten av skärmen i y-led plus ett konstant avstånd mellan varje highscore
 
 
 
 
 
         this.stage.addChild(teamText);
-        this.stage.addChild(playerText);
         this.stage.addChild(waveText);
         this.stage.addChild(zombiesKilledText);
     }
@@ -100,12 +92,14 @@ the_final_stand.scene.Highscore.prototype.update = function (step) {
 };
 
 the_final_stand.scene.Highscore.prototype.m_initBackground = function () {
-    this.background = new rune.display.Graphic(
+    this.background = new rune.display.Sprite(
         0,
         0,
         this.application.screen.width,
-        this.application.screen.height, "highscore_bg"
+        this.application.screen.height, "highscore-Sheet"
     );
+
+    this.background.animation.create("play", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], 10, true);
     this.stage.addChild(this.background);
 };
 
@@ -119,6 +113,8 @@ the_final_stand.scene.Highscore.prototype.m_initMenu = function () {
     this.menu.onSelect(this.selectOption, this);
     this.stage.addChild(this.menu);
     this.selectSound = this.application.sounds.sound.get("click");
+    this.music = this.application.sounds.sound.get("highscore");
+    this.music.play();
 };
 
 the_final_stand.scene.Highscore.prototype.selectOption = function (option) {

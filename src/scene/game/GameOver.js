@@ -51,6 +51,8 @@ the_final_stand.scene.GameOver.prototype.init = function () {
     // this.camera.m_fade.in(2000, this.m_renderGameOver, this);
     // console.log(this.camera);
     this.m_renderGameOver();
+    this.music = this.application.sounds.sound.get("gameover_sound");
+    this.music.play();
 };
 
 /**
