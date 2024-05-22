@@ -13,7 +13,7 @@
  * 
  * Game scene.
  */
-the_final_stand.scene.Game = function (numPlayers) {
+the_final_stand.scene.Game = function (numPlayers, teamName) {
 
     //--------------------------------------------------------------------------
     // Super call
@@ -25,6 +25,7 @@ the_final_stand.scene.Game = function (numPlayers) {
     rune.scene.Scene.call(this);
 
     this.numPlayers = numPlayers;
+    this.teamName = teamName;
 };
 
 //------------------------------------------------------------------------------
@@ -71,7 +72,6 @@ the_final_stand.scene.Game.prototype.init = function () {
     this.players = allPlayers.slice(0, this.numPlayers);
 
     for (var i = 0; i < this.players.length; i++) {
-        // console.log(this.players[i]);
         this.playerLayer.addChild(this.players[i]);
     }
 
@@ -188,9 +188,9 @@ the_final_stand.scene.Game.prototype.gameOver = function () {
     var gameOverScene = new the_final_stand.scene.GameOver(this);
     this.application.scenes.load([gameOverScene]);
 
-    var numPlayers = this.numPlayers;
+    var teamName = this.teamName;
     var zombiesKilled = this.zombieSpawner.getZombiesDead();
     var currentWave = this.zombieSpawner.getCurrentWave();
 
-    this.highscoreManager.addHighscore(numPlayers, currentWave, zombiesKilled);
+    this.highscoreManager.addHighscore(teamName, currentWave, zombiesKilled);
 };

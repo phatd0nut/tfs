@@ -48,6 +48,7 @@ the_final_stand.data.Requests.prototype.m_construct = function() {
 	this.add("pistol", "./../asset/audio/guns/pistol.mp3");
 	this.add("shotgun", "./../asset/audio/guns/shotgun.mp3");
 	this.add("sniper_rifle", "./../asset/audio/guns/sniper_rifle.mp3");
+	this.add("error", "./../asset/audio/interaction/error.wav");
 	this.add("pickup", "./../asset/audio/interaction/pickup.wav");
 	this.add("revive_sound", "./../asset/audio/interaction/revive_sound.mp3");
 	this.add("menumusic", "./../asset/audio/music/menumusic.mp3");

@@ -14,8 +14,11 @@
   "author": "Uncredited Rune developer",
   "license": "MIT",
   "devDependencies": {
+    "electron": "*",
     "google-closure-compiler": "*",
-    "jsdoc": "*",
-    "electron": "*"
+    "jsdoc": "*"
+  },
+  "dependencies": {
+    "rune-tools": "^2.0.2"
   }
 }

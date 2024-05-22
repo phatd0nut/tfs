@@ -47,46 +47,53 @@ the_final_stand.scene.Highscore.prototype.init = function () {
     this.m_initBackground();
     this.m_initMenu();
 
+    // Create column headers
+    var teamHeader = new rune.text.BitmapField("TEAM", "tfs_font");
+    var waveHeader = new rune.text.BitmapField("WAVE", "tfs_font");
+    var zombiesKilledHeader = new rune.text.BitmapField("ZOMBIES KILLED", "tfs_font");
+
+    var spacing = 1280 / 4;
+
+    teamHeader.x = spacing - 120;
+    waveHeader.x = (spacing - 100) * 2;
+    zombiesKilledHeader.x = (spacing - 100)  * 3;
+
+    teamHeader.y = waveHeader.y = zombiesKilledHeader.y = 200;
+
+    teamHeader.autoSize = waveHeader.autoSize = zombiesKilledHeader.autoSize = true;
+    teamHeader.scaleX = waveHeader.scaleX = zombiesKilledHeader.scaleX = 2;
+    teamHeader.scaleY = waveHeader.scaleY = zombiesKilledHeader.scaleY = 2;
+
+    this.stage.addChild(teamHeader);
+    this.stage.addChild(waveHeader);
+    this.stage.addChild(zombiesKilledHeader);
+
     // Hämta highscores
     var highscores = this.highscoreManager.getHighscores();
     console.log(highscores);
 
     for (var i = 0; i < highscores.length; i++) {
-        var text1 = "TEAM: KEBAB";
+        var text1 = "" + highscores[i].team;
         var teamText = new rune.text.BitmapField(text1, "tfs_font");
-
-        var text2 = "PLAYERS: " + highscores[i].players;
-        var playerText = new rune.text.BitmapField(text2, "tfs_font");
-
-        var text3 = "WAVE: " + highscores[i].wave;
-        var waveText = new rune.text.BitmapField(text3, "tfs_font");
-
-        var text4 = "ZOMBIES KILLED: " + highscores[i].zombiesKilled;
-        var zombiesKilledText = new rune.text.BitmapField(text4, "tfs_font");
-
-        teamText.autoSize = true;
-        playerText.autoSize = true;
-        waveText.autoSize = true;
-        zombiesKilledText.autoSize = true;
-
-        teamText.x = 200; // Mitten av skärmen i x-led
-        teamText.y = 300 + i * 30; // Mitten av skärmen i y-led plus ett konstant avstånd mellan varje highscore
-
-        playerText.x = 460; // Mitten av skärmen i x-led
-        playerText.y = 300 + i * 30; // Mitten av skärmen i y-led plus ett konstant avstånd mellan varje highscore
-
-        waveText.x = 680; // Mitten av skärmen i x-led
-        waveText.y = 300 + i * 30; // Mitten av skärmen i y-led plus ett konstant avstånd mellan varje highscore
-
-        zombiesKilledText.x = 830; // Mitten av skärmen i x-led
-        zombiesKilledText.y = 300 + i * 30; // Mitten av skärmen i y-led plus ett konstant avstånd mellan varje highscore
-
-
-
-
-
+    
+        var text2 = "" + highscores[i].wave;
+        var waveText = new rune.text.BitmapField(text2, "tfs_font");
+    
+        var text3 = "" + highscores[i].zombiesKilled;
+        var zombiesKilledText = new rune.text.BitmapField(text3, "tfs_font");
+    
+        teamText.autoSize = waveText.autoSize = zombiesKilledText.autoSize = true;
+    
+        teamText.x = teamHeader.x; // Same as teamHeader
+        teamText.y = teamHeader.y + teamHeader.height + 25 + i * 30; // Below teamHeader
+    
+        waveText.x = waveHeader.x; // Same as waveHeader
+        waveText.y = waveHeader.y + waveHeader.height + 25 + i * 30; // Below waveHeader
+    
+        zombiesKilledText.x = zombiesKilledHeader.x; // Same as zombiesKilledHeader
+        zombiesKilledText.y = zombiesKilledHeader.y + zombiesKilledHeader.height + 25 + i * 30; // Below zombiesKilledHeader
+    
         this.stage.addChild(teamText);
-        this.stage.addChild(playerText);
         this.stage.addChild(waveText);
         this.stage.addChild(zombiesKilledText);
     }
