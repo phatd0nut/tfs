@@ -64,6 +64,10 @@ the_final_stand.entity.Zombie.prototype.init = function () {
 
     this.m_initAnimation();
     this.m_initHitBox();
+
+    this.hitSound = this.game.application.sounds.sound.get('zombiehit', true);
+    this.hitSound.loop = false;
+
 };
 
 /**
@@ -79,6 +83,7 @@ the_final_stand.entity.Zombie.prototype.update = function (step) {
     this.bulletHasCollided = false;
     this.m_hitBoxDetection();
     this.m_followPlayers();
+ 
 
     // Uppdatera aabb
     this.aabb.x = this.x;
@@ -132,6 +137,8 @@ the_final_stand.entity.Zombie.prototype.m_hitBoxDetection = function () {
                 if (this.hp <= 0) {
                     this.die();
                 }
+
+                this.hitSound.play();
 
                 break;
             }
