@@ -42,28 +42,29 @@ the_final_stand.scene.Menu.prototype.constructor = the_final_stand.scene.Menu;
 
 the_final_stand.scene.Menu.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
+
+    this.selectSound = this.application.sounds.sound.get("select");
+    this.navigateSound = this.application.sounds.sound.get("navigate");
+
     this.m_initBackground();
     this.m_initMenu();
     this.m_initController();
-
-
 };
 
 the_final_stand.scene.Menu.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
     if (this.gamepads.get(0).justPressed(12)) {
-        if (this.menu.up()) {
-        }
+        this.navigateSound.play();
+        this.menu.up()
     }
-
 
     if (this.gamepads.get(0).justPressed(13)) {
-        if (this.menu.down()) {
-        }
+        this.navigateSound.play();
+        this.menu.down()
     }
 
-
     if (this.gamepads.get(0).justPressed(0)) {
+        this.selectSound.play();
         this.menu.select();
     }
 };
@@ -106,7 +107,7 @@ the_final_stand.scene.Menu.prototype.m_initController = function () {
 
 //Method to initialize the menu
 the_final_stand.scene.Menu.prototype.m_initMenu = function () {
-    this.menu = new rune.ui.VTMenu({resource: "tfs_font"});
+    this.menu = new rune.ui.VTMenu({ resource: "tfs_font" });
     this.menu.add("PLAY GAME");
     this.menu.add("HIGH SCORES");
     this.menu.add("HOW TO PLAY");
@@ -139,7 +140,7 @@ the_final_stand.scene.Menu.prototype.selectOption = function (option) {
             this.application.scenes.load([
                 new the_final_stand.scene.Highscore()
             ]);
-            break;s
+            break; s
         case "CREDITS":
             this.application.scenes.load([
                 new the_final_stand.scene.Credits()

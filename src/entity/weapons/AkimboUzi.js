@@ -1,7 +1,8 @@
 the_final_stand.entity.AkimboUzi = function (stage, game) {
-    the_final_stand.entity.Weapon.call(this, "akimbo_uzi", 400, -26, 0, stage, game, true);
+    the_final_stand.entity.Weapon.call(this, "akimbo_uzi", 300, -26, 0, stage, game, true);
     this.weaponDamage = 9;
     this.fireRate = 100;
+    this.totalAmmo = 300; // Används i PlayerHUD.js för att räkna ut procentuell ammo
 };
 
 the_final_stand.entity.AkimboUzi.prototype = Object.create(the_final_stand.entity.Weapon.prototype);

@@ -46,34 +46,43 @@ the_final_stand.scene.TeamScreen.prototype.constructor = the_final_stand.scene.T
 
 the_final_stand.scene.TeamScreen.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
+
+    this.selectSound = this.application.sounds.sound.get("select");
+    this.errorSound = this.application.sounds.sound.get("error");
+    this.navigateSound = this.application.sounds.sound.get("navigate");
+    this.gamepad = this.gamepads.get(0);
+
     this.m_initBackground();
     this.m_initMenu();
-    this.gamepad = this.gamepads.get(0);
-    this.errorSound = this.application.sounds.sound.get("error");
 };
 
 the_final_stand.scene.TeamScreen.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
 
     if (this.gamepad.justPressed(12)) {
+        this.navigateSound.play();
         this.menu.up();
     }
 
     if (this.gamepad.justPressed(13)) {
+        this.navigateSound.play();
         this.menu.down();
     }
 
     if (this.gamepad.justPressed(14)) { // left
         this.currentLetterIndex = (this.currentLetterIndex - 1 + this.letters.length) % this.letters.length;
+        this.navigateSound.play();
         this.m_initMenu();
     }
     
     if (this.gamepad.justPressed(15)) { // right
         this.currentLetterIndex = (this.currentLetterIndex + 1) % this.letters.length;
+        this.navigateSound.play();
         this.m_initMenu();
     }
 
     if (this.gamepads.get(0).justPressed(0)) {
+        this.selectSound.play();
         this.menu.select();
     }
 };

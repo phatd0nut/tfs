@@ -57,8 +57,10 @@ the_final_stand.entity.Player.prototype.init = function () {
     this.m_initAnimation();
     this.getStarterWep();
     this.m_initSounds();
+
     this.hud = new the_final_stand.hud.PlayerHUD(this);
-    // this.hud.render();
+    this.damageSound = this.application.sounds.sound.get("damage");
+    this.lastHp = this.hp;
 };
 
 /**
@@ -82,6 +84,12 @@ the_final_stand.entity.Player.prototype.update = function (step) {
         this.hud.dispose();
     }
 
+    if (this.hp < this.lastHp) {
+        this.damageSound.play();
+    }
+    
+    this.lastHp = this.hp;
+
     if (this.currentWeapon) {
         this.currentWeapon.update(step);
 
@@ -101,7 +109,7 @@ the_final_stand.entity.Player.prototype.update = function (step) {
 
             if (this.reviveButtonPresses >= 5) {
                 this.revive();
-                this.reviveButtonPresses = 0; // Reset the counter
+                this.reviveButtonPresses = 0;
             }
         }
     }
@@ -188,6 +196,7 @@ the_final_stand.entity.Player.prototype.revive = function () {
     this.hud.render();
 };
 
+/*
 the_final_stand.entity.Player.prototype.m_keyboardInput = function () {
     this.widthX = 1280; // Spelets upplösning i X-led
     this.heightY = 720; // Spelets upplösning i Y-led
@@ -235,7 +244,7 @@ the_final_stand.entity.Player.prototype.m_keyboardInput = function () {
         this.y += this.diagonalSpeed * this.aspectRatio;
         this.isMoving = true;
     }
-};
+};*/
 
 the_final_stand.entity.Player.prototype.shoot = function () {
     var radian = (this.rotation - 90) * Math.PI / 180;

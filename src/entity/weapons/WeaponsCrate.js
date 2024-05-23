@@ -12,6 +12,8 @@ the_final_stand.entity.WeaponsCrate.prototype.update = function () {
 };
 
 the_final_stand.entity.WeaponsCrate.prototype.init = function () {
+    this.weaponPickup = this.game.application.sounds.sound.get("weapon_pickup", false);
+
     this.m_initSprite();
     this.m_initAnimation();
 };
@@ -71,7 +73,7 @@ the_final_stand.entity.WeaponsCrate.prototype.m_buyWeapon = function () {
 
                 // Switch to the random weapon
                 this.players[i].switchWeapon(randomWeaponName);
-                console.log("Player " + (i + 1) + " bought " + randomWeaponName + " for 5000. Remaining money in bank: " + this.game.bank); 
+                this.weaponPickup.play();
             } else {
                 console.log("Not enough money in the bank to buy a weapon. Current money in bank: " + this.game.bank);
             }

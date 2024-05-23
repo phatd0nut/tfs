@@ -25,7 +25,7 @@ the_final_stand.system.Main = function() {
         developer: "se.lnu",
         app: "the_final_stand",
         build: "0.0.1",
-        scene: the_final_stand.scene.Menu,
+        scene: the_final_stand.scene.Game,
         resources: the_final_stand.data.Requests,
         useGamepads:true,
         useKeyboard:true,

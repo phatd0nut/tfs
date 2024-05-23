@@ -42,6 +42,7 @@ the_final_stand.scene.HowToPlay.prototype.constructor = the_final_stand.scene.Ho
 
 the_final_stand.scene.HowToPlay.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
+    this.selectSound = this.application.sounds.sound.get("select");
     this.m_initBackground();
     this.m_initMenu();
 };
@@ -49,6 +50,7 @@ the_final_stand.scene.HowToPlay.prototype.init = function () {
 the_final_stand.scene.HowToPlay.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
     if (this.gamepads.get(0).justPressed(0)) {
+        this.selectSound.play();
         this.menu.select();
     }
 };
