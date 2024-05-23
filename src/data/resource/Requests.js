@@ -56,6 +56,7 @@ the_final_stand.data.Requests.prototype.m_construct = function() {
 	this.add("pickup", "./../asset/audio/interaction/pickup.wav");
 	this.add("revive_sound", "./../asset/audio/interaction/revive_sound.mp3");
 	this.add("select", "./../asset/audio/interaction/select.wav");
+	this.add("zombiehit", "./../asset/audio/interaction/zombiehit.wav");
 	this.add("menumusic", "./../asset/audio/menumusic.wav");
 	this.add("menumusic", "./../asset/audio/music/menumusic.mp3");
 	this.add("gameover_bg", "./../asset/backgrounds/gameover_bg.png");
