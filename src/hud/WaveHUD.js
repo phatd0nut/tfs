@@ -17,13 +17,13 @@ the_final_stand.hud.WaveHUD.prototype.createBitmapField = function (text, x, y) 
 };
 
 the_final_stand.hud.WaveHUD.prototype.render = function () {
-    this.zombieCountText = this.createBitmapField("ZOMBIES: ", 280, 10);
+    this.zombieCountText = this.createBitmapField("ZOMBIES TO KILL: ", 160, 10);
     this.zombieSpawner.game.stage.addChild(this.zombieCountText);
 
-    this.waveText = this.createBitmapField("WAVE: ", 640, 10);
+    this.waveText = this.createBitmapField("WAVE: ", 610, 10);
     this.zombieSpawner.game.stage.addChild(this.waveText);
 
-    this.totalMoneyText = this.createBitmapField("TOTAL MONEY: ", 800, 10);
+    this.totalMoneyText = this.createBitmapField("TOTAL MONEY: ", 850, 10);
     this.zombieSpawner.game.stage.addChild(this.totalMoneyText);
 };
 

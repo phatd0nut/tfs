@@ -26,6 +26,7 @@ the_final_stand.scene.Game = function (numPlayers, teamName) {
 
     this.numPlayers = numPlayers;
     this.teamName = teamName;
+    console.log(teamName);
 };
 
 //------------------------------------------------------------------------------
@@ -47,6 +48,10 @@ the_final_stand.scene.Game.prototype.constructor = the_final_stand.scene.Game;
  */
 the_final_stand.scene.Game.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
+
+    this.cameras.getCameraAt(0).fade.opacity = 1;
+    this.cameras.getCameraAt(0).fade.in(2000);
+
     this.stage.map.load('map2');
     this.canvas = new rune.display.Canvas(1280, 720);
     this.corpseLayer = new rune.display.DisplayObjectContainer(0, 0, 1280, 720);
@@ -185,12 +190,12 @@ the_final_stand.scene.Game.prototype.checkAllPlayersDead = function () {
 };
 
 the_final_stand.scene.Game.prototype.gameOver = function () {
-    var gameOverScene = new the_final_stand.scene.GameOver(this);
-    this.application.scenes.load([gameOverScene]);
-
     var teamName = this.teamName;
     var zombiesKilled = this.zombieSpawner.getZombiesDead();
     var currentWave = this.zombieSpawner.getCurrentWave();
+
+    var gameOverScene = new the_final_stand.scene.GameOver(this, teamName);
+    this.application.scenes.load([gameOverScene]);
 
     this.highscoreManager.addHighscore(teamName, currentWave, zombiesKilled);
 };

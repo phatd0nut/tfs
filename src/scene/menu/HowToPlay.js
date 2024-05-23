@@ -92,7 +92,7 @@ the_final_stand.scene.HowToPlay.prototype.m_initBackground = function () {
 };
 
 the_final_stand.scene.HowToPlay.prototype.m_initMenu = function () {
-    this.menu = new rune.ui.VTMenu({resource: "tfs_font"});
+    this.menu = new rune.ui.VTMenu({ resource: "tfs_font", duration: 30, pointer: the_final_stand.entity.Pointer });
     this.menu.add("BACK TO MENU");
     this.menu.x = 435;
     this.menu.y = 600;

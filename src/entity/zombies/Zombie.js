@@ -98,9 +98,7 @@ the_final_stand.entity.Zombie.prototype.update = function (step) {
 
 the_final_stand.entity.Zombie.prototype.dispose = function () {
     rune.display.Sprite.prototype.dispose.call(this);
-    console.log('Zombie disposed');
     this.game.zombieLayer.removeChild(this);
-    console.log('Zombie removed from stage');
 };
 
 the_final_stand.entity.Zombie.prototype.m_initAnimation = function () {
@@ -218,7 +216,6 @@ the_final_stand.entity.Zombie.prototype.dropCash = function () {
 }
 
 the_final_stand.entity.Zombie.prototype.printZombieToCanvas = function () {
-    console.log('printZombieToCanvas');
     var deadImage;
     switch (this.type) {
         case "default":

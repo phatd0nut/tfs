@@ -48,7 +48,6 @@ the_final_stand.scene.Menu.prototype.init = function () {
 
     this.m_initBackground();
     this.m_initMenu();
-    this.m_initController();
 };
 
 the_final_stand.scene.Menu.prototype.update = function (step) {
@@ -81,33 +80,9 @@ the_final_stand.scene.Menu.prototype.m_initBackground = function () {
     this.stage.addChild(this.background);
 };
 
-
-
-//------------------------------------------------------------------------------
-// Method to initialize the controller graphic
-the_final_stand.scene.Menu.prototype.m_initController = function () {
-    // this.controllerGraphic = new rune.display.Graphic(
-    //     0,
-    //     0,
-    //     400,
-    //     400, "controller"
-    // );
-    // this.controllerGraphic.center = this.application.screen.center;
-    // this.text = new rune.text.BitmapField("JKLMNOPQRSTUVXYZ0123456789");
-    // this.text.autoSize = true;
-    // this.text.x = 200;
-    // this.text.y = 200;
-    // // this.text.x = this.controllerGraphic.x + 100;
-    // // this.text.y = this.controllerGraphic.y + 50;
-    // this.text.scaleX = 2;
-    // this.text.scaleY = 2;
-    // this.stage.addChild(this.text);
-    // this.stage.addChild(this.controllerGraphic);
-};
-
 //Method to initialize the menu
 the_final_stand.scene.Menu.prototype.m_initMenu = function () {
-    this.menu = new rune.ui.VTMenu({ resource: "tfs_font" });
+    this.menu = new rune.ui.VTMenu({ resource: "tfs_font", duration: 30, pointer: the_final_stand.entity.Pointer });
     this.menu.add("PLAY GAME");
     this.menu.add("HIGH SCORES");
     this.menu.add("HOW TO PLAY");
@@ -123,7 +98,6 @@ the_final_stand.scene.Menu.prototype.m_initMenu = function () {
     this.music.loop = true;
 };
 
-//Method to select the option
 the_final_stand.scene.Menu.prototype.selectOption = function (option) {
     switch (option.text) {
         case "PLAY GAME":

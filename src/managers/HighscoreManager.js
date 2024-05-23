@@ -9,5 +9,17 @@ the_final_stand.managers.HighscoreManager.prototype.addHighscore = function (tea
 };
 
 the_final_stand.managers.HighscoreManager.prototype.getHighscores = function () {
-    return this.highscores;
+    // Sortera efter top 5 highscores
+    this.highscores.sort(function(a, b) {
+        if (a.wave === b.wave) {
+            return b.zombiesKilled - a.zombiesKilled;
+        }
+        return b.wave - a.wave;
+    });
+
+    return this.highscores.slice(0, 8);
+};
+
+the_final_stand.managers.HighscoreManager.prototype.getLatestHighscore = function () {
+    return this.highscores[this.highscores.length - 1];
 };

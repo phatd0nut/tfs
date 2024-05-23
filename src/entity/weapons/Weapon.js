@@ -12,32 +12,41 @@ the_final_stand.entity.Weapon = function (name, ammo, offsetX, offsetY, stage, g
     this.game = game;
     this.activeSounds = new Set();  // Set som innehåller alla ljud som spelas upp.
 
+    this.init();
+};
+
+the_final_stand.entity.Weapon.prototype.init = function () {
     // Ljudpool för vapenljud. Tillåter snabb uppspelning av ljud.
     this.gunSounds = [];
     for (var i = 0; i < 5; i++) {
-        var gunSound = this.game.application.sounds.sound.get(this.name, true);
+        var gunSound = this.game.application.sounds.sound.get(this.name, this.name === 'pistol');
         gunSound.loop = false;
         this.gunSounds.push(gunSound);
     }
     this.currentSoundIndex = 0;
-}
+};
 
 the_final_stand.entity.Weapon.prototype.update = function (step) {
     this.timeSinceLastFire += step;
 
     // Kontrollerar om ljudet har spelats klart och tar bort det från activeSounds.
-    var that = this;
-    this.activeSounds.forEach(function(sound) {
+    this.activeSounds.forEach(function (sound) {
         if (sound.ended) {
-            that.dispose(sound);
+            this.dispose(sound);
         }
-    });
+    }.bind(this));
 };
 
 the_final_stand.entity.Weapon.prototype.dispose = function (sound) {
     this.activeSounds.delete(sound);
-    console.log(sound + " disposed");
-}
+
+    // Ta bort specifikt ljudobjekt
+    var soundIndex = this.gunSounds.indexOf(sound);
+    if (soundIndex > -1) {
+        this.gunSounds[soundIndex].stop();
+        this.gunSounds.splice(soundIndex, 1);
+    }
+};
 
 the_final_stand.entity.Weapon.prototype.fire = function (x, y, radian, rotation) {
     if (this.ammo > 0 && this.timeSinceLastFire >= this.fireRate) {

@@ -33,12 +33,7 @@ the_final_stand.entity.Projectile.prototype.dispose = function () {
 };
 
 the_final_stand.entity.Projectile.prototype.outOfBounds = function () {
-    if (this.x < 300 || this.x > this.game.application.screen.width || this.y < 0 || this.y > this.game.application.screen.height) {
+    if (this.x < 30 || this.x > this.game.application.screen.width - 30 || this.y < 35 || this.y > this.game.application.screen.height - 35) {
         this.dispose();
     } 
-    // else {
-    //     this.game.stage.map.back.hitTestAndSeparate(this, function () {
-    //         this.dispose();
-    //     })
-    // }
 };

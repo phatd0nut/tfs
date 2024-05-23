@@ -87,7 +87,7 @@ the_final_stand.entity.Player.prototype.update = function (step) {
     if (this.hp < this.lastHp) {
         this.damageSound.play();
     }
-    
+
     this.lastHp = this.hp;
 
     if (this.currentWeapon) {
@@ -138,7 +138,6 @@ the_final_stand.entity.Player.prototype.getStarterWep = function () {
 };
 
 the_final_stand.entity.Player.prototype.switchWeapon = function (weaponName) {
-    console.log("Switching to " + weaponName);
     this.currentWeapon = null;
     this.currentWeapon = new the_final_stand.entity[weaponName](this.stage, this.game);
     this.ammo = this.currentWeapon.ammo;
