@@ -337,7 +337,6 @@ the_final_stand.entity.Zombie.prototype.m_followPlayers = function () {
         if (this.rotation < 0) {
             this.rotation += 360;
         }
-
     }
 };
 

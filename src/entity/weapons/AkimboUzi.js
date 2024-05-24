@@ -14,16 +14,21 @@ the_final_stand.entity.AkimboUzi.prototype.update = function (step) {
 
 the_final_stand.entity.AkimboUzi.prototype.fire = function (x, y, radian, rotation) {
     if (this.ammo > 0 && this.timeSinceLastFire >= this.fireRate) {
+        // Konvertera rotation till radianer
+        var rotationInRadians = rotation * (Math.PI / 180);
+
+        // Beräkna offset för att skjuta från båda pistoler
+        var offsetX = 10 * Math.cos(rotationInRadians);
+        var offsetY = 10 * Math.sin(rotationInRadians);
+
         // Skapa det första skottet
-        var projectile1 = new the_final_stand.entity.Projectile(x - 10, y, radian, rotation, this.game, this.weaponDamage);
-        this.stage.addChild(projectile1);
-        this.stage.setChildIndex(projectile1, 0);
+        var projectile1 = new the_final_stand.entity.Bullet(x - offsetX, y - offsetY, radian, rotation, this.game, this.weaponDamage);
+        this.game.bulletLayer.addChild(projectile1);
         this.game.activeBullets.add(projectile1);
 
         // Skapa det andra skottet
-        var projectile2 = new the_final_stand.entity.Projectile(x + 10, y, radian, rotation, this.game, this.weaponDamage);
-        this.stage.addChild(projectile2);
-        this.stage.setChildIndex(projectile2, 0);
+        var projectile2 = new the_final_stand.entity.Bullet(x + offsetX, y + offsetY, radian, rotation, this.game, this.weaponDamage);
+        this.game.bulletLayer.addChild(projectile2);
         this.game.activeBullets.add(projectile2);
 
         this.timeSinceLastFire = 0;

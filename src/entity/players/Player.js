@@ -166,8 +166,7 @@ the_final_stand.entity.Player.prototype.m_updateInput = function () {
             if (rotation < 0) {
                 rotation += 2 * Math.PI;
             }
-            this.rotation = this.RuneMath.radiansToDegrees(rotation) + 90;
-
+            this.rotation = (this.RuneMath.radiansToDegrees(rotation) + 90) % 360;
             if (!this.gamepad.pressed(5)) {
                 this.x += x * this.speed;
                 this.y += y * this.speed;
@@ -192,7 +191,7 @@ the_final_stand.entity.Player.prototype.revive = function () {
     this.isAlive = true;
     this.hp = 100;
     this.animation.gotoAndPlay("idle_" + this.weaponName);
-    this.hud.render();
+    this.hud.init();
 };
 
 /*
@@ -284,6 +283,9 @@ the_final_stand.entity.Player.prototype.playerDowned = function () {
     this.x = this.x;
     this.y = this.y;
     this.reviveButtonPresses = 0;
+
+    // Reset the player's rotation
+    this.rotation = 0;
 
     if (!this.isAlive) {
         this.animation.gotoAndPlay("downed");

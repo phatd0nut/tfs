@@ -8,6 +8,10 @@ the_final_stand.hud.PlayerHUD = function (player) {
     // this.hpBar.progress = 1; // Antag att max HP är 100
     // this.hpBars.push(this.hpBar);
 
+    this.init();
+};
+
+the_final_stand.hud.PlayerHUD.prototype.init = function () {
     this.m_render();
 };
 
@@ -29,6 +33,10 @@ the_final_stand.hud.PlayerHUD.prototype.m_render = function () {
 };
 
 the_final_stand.hud.PlayerHUD.prototype.update = function () {
+    if (this.hpBar === null) {
+        return;
+    }
+
     this.hpBar.x = this.player.centerX - 35;
     this.hpBar.y = this.player.centerY - 35;
     this.ammoText.x = this.player.centerX - 35;
@@ -37,22 +45,25 @@ the_final_stand.hud.PlayerHUD.prototype.update = function () {
     this.ammoTextRed.y = this.player.centerY - 55;
 };
 
-the_final_stand.hud.PlayerHUD.prototype.dispose = function () {
-    this.player.game.playerHUDLayer.removeChild(this.hpBar);
-    this.player.game.playerHUDLayer.removeChild(this.ammoText);
-    this.player.game.playerHUDLayer.removeChild(this.ammoTextRed);
+the_final_stand.hud.PlayerHUD.prototype.m_createBitmapField = function (text) {
+    this.field = new rune.text.BitmapField(text, 'tfs_font');
+    this.field2 = new rune.text.BitmapField(text, 'tfs_font_red');
+    this.field.autoSize = true;
+    this.field2.autoSize = true;
+
+    this.field.scaleX = this.field2.scaleX = 1;
+    this.field.scaleY = this.field2.scaleY = 1;
+    return { field: this.field, field2: this.field2 };
 };
 
+the_final_stand.hud.PlayerHUD.prototype.dispose = function () {
+    this.player.game.playerHUDLayer.removeChild(this.hpBar, true);
+    this.player.game.playerHUDLayer.removeChild(this.ammoText, true);
+    this.player.game.playerHUDLayer.removeChild(this.ammoTextRed, true);
 
-the_final_stand.hud.PlayerHUD.prototype.m_createBitmapField = function (text) {
-    var field = new rune.text.BitmapField(text, 'tfs_font');
-    var field2 = new rune.text.BitmapField(text, 'tfs_font_red');
-    field.autoSize = true;
-    field2.autoSize = true;
-    
-    field.scaleX = field2.scaleX = 1;
-    field.scaleY = field2.scaleY = 1;
-    return { field, field2 };
+    this.hpBar = null;
+    this.field = null;
+    this.field2 = null;
 };
 
 the_final_stand.hud.PlayerHUD.prototype.updateAmmo = function () {
