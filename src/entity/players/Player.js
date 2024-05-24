@@ -154,7 +154,7 @@ the_final_stand.entity.Player.prototype.m_updateInput = function () {
 
     if (this.gamepad) {
         if (this.gamepad.justPressed(2) || (this.currentWeapon.isAutomatic && this.gamepad.pressed(2))) {
-            this.shoot();
+            this.m_shoot();
         }
 
         var threshold = 0.1;
@@ -244,25 +244,29 @@ the_final_stand.entity.Player.prototype.m_keyboardInput = function () {
     }
 };*/
 
-the_final_stand.entity.Player.prototype.shoot = function () {
+the_final_stand.entity.Player.prototype.m_shoot = function () {
     var radian = (this.rotation - 90) * Math.PI / 180;
     var gunOffsetX = this.currentWeapon.offsetX;
     var gunOffsetY = this.currentWeapon.offsetY;
+    var rotatedOffsetX, rotatedOffsetY;
+    var x, y;
 
-    // Rotera offseten
-    var rotatedOffsetX = gunOffsetX * Math.cos(radian) - gunOffsetY * Math.sin(radian);
-    var rotatedOffsetY = gunOffsetX * Math.sin(radian) + gunOffsetY * Math.cos(radian);
-    var x = this.x + this.width / 2 + Math.cos(radian) * this.width / 2 + rotatedOffsetX;
-    var y = this.y + this.height / 2 + Math.sin(radian) * this.height / 2 + rotatedOffsetY;
+    // Om spelaren har RPG så skjuts raketen från mitten av spelaren
+    if (this.currentWeapon instanceof the_final_stand.entity.RPG) {
+        x = this.centerX - 15;
+        y = this.centerY - 60;
+    } else {
 
+        var rotatedOffsetX = gunOffsetX * Math.cos(radian) - gunOffsetY * Math.sin(radian);
+        var rotatedOffsetY = gunOffsetX * Math.sin(radian) + gunOffsetY * Math.cos(radian);
+        var x = this.x + this.width / 2 + Math.cos(radian) * this.width / 2 + rotatedOffsetX;
+        var y = this.y + this.height / 2 + Math.sin(radian) * this.height / 2 + rotatedOffsetY;
+    }
     // Anropa fire metoden i currentWeapon objektet (Weapon.js metod)
     this.currentWeapon.fire(x, y, radian, this.rotation);
 
     if (this.hud) {
         this.hud.updateAmmo();
-    } else {
-        console.error('HUD is not initialized');
-        return;
     }
 };
 

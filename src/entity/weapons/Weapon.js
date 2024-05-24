@@ -3,7 +3,6 @@ the_final_stand.entity.Weapon = function (name, ammo, offsetX, offsetY, stage, g
     this.ammo = ammo;
     this.isAutomatic = isAutomatic;
     this.weaponDamage = null;
-    this.bulletSpread = 0;
     this.fireRate = 0;
     this.timeSinceLastFire = 0;
     this.offsetX = offsetX;
@@ -69,4 +68,8 @@ the_final_stand.entity.Weapon.prototype.fire = function (x, y, radian, rotation)
         // Uppdatera ammo
         this.ammo--;
     }
+};
+
+the_final_stand.entity.Weapon.prototype.resetFireRate = function () {
+    this.timeSinceLastFire = this.fireRate;
 };

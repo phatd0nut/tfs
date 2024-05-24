@@ -42,6 +42,9 @@ the_final_stand.scene.Credits.prototype.constructor = the_final_stand.scene.Cred
 
 the_final_stand.scene.Credits.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
+    this.menuMusic = this.application.sounds.sound.get("menumusic_2");
+    
+    this.menuMusic.play();
     this.m_initBackground();
     this.m_initMenu();
     this.m_render();
@@ -80,27 +83,29 @@ the_final_stand.scene.Credits.prototype.m_initMenu = function () {
 
 the_final_stand.scene.Credits.prototype.m_render = function () {
     this.texts = [
-    "SOUND AND MUSIC CREDITS:",  
-    "9MM PISTOL SHOOT SHORT REVERB. PIXABAY.",
-    "UZI GUN FIRING AV MICROSAMMY. PIXABAY",
-    "SHOTGUN FIRING 3. PIXABAY.",
-    "SNIPER RIFLE FIRING SHOT 1. PIXABAY.",
-    "M4 ASSAULT RIFLE LONG BURST.",
-    "SUCCESS FANFARE TRUMPETS.",
-    "GAME MUSIC ACTION, ZAPSLAT.",
-    "APOCALYPSE BACKGROUND PIANO LAYER. CESSIR. LOOPERMAN",
-    "LABYRINTH OF DESPAIR. MOODMODE. PIXABAY"
+    "SOUND AND MUSIC CREDITS:",
+    "9MM PISTOL SHOOT SHORT REVERB/ PIXABAY/",
+    "UZI GUN FIRING AV MICROSAMMY/ PIXABAY/",
+    "SHOTGUN FIRING 3/ PIXABAY/",
+    "SNIPER RIFLE FIRING SHOT 1/ PIXABAY/",
+    "M4 ASSAULT RIFLE LONG BURST/ PIXABAY/",
+    "SUCCESS FANFARE TRUMPETS/ PIXABAY/",
+    "GAME MUSIC ACTION/ ZAPSLAT/",
+    "APOCALYPSE BACKGROUND PIANO LAYER/ CESSIR/ LOOPERMAN",
+    "ROCKET LAUNCHER/ SOUNDSNAP/",
+    "EXPLOSION SOUND/ PIXABAY/",
+    "LABYRINTH OF DESPAIR/ MOODMODE/ PIXABAY/"
     ];
-    
+
     this.texts2 = [
         "GAME DEVELOPED BY:",
         "DESIGNER: DANNY LE",
         "DEVELOPER: ENOR ZILKIQI",
-        "DEVELOPED AT LINNAEUS UNIVERSITY IN VAEXJO SWEDEN"
+        "DEVELOPED AT LINNAEUS UNIVERSITY IN V?XJ>"
     ];
 
     this.textFields = [];
-    
+
     for (var i = 0; i < this.texts.length; i++) {
         var textField = this.createBitmapField(this.texts[i], 600, 320 + i * 20);
         this.stage.addChild(textField);
@@ -108,7 +113,7 @@ the_final_stand.scene.Credits.prototype.m_render = function () {
         textField.y = 200 + i * 20;
         this.textFields.push(textField);
     }
-    
+
     for (var i = 0; i < this.texts2.length; i++) {
         var textField = this.createBitmapField(this.texts2[i], 600, 320 + (this.texts.length + i + 1) * 20); // Lägg till en extra radbrytning
         this.stage.addChild(textField);
@@ -116,7 +121,6 @@ the_final_stand.scene.Credits.prototype.m_render = function () {
         textField.y = 280 + (this.texts.length + i + 1) * 20; // Lägg till en extra radbrytning
         this.textFields.push(textField);
     }
-
 };
 
 the_final_stand.scene.Credits.prototype.createBitmapField = function (text, x, y) {

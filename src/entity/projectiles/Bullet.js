@@ -7,7 +7,8 @@ the_final_stand.entity.Bullet = function (x, y, direction, rotation, game, damag
     this.damage = damage;
     this.dx = Math.cos(this.direction) * this.bulletSpeed;
     this.dy = Math.sin(this.direction) * this.bulletSpeed;
-    this.hitbox.set(2, 2, 6, 6);
+    this.hitbox.set(0, 0, 6, 6);
+    // this.hitbox.debug = true;
     this.aabb = new AABB(this.x, this.y, 6, 6);
 };
 
@@ -26,7 +27,6 @@ the_final_stand.entity.Bullet.prototype.update = function (step) {
 the_final_stand.entity.Bullet.prototype.dispose = function () {
     rune.display.Graphic.prototype.dispose.call(this);
 
-    // this.game.activeBullets.splice(this.game.activeBullets.indexOf(this), 1);
     this.game.activeBullets.delete(this);
     this.game.bulletLayer.removeChild(this);
 };

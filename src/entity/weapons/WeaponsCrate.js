@@ -13,6 +13,7 @@ the_final_stand.entity.WeaponsCrate.prototype.update = function () {
 
 the_final_stand.entity.WeaponsCrate.prototype.init = function () {
     this.weaponPickup = this.game.application.sounds.sound.get("weapon_pickup", false);
+    this.noCashSound = this.game.application.sounds.sound.get("no_cash_sound", false);
 
     this.m_initSprite();
     this.m_initAnimation();
@@ -47,7 +48,12 @@ the_final_stand.entity.WeaponsCrate.prototype.m_checkPlayerNearCrate = function 
                 this.buyInstruction.visible = true;
                 this.animation.play();
             }
-            this.m_buyWeapon();
+
+            var gamepad = this.game.gamepads.get(this.players[i].gamepadIndex); // Get the gamepad for the current player
+
+            if (gamepad.justPressed(0)) { // Check if the current player has pressed the button
+                this.m_buyWeapon(i);
+            }
         }
     }
 
@@ -57,26 +63,20 @@ the_final_stand.entity.WeaponsCrate.prototype.m_checkPlayerNearCrate = function 
     }
 };
 
-the_final_stand.entity.WeaponsCrate.prototype.m_buyWeapon = function () {
-    for (var i = 0; i < this.players.length; i++) {
-        var gamepad = this.game.gamepads.get(this.players[i].gamepadIndex); // Get the gamepad for the current player
+the_final_stand.entity.WeaponsCrate.prototype.m_buyWeapon = function (playerIndex) {
+    // Check if there is enough money in the shared bank
+    if (this.game.bank >= 2500) {
+        // Deduct the cost of the weapon from the shared bank
+        this.game.bank -= 2500;
 
-        if (gamepad.justPressed(0)) { // Check if the current player has pressed the button
-            // Check if there is enough money in the shared bank
-            if (this.game.bank >= 100) {
-                // Deduct the cost of the weapon from the shared bank
-                this.game.bank -= 100;
+        // Randomly select a weapon name
+        var weaponNames = ['AssaultRifle', 'AkimboUzi', 'Shotgun', 'Sniper', 'RPG'];
+        var randomWeaponName = weaponNames[Math.floor(Math.random() * weaponNames.length)];
 
-                // Randomly select a weapon name
-                var weaponNames = ['AssaultRifle', 'AkimboUzi'];
-                var randomWeaponName = weaponNames[Math.floor(Math.random() * weaponNames.length)];
-
-                // Switch to the random weapon
-                this.players[i].switchWeapon(randomWeaponName);
-                this.weaponPickup.play();
-            } else {
-                console.log("Not enough money in the bank to buy a weapon. Current money in bank: " + this.game.bank);
-            }
-        }
+        // Switch to the random weapon
+        this.players[playerIndex].switchWeapon(randomWeaponName);
+        this.weaponPickup.play();
+    } else {
+        this.noCashSound.play();
     }
 };

@@ -109,8 +109,13 @@ the_final_stand.entity.Zombie.prototype.m_initAnimation = function () {
 };
 
 the_final_stand.entity.Zombie.prototype.m_initHitBox = function () {
-    this.hitbox.set(20, 12, this.width - 40, this.height - 30);
-    this.hitbox.debug = false;
+    if (this.type === "fat") {
+        // Set the hitbox to be larger for "fat" zombies
+        this.hitbox.set(10, 6, this.width - 20, this.height - 15);
+    } else {
+        this.hitbox.set(20, 12, this.width - 40, this.height - 30);
+    }
+    // this.hitbox.debug = false;
 };
 
 the_final_stand.entity.Zombie.prototype.m_hitBoxDetection = function () {
@@ -123,8 +128,37 @@ the_final_stand.entity.Zombie.prototype.m_hitBoxDetection = function () {
             if (this.aabb.intersects(bulletAABB)) {
                 this.bulletHasCollided = true;
 
-                bullets.dispose();
-                this.game.activeBullets.delete(bullets);
+                // Om projektilen är en raket, skapa en explosion när den träffar en zombie
+                if (bullets instanceof the_final_stand.entity.Rocket) {
+                    var explosion = new the_final_stand.entity.Explosion(this.x, this.y, this.game);
+                    this.game.bulletLayer.addChild(explosion);
+
+                    // Skada alla levande zombies inom en radie av 200 pixlar från explosionen
+                    var zombiesArray = this.game.zombieSpawner.zombies;
+                    for (var j = 0; j < zombiesArray.length; j++) {
+                        var zombie = zombiesArray[j];
+                        if (zombie.isAlive) {
+                            var dx = zombie.x - explosion.x;
+                            var dy = zombie.y - explosion.y;
+                            var distance = Math.sqrt(dx * dx + dy * dy);
+
+                            if (distance <= 140) {
+                                zombie.hp -= bullets.damage;
+                                this.explosionSound = this.application.sounds.sound.get("explosion");
+                                this.explosionSound.play();
+                                if (zombie.hp <= 0) {
+                                    zombie.die();
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Om projektilen inte är en SniperBullet, ta bort den när den träffar en zombie
+                if (!(bullets instanceof the_final_stand.entity.SniperBullet)) {
+                    bullets.dispose();
+                    this.game.activeBullets.delete(bullets);
+                }
 
                 this.hp -= bullets.damage;
                 if (this.hp <= 0) {
@@ -207,13 +241,13 @@ the_final_stand.entity.Zombie.prototype.die = function () {
 
 the_final_stand.entity.Zombie.prototype.dropCash = function () {
     var chance = Math.random();
-    if (chance < 1) {
+    if (chance < 0.5) {
         var cashX = this.x + this.width / 3;
         var cashY = this.y + this.height / 3;
         var cash = new the_final_stand.entity.Cash(cashX, cashY, this.cashValue, this.game);
         cash.drop();
     }
-}
+};
 
 the_final_stand.entity.Zombie.prototype.printZombieToCanvas = function () {
     var deadImage;

@@ -26,7 +26,6 @@ the_final_stand.scene.Game = function (numPlayers, teamName) {
 
     this.numPlayers = numPlayers;
     this.teamName = teamName;
-    console.log(teamName);
 };
 
 //------------------------------------------------------------------------------
@@ -48,11 +47,11 @@ the_final_stand.scene.Game.prototype.constructor = the_final_stand.scene.Game;
  */
 the_final_stand.scene.Game.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
-
+    this.stage.map.load('map2');
     this.cameras.getCameraAt(0).fade.opacity = 1;
     this.cameras.getCameraAt(0).fade.in(2000);
+    this.gameMusic = this.application.sounds.sound.get("game");
 
-    this.stage.map.load('map2');
     this.canvas = new rune.display.Canvas(1280, 720);
     this.corpseLayer = new rune.display.DisplayObjectContainer(0, 0, 1280, 720);
     this.zombieLayer = new rune.display.DisplayObjectContainer(0, 0, 1280, 720);
@@ -62,7 +61,6 @@ the_final_stand.scene.Game.prototype.init = function () {
     this.playerLayer = new rune.display.DisplayObjectContainer(0, 0, 1280, 720);
     this.playerHUDLayer = new rune.display.DisplayObjectContainer(0, 0, 1280, 720);
 
-
     // Skapa en array med alla möjliga spelare
     var allPlayers = [
         new the_final_stand.entity.Mathias(500, 345, this, 0),
@@ -71,7 +69,7 @@ the_final_stand.scene.Game.prototype.init = function () {
         new the_final_stand.entity.Danny(608, 270, this, 3)
     ];
 
-    this.numPlayers = 4;
+    this.numPlayers = 3;
 
     // Välj de första 'numPlayers' spelarna
     this.players = allPlayers.slice(0, this.numPlayers);
@@ -80,7 +78,7 @@ the_final_stand.scene.Game.prototype.init = function () {
         this.playerLayer.addChild(this.players[i]);
     }
 
-    this.bank = 5000;
+    this.bank = 0;
 
     this.zombieSpawner = new the_final_stand.managers.ZombieSpawner(this);
     this.updateCounter = 0;
@@ -97,6 +95,7 @@ the_final_stand.scene.Game.prototype.init = function () {
     this.stage.addChild(this.playerHUDLayer);
 
     this.highscoreManager = new the_final_stand.managers.HighscoreManager();
+    this.gameMusic.play();
 };
 
 /**
@@ -111,7 +110,6 @@ the_final_stand.scene.Game.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
     this.zombieSpawner.update();
     this.weaponsCrate.update();
-
 
     // Kontrollerar kollision mellan alla spelare och zombies
     var zombies = this.zombieSpawner.zombies;

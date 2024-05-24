@@ -19,7 +19,7 @@ the_final_stand.managers.ZombieSpawner = function (game) {
     this.currentWave = 1; // Initialisera currentWave till 1 för att räkna vilken våg som är aktiv
     this.isWavePaused = false; // Initialisera isWavePaused till false för att bestämma om vågen är pausad eller inte
     this.wavePauseTimer = 0; // Initialisera wavePauseTimer till 0 för att räkna tiden som vågen är pausad
-    this.wavePauseDuration = 500; // Tiden som vågen är pausad
+    this.wavePauseDuration = 180; // Tiden som vågen är pausad
 
     this.m_spawnWave(this.currentWave);
     this.waveHUD.render(); // Rendera WaveHUD
@@ -29,6 +29,7 @@ the_final_stand.managers.ZombieSpawner.prototype.update = function () {
     this.waveHUD.update();
     if (this.isWavePaused) {
         this.wavePauseTimer++;
+        console.log(this.wavePauseTimer);
         if (this.wavePauseTimer >= this.wavePauseDuration) {
             this.isWavePaused = false;
             this.wavePauseTimer = 0;
@@ -61,22 +62,33 @@ the_final_stand.managers.ZombieSpawner.prototype.m_spawnZombie = function () {
     var zombie = new ZombieType(point.x, point.y, this.game);
 
     this.game.zombieLayer.addChild(zombie);
-    // this.game.stage.setChildIndex(zombie, 1);
     this.zombies.push(zombie);
 };
 
 the_final_stand.managers.ZombieSpawner.prototype.m_spawnWave = function (waveNumber) {
     var numZombies;
-    if (waveNumber === 0) {
-        numZombies = 1; // Antalet zombies som spawnas första vågen
+    if (waveNumber === 1) {
+        numZombies = 25; // Antalet zombies som spawnas första vågen
     } else {
-        numZombies = 25 + Math.pow(2, waveNumber); // Ökar antalet zombies exponentiellt
+       numZombies = 25 + Math.pow(2, waveNumber); // Ökar antalet zombies exponentiellt
     }
-    this.spawnInterval = Math.max(1, Math.floor(1000 / (20 * waveNumber + 1))); // Decrease the spawn interval with each wave
+
+// Styr spawnintervallet för zombies
+if (waveNumber >= 1 && waveNumber <= 3) {
+    this.spawnInterval = 50 - waveNumber; // Sänk intervallet med 1 för varje våg från 1 till 3
+} else if (waveNumber > 3 && waveNumber <= 10) {
+    this.spawnInterval -= 2; // Sänk intervallet med 2 för varje våg från 4 till 10
+} else if (waveNumber > 10 && waveNumber <= 20) {
+    this.spawnInterval -= 3; // Sänk intervallet med 3 för varje våg från 11 till 20
+} else if (waveNumber > 20) {
+    this.spawnInterval -= 4; // Sänk intervallet med 4 för varje våg från 21 och framåt
+}
+
     this.zombiesDead = 0; // Reset the number of dead zombies
     this.zombiesToSpawn = numZombies;
     this.totalZombiesInWave = numZombies;
     this.waveHUD.updateWaveCounter();
+    this.resetPlayerHP();
 };
 
 the_final_stand.managers.ZombieSpawner.prototype.dispose = function () {
@@ -96,6 +108,15 @@ the_final_stand.managers.ZombieSpawner.prototype.killedZombies = function (zombi
         this.zombiesDead++;
         this.waveHUD.updateZombieCount(this.totalZombiesInWave - this.zombiesDead);
     }
+};
+
+the_final_stand.managers.ZombieSpawner.prototype.resetPlayerHP = function () {
+    this.game.players.forEach(function (player) {
+        if (player.isAlive) {
+            player.hp = 100;
+            player.hud.updateHp();
+        }
+    });
 };
 
 the_final_stand.managers.ZombieSpawner.prototype.removePrintedZombies = function (printedZombie) {

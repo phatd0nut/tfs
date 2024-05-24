@@ -45,7 +45,9 @@ the_final_stand.data.Requests.prototype.m_construct = function() {
     rune.resource.Requests.prototype.m_construct.call(this);
     this.add("akimbo_uzi", "./../asset/audio/guns/akimbo_uzi.mp3");
 	this.add("assault_rifle", "./../asset/audio/guns/assault_rifle.mp3");
+	this.add("explosion", "./../asset/audio/guns/explosion.mp3");
 	this.add("pistol", "./../asset/audio/guns/pistol.mp3");
+	this.add("rpg", "./../asset/audio/guns/rpg.mp3");
 	this.add("shotgun", "./../asset/audio/guns/shotgun.mp3");
 	this.add("sniper_rifle", "./../asset/audio/guns/sniper_rifle.mp3");
 	this.add("damage", "./../asset/audio/interaction/damage.mp3");
@@ -53,6 +55,7 @@ the_final_stand.data.Requests.prototype.m_construct = function() {
 	this.add("gameover_sound", "./../asset/audio/interaction/gameover_sound.mp3");
 	this.add("highscore", "./../asset/audio/interaction/highscore.mp3");
 	this.add("navigate", "./../asset/audio/interaction/navigate.wav");
+	this.add("no_cash_sound", "./../asset/audio/interaction/no_cash_sound.mp3");
 	this.add("pickup", "./../asset/audio/interaction/pickup.wav");
 	this.add("revive_sound", "./../asset/audio/interaction/revive_sound.mp3");
 	this.add("select", "./../asset/audio/interaction/select.wav");
@@ -80,7 +83,11 @@ the_final_stand.data.Requests.prototype.m_construct = function() {
 	this.add("3_enor_60x60", "./../asset/players/3_enor_60x60.png");
 	this.add("4_danny_60x60", "./../asset/players/4_danny_60x60.png");
 	this.add("bullet_6x6", "./../asset/projectiles/bullet_6x6.png");
+	this.add("explosion_100x100", "./../asset/projectiles/explosion_100x100.png");
 	this.add("pointer_24x12", "./../asset/projectiles/pointer_24x12.png");
+	this.add("rocket_15x50", "./../asset/projectiles/rocket_15x50.png");
+	this.add("shell_8x8", "./../asset/projectiles/shell_8x8.png");
+	this.add("sniper_bullet6x15", "./../asset/projectiles/sniper_bullet6x15.png");
 	this.add("zombie_default", "./../asset/zombies/zombie_default.png");
 	this.add("zombie_default_dead_60x60", "./../asset/zombies/zombie_default_dead_60x60.png");
 	this.add("zombie_fast", "./../asset/zombies/zombie_fast.png");

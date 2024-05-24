@@ -5,9 +5,6 @@ the_final_stand.hud.PlayerHUD = function (player) {
     this.hpBar = null;
     this.ammoText = null;
 
-    // this.hpBar.progress = 1; // Antag att max HP är 100
-    // this.hpBars.push(this.hpBar);
-
     this.init();
 };
 
@@ -72,15 +69,16 @@ the_final_stand.hud.PlayerHUD.prototype.updateAmmo = function () {
     if (this.player.currentWeapon.ammo === Infinity) {
         this.ammoText.text = "&:%";
         this.ammoTextRed.text = "&:%";
-    } else if (ammoPercentage <= 0.2) {
+    } else if (ammoPercentage <= 0.30 || (ammoPercentage < 0.75 && this.player.currentWeapon.name === "rpg")) {
         this.ammoText.visible = false;
         this.ammoTextRed.visible = true;
         this.ammoTextRed.text = "&:" + this.player.currentWeapon.ammo;
     } else {
         this.ammoText.visible = true;
         this.ammoTextRed.visible = false;
-        this.ammoText.text = "&:" + this.player.currentWeapon.ammo;
+        this.ammoText.text = "':" + this.player.currentWeapon.ammo;
     }
+
 };
 
 the_final_stand.hud.PlayerHUD.prototype.updateHp = function () {
