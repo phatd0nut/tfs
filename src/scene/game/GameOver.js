@@ -49,6 +49,8 @@ the_final_stand.scene.GameOver.prototype.init = function () {
 
     this.cameras.getCameraAt(0).fade.opacity = 1;
     this.cameras.getCameraAt(0).fade.in(1000);
+    this.menuMusic = this.application.sounds.sound.get("menumusic_2");
+    this.menuMusic.play();
 
 
     this.screenWidth = 1280;

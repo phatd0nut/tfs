@@ -48,6 +48,7 @@ the_final_stand.scene.TeamScreen.prototype.constructor = the_final_stand.scene.T
 the_final_stand.scene.TeamScreen.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
 
+    this.menuMusic = this.application.sounds.sound.get("menumusic_2");
     this.selectSound = this.application.sounds.sound.get("select");
     this.errorSound = this.application.sounds.sound.get("error");
     this.navigateSound = this.application.sounds.sound.get("navigate");
@@ -60,6 +61,7 @@ the_final_stand.scene.TeamScreen.prototype.init = function () {
     this.errorText.x = (this.application.screen.width - this.errorText.textWidth * this.errorText.scaleX) / 2;
     this.errorText.y = 415;
 
+    this.menuMusic.play();
     this.m_initBackground();
     this.m_initMenu();
 };
@@ -114,7 +116,7 @@ the_final_stand.scene.TeamScreen.prototype.m_initMenu = function () {
     this.menu = new rune.ui.VTMenu({ resource: "tfs_font", duration: 30, pointer: the_final_stand.entity.Pointer });
     this.menu.add(this.letters[this.currentLetterIndex]);
     this.menu.add("DELETE LAST LETTER");
-    this.menu.add("CONFIRM & START GAME");
+    this.menu.add("CONFIRM TO START GAME");
     this.menu.add("BACK TO MENU");
     this.menu.x = 300;
     this.menu.y = 500;
@@ -149,8 +151,8 @@ the_final_stand.scene.TeamScreen.prototype.updateTeamNameText = function () {
 
 the_final_stand.scene.TeamScreen.prototype.selectOption = function (option) {
     switch (option.text) {
-        case "CONFIRM & START GAME":
-            if (this.teamName.length > 0) { // Lägg till denna kontroll
+        case "CONFIRM TO START GAME":
+            if (this.teamName.length > 0) { 
                 this.application.scenes.load([
                     new the_final_stand.scene.Game(4, this.teamName)
                 ]);

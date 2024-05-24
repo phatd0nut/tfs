@@ -43,6 +43,9 @@ the_final_stand.scene.HowToPlay.prototype.constructor = the_final_stand.scene.Ho
 the_final_stand.scene.HowToPlay.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
     this.selectSound = this.application.sounds.sound.get("select");
+    this.menuMusic = this.application.sounds.sound.get("menumusic_2");
+    
+    this.menuMusic.play();
     this.m_initBackground();
     this.m_initMenu();
 };
@@ -80,7 +83,7 @@ the_final_stand.scene.HowToPlay.prototype.m_initBackground = function () {
         "AS MANY WAVES AS POSSIBLE AS A TEAM"
     ];
     this.lineHeight = 20; // Justera efter behov
-    
+
     for (var i = 0; i < this.lines.length; i++) {
         this.line = this.createBitmapField(
             this.lines[i],

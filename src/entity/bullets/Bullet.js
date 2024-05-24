@@ -1,5 +1,5 @@
 the_final_stand.entity.Bullet = function (x, y, direction, rotation, game, damage) {
-    rune.display.Graphic.call(this, x, y, 6, 6, 'bullet6x6');
+    rune.display.Graphic.call(this, x, y, 6, 6, 'bullet_6x6');
     this.direction = direction;
     this.rotation = rotation;
     this.game = game;
