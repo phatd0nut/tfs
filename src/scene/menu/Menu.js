@@ -43,6 +43,12 @@ the_final_stand.scene.Menu.prototype.constructor = the_final_stand.scene.Menu;
 the_final_stand.scene.Menu.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
 
+    if (!this.constructor.hasFadedIn) {
+        this.cameras.getCameraAt(0).fade.opacity = 1;
+        this.cameras.getCameraAt(0).fade.in(2000);
+        this.constructor.hasFadedIn = true;
+    }
+
     this.selectSound = this.application.sounds.sound.get("select");
     this.navigateSound = this.application.sounds.sound.get("navigate");
 
