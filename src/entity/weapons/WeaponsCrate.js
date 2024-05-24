@@ -64,17 +64,36 @@ the_final_stand.entity.WeaponsCrate.prototype.m_checkPlayerNearCrate = function 
 };
 
 the_final_stand.entity.WeaponsCrate.prototype.m_buyWeapon = function (playerIndex) {
-    // Check if there is enough money in the shared bank
+    // Kontrollera om spelaren har tillräckligt med pengar för att köpa ett vapen
     if (this.game.bank >= 2500) {
-        // Deduct the cost of the weapon from the shared bank
+        // Kostnaden för att köpa ett vapen
         this.game.bank -= 2500;
 
-        // Randomly select a weapon name
-        var weaponNames = ['AssaultRifle', 'AkimboUzi', 'Shotgun', 'Sniper', 'RPG'];
-        var randomWeaponName = weaponNames[Math.floor(Math.random() * weaponNames.length)];
+        // Definiera vilka vapen som kan plockas upp och deras sannolikheter
+        var weapons = [
+            { name: 'AkimboUzi', probability: 0.3 }, // 30% chance
+            { name: 'Shotgun', probability: 0.25 }, // 25% chance
+            { name: 'AssaultRifle', probability: 0.2 }, // 20% chance
+            { name: 'Sniper', probability: 0.15 }, // 15% chance
+            { name: 'RPG', probability: 0.1 } // 10% chance
+        ];
 
-        // Switch to the random weapon
-        this.players[playerIndex].switchWeapon(randomWeaponName);
+        // Generera ett slumpmässigt nummer mellan 0 och 1
+        var randNum = Math.random();
+
+        // Avgör vilket vapen som ska plockas upp baserat på det slumpmässiga numret
+        var cumulativeProbability = 0;
+        var selectedWeaponName;
+        for (var i = 0; i < weapons.length; i++) {
+            cumulativeProbability += weapons[i].probability;
+            if (randNum <= cumulativeProbability) {
+                selectedWeaponName = weapons[i].name;
+                break;
+            }
+        }
+
+        // Byt vapen för spelaren
+        this.players[playerIndex].switchWeapon(selectedWeaponName);
         this.weaponPickup.play();
     } else {
         this.noCashSound.play();

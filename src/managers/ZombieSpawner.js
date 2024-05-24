@@ -54,12 +54,40 @@ the_final_stand.managers.ZombieSpawner.prototype.update = function () {
 the_final_stand.managers.ZombieSpawner.prototype.m_spawnZombie = function () {
     var point = this.spawnPoints[Math.floor(Math.random() * this.spawnPoints.length)];
 
-    // Select a random zombie type
-    var index = Math.floor(Math.random() * this.zombieTypes.length);
-    var ZombieType = this.zombieTypes[index];
+    // Define zombie types with their probabilities
+    var zombieTypes = [
+        {type: 'default', probability: 0.5}, // 50% chance
+        {type: 'fast', probability: 0.35}, // 30% chance
+        {type: 'fat', probability: 0.15} // 20% chance
+    ];
+
+    // Generate a random number between 0 and 1
+    var randNum = Math.random();
+
+    // Determine which zombie type to select based on the random number and zombie type probabilities
+    var cumulativeProbability = 0;
+    var selectedZombieType;
+    for (var i = 0; i < zombieTypes.length; i++) {
+        cumulativeProbability += zombieTypes[i].probability;
+        if (randNum <= cumulativeProbability) {
+            selectedZombieType = zombieTypes[i].type;
+            break;
+        }
+    }
 
     // Spawn a new zombie of the selected type
-    var zombie = new ZombieType(point.x, point.y, this.game);
+    var zombie;
+    switch (selectedZombieType) {
+        case 'default':
+            zombie = new the_final_stand.entity.ZombieDefault(point.x, point.y, this.game);
+            break;
+        case 'fast':
+            zombie = new the_final_stand.entity.ZombieFast(point.x, point.y, this.game);
+            break;
+        case 'fat':
+            zombie = new the_final_stand.entity.ZombieFat(point.x, point.y, this.game);
+            break;
+    }
 
     this.game.zombieLayer.addChild(zombie);
     this.zombies.push(zombie);
