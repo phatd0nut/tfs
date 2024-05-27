@@ -51,6 +51,7 @@ the_final_stand.scene.Game.prototype.init = function () {
     this.cameras.getCameraAt(0).fade.opacity = 1;
     this.cameras.getCameraAt(0).fade.in(2000);
     this.gameMusic = this.application.sounds.sound.get("game");
+    this.gameMusic.loop = true;
 
     this.canvas = new rune.display.Canvas(1280, 720);
     this.corpseLayer = new rune.display.DisplayObjectContainer(0, 0, 1280, 720);
@@ -69,7 +70,7 @@ the_final_stand.scene.Game.prototype.init = function () {
         new the_final_stand.entity.Danny(608, 270, this, 3)
     ];
 
-    // this.numPlayers = 1;
+    this.numPlayers = 3;
 
     // Välj de första 'numPlayers' spelarna
     this.players = allPlayers.slice(0, this.numPlayers);

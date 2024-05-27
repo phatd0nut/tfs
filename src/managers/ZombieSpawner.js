@@ -55,9 +55,9 @@ the_final_stand.managers.ZombieSpawner.prototype.m_spawnZombie = function () {
 
     // Define zombie types with their probabilities
     var zombieTypes = [
-        {type: 'default', probability: 0.5}, // 50% chance
-        {type: 'fast', probability: 0.35}, // 30% chance
-        {type: 'fat', probability: 0.15} // 20% chance
+        { type: 'default', probability: 0.5 }, // 50% chance
+        { type: 'fast', probability: 0.35 }, // 30% chance
+        { type: 'fat', probability: 0.15 } // 20% chance
     ];
 
     // Generate a random number between 0 and 1
@@ -95,21 +95,23 @@ the_final_stand.managers.ZombieSpawner.prototype.m_spawnZombie = function () {
 the_final_stand.managers.ZombieSpawner.prototype.m_spawnWave = function (waveNumber) {
     var numZombies;
     if (waveNumber === 1) {
-        numZombies = 25; // Antalet zombies som spawnas första vågen
+        numZombies = 3; // Antalet zombies som spawnas första vågen
     } else {
-       numZombies = 25 + Math.pow(2, waveNumber); // Ökar antalet zombies exponentiellt
+        numZombies = 3 + Math.pow(2, waveNumber); // Ökar antalet zombies exponentiellt
     }
 
-// Styr spawnintervallet för zombies
-if (waveNumber >= 1 && waveNumber <= 3) {
-    this.spawnInterval = 50 - waveNumber; // Sänk intervallet med 1 för varje våg från 1 till 3
-} else if (waveNumber > 3 && waveNumber <= 10) {
-    this.spawnInterval -= 2; // Sänk intervallet med 2 för varje våg från 4 till 10
-} else if (waveNumber > 10 && waveNumber <= 20) {
-    this.spawnInterval -= 3; // Sänk intervallet med 3 för varje våg från 11 till 20
-} else if (waveNumber > 20) {
-    this.spawnInterval -= 4; // Sänk intervallet med 4 för varje våg från 21 och framåt
-}
+    // Styr spawnintervallet för zombies
+    if (this.spawnInterval > 0) {
+        if (waveNumber >= 1 && waveNumber <= 3) {
+            this.spawnInterval = Math.max(this.spawnInterval - 5, 0);
+        } else if (waveNumber > 3 && waveNumber <= 7) {
+            this.spawnInterval = Math.max(this.spawnInterval - 7, 0);
+        } else if (waveNumber > 7) {
+            this.spawnInterval = Math.max(this.spawnInterval - 1, 0);
+        }
+    }
+
+    console.log(this.spawnInterval);
 
     this.zombiesDead = 0; // Reset the number of dead zombies
     this.zombiesToSpawn = numZombies;
