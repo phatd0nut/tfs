@@ -22,9 +22,9 @@ the_final_stand.system.Main = function() {
      * Extend (Rune) Application.
      */
     rune.system.Application.call(this, {
-        developer: "se.lnu",
+        developer: "gh.phatd0nut",
         app: "the_final_stand",
-        build: "0.0.1",
+        build: "1.0.0",
         scene: the_final_stand.scene.Menu,
         resources: the_final_stand.data.Requests,
         useGamepads:true,
@@ -32,7 +32,7 @@ the_final_stand.system.Main = function() {
         framerate: 30,
         screenResolutionX: 1280,
         screenResolutionY: 720,
-        debug: false
+        debug: true
     });
 };
 

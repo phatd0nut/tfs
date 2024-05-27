@@ -19,7 +19,7 @@ the_final_stand.managers.ZombieSpawner = function (game) {
     this.currentWave = 1; // Initialisera currentWave till 1 för att räkna vilken våg som är aktiv
     this.isWavePaused = false; // Initialisera isWavePaused till false för att bestämma om vågen är pausad eller inte
     this.wavePauseTimer = 0; // Initialisera wavePauseTimer till 0 för att räkna tiden som vågen är pausad
-    this.wavePauseDuration = 180; // Tiden som vågen är pausad
+    this.wavePauseDuration = 200; // Tiden som vågen är pausad
 
     this.m_spawnWave(this.currentWave);
     this.waveHUD.render(); // Rendera WaveHUD
@@ -29,7 +29,6 @@ the_final_stand.managers.ZombieSpawner.prototype.update = function () {
     this.waveHUD.update();
     if (this.isWavePaused) {
         this.wavePauseTimer++;
-        console.log(this.wavePauseTimer);
         if (this.wavePauseTimer >= this.wavePauseDuration) {
             this.isWavePaused = false;
             this.wavePauseTimer = 0;

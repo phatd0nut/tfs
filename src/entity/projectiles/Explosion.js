@@ -11,4 +11,6 @@ the_final_stand.entity.Explosion.prototype.constructor = the_final_stand.entity.
 
 the_final_stand.entity.Explosion.prototype.dispose = function () {
     this.game.bulletLayer.removeChild(this, true);
+    var self = this;
+    self = null;
 };

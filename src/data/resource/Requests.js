@@ -72,8 +72,6 @@ the_final_stand.data.Requests.prototype.m_construct = function() {
 	this.add("tfs_font_black", "./../asset/font/tfs_font_black.png");
 	this.add("tfs_font_red", "./../asset/font/tfs_font_red.png");
 	this.add("buy_weapon_instruction_150x32", "./../asset/img/buy_weapon_instruction_150x32.png");
-	this.add("Map1-tilest", "./../asset/maps/map_1/Map1-tilest.png");
-	this.add("map1", "./../asset/maps/map_1/map1.json");
 	this.add("map2", "./../asset/maps/map_2/map2.json");
 	this.add("Newmap2", "./../asset/maps/map_2/Newmap2.png");
 	this.add("test_map", "./../asset/maps/test_map.png");

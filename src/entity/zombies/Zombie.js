@@ -98,7 +98,10 @@ the_final_stand.entity.Zombie.prototype.update = function (step) {
 
 the_final_stand.entity.Zombie.prototype.dispose = function () {
     rune.display.Sprite.prototype.dispose.call(this);
-    this.game.zombieLayer.removeChild(this);
+    this.game.zombieLayer.removeChild(this, true);
+
+    this.cash = null;
+    this.graphic = null;
 };
 
 the_final_stand.entity.Zombie.prototype.m_initAnimation = function () {
@@ -110,7 +113,6 @@ the_final_stand.entity.Zombie.prototype.m_initAnimation = function () {
 
 the_final_stand.entity.Zombie.prototype.m_initHitBox = function () {
     if (this.type === "fat") {
-        // Set the hitbox to be larger for "fat" zombies
         this.hitbox.set(10, 6, this.width - 20, this.height - 15);
     } else {
         this.hitbox.set(20, 12, this.width - 40, this.height - 30);
@@ -190,33 +192,30 @@ the_final_stand.entity.Zombie.prototype.doDamage = function () {
     if (!this.isAlive) {
         return
     }
-    // Frame counter to count frames per attack
+    // Framecounter för att kontrollera hastigheten på attackerna
     this.frameCounter = (this.frameCounter || 0) + 1;
 
     if (this.frameCounter >= 60 / 3) {
-        var currentPlayer = this.closestPlayer; // Use the closest player instead of the one at currentPlayerIndex
+        var currentPlayer = this.closestPlayer; // Använd den närmaste spelaren som mål
 
-        // If there is no closest player (all players are dead), stop attacking
+        // Om det inte finns någon spelare att attackera, returnera
         if (!currentPlayer) {
             return;
         }
 
         currentPlayer.hp -= this.attackDamage;
 
-        // If HP is less than 0, set it to 0
         if (currentPlayer.hp < 0) {
             currentPlayer.hp = 0;
         }
 
         if (currentPlayer.hp <= 0) {
             currentPlayer.playerDowned();
-
-            // Call m_followPlayers to start following the next closest player
             this.m_followPlayers();
         }
 
         currentPlayer.hud.updateHp();
-        this.frameCounter -= 60 / 3; // Reset frameCounter
+        this.frameCounter -= 60 / 3; // Återställ framecountern
     }
 };
 
@@ -244,8 +243,8 @@ the_final_stand.entity.Zombie.prototype.dropCash = function () {
     if (chance < 0.5) {
         var cashX = this.x + this.width / 3;
         var cashY = this.y + this.height / 3;
-        var cash = new the_final_stand.entity.Cash(cashX, cashY, this.cashValue, this.game);
-        cash.drop();
+        this.cash = new the_final_stand.entity.Cash(cashX, cashY, this.cashValue, this.game);
+        this.cash.drop();
     }
 };
 
@@ -312,7 +311,6 @@ the_final_stand.entity.Zombie.prototype.m_followPlayers = function () {
         dy /= this.distance;
 
         // Om zombien är längre bort än 150 pixlar från spelaren, slumpa en ny riktning att röra sig i
-        // Om zombien är längre bort än 150 pixlar från spelaren, slumpa en ny riktning att röra sig i
         if (this.distance > 150 && this.directionChangeTimer <= 0) {
             this.dxDeviation = dx + (Math.random() - 0.5) * 0.6;
             this.dyDeviation = dy + (Math.random() - 0.5) * 0.6;
@@ -375,22 +373,24 @@ the_final_stand.entity.Zombie.prototype.m_followPlayers = function () {
 };
 
 the_final_stand.entity.Zombie.prototype.checkObjColl = function (tileMap) {
+    // Metod för att kontrollera om det finns ett hinder framför zombien. Returnerar om inget hinder finns.
     if (!this.isAlive) {
         return;
     }
 
+    // Array med tile-värden som zombien ska kolla efter
     var tilesToCheck = [
         23, 24, 25, 26, 30, 31, 32, 33, 37, 38, 39, 47, 48, 49, 50, 51, 52, 53, 54, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 81, 84, 90, 91, 92, 93, 94, 95, 96, 97, 98, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109
     ];
 
-    var scanPoint = this.getPointInFront();
-    var tileValue = tileMap.getTileValueOfPoint(scanPoint);
+    var scanPoint = this.getPointInFront(); // Hämta punkten framför zombien
+    var tileValue = tileMap.getTileValueOfPoint(scanPoint); // Hämta tile-värdet för punkten framför zombien
 
     if (tilesToCheck.includes(tileValue)) {
-        this.isObstacleInFront = true;  // Set the flag
+        this.isObstacleInFront = true; 
         this.changeDirection();
     } else {
-        this.isObstacleInFront = false;  // Reset the flag if there's no obstacle
+        this.isObstacleInFront = false;
     }
 };
 

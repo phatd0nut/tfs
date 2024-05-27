@@ -26,9 +26,10 @@ the_final_stand.entity.Bullet.prototype.update = function (step) {
 
 the_final_stand.entity.Bullet.prototype.dispose = function () {
     rune.display.Graphic.prototype.dispose.call(this);
-
     this.game.activeBullets.delete(this);
     this.game.bulletLayer.removeChild(this);
+    var self = this;
+    self = null;
 };
 
 the_final_stand.entity.Bullet.prototype.outOfBounds = function () {

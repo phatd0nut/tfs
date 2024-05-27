@@ -141,7 +141,9 @@ the_final_stand.scene.Game.prototype.update = function (step) {
 
         // Kontrollerar kollision mellan spelare
         for (var q = p + 1; q < this.players.length; q++) {
-            player.hitTestAndSeparate(this.players[q]);
+            if (player.isAlive && this.players[q].isAlive) {
+                player.hitTestAndSeparate(this.players[q]);
+            }
         }
     }
 
@@ -169,6 +171,20 @@ the_final_stand.scene.Game.prototype.dispose = function () {
         if (this.playerLayer) this.stage.removeChild(this.playerLayer, true);
         if (this.canvas) this.stage.removeChild(this.canvas, true);
     }
+
+    this.corpseLayer = null;
+    this.zombieLayer = null;
+    this.pickupLayer = null;
+    this.shopTextLayer = null;
+    this.bulletLayer = null;
+    this.playerLayer = null;
+    this.canvas = null;
+    this.zombieSpawner.zombieTypes = null;
+    this.zombieSpawner = null;
+    this.players = null;
+    this.activeBullets = null;
+    this.weaponsCrate = null;
+    this.highscoreManager = null;
 };
 
 the_final_stand.scene.Game.prototype.checkAllPlayersDead = function () {

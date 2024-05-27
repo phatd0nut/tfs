@@ -80,7 +80,10 @@ the_final_stand.scene.HowToPlay.prototype.m_initBackground = function () {
     this.lines = [
         "THE FINAL STAND IS A SURVIVAL GAME",
         "WHERE YOU TRY TO SURVIVE",
-        "AS MANY WAVES AS POSSIBLE AS A TEAM"
+        "AS MANY WAVES AS POSSIBLE AS A TEAM",
+        "YOU CAN BUY NEW WEAPONS AT THE WEAPON CRATE",
+        "TO HELP YOU SURVIVE",
+        "A NEW WEAPON COSTS 1500"
     ];
     this.lineHeight = 20; // Justera efter behov
 

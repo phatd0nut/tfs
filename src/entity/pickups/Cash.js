@@ -27,7 +27,7 @@ the_final_stand.entity.Cash.prototype.update = function (step) {
 };
 
 the_final_stand.entity.Cash.prototype.dispose = function () {
-    this.game.pickupLayer.removeChild(this);
+    this.game.pickupLayer.removeChild(this, true);
 };
 
 the_final_stand.entity.Cash.prototype.pickup = function () {
@@ -44,7 +44,7 @@ the_final_stand.entity.Cash.prototype.pickup = function () {
     
         // Om spelaren är nära nog, pengarna fortfarande finns kvar, och spelaren är levande, plocka upp dem
         if (distance < cashRadius + playerRadius && this.pickupDuration > 0 && player.isAlive) {
-            this.game.bank += this.value; // Add the value to the shared bank
+            this.game.bank += this.value;
             this.game.waveHUD.updateTotalMoney();
             this.pickupSound.play();
             this.dispose();
@@ -59,6 +59,5 @@ the_final_stand.entity.Cash.prototype.m_initAnimation = function () {
 
 the_final_stand.entity.Cash.prototype.drop = function () {
     this.game.pickupLayer.addChild(this);
-    // this.game.stage.setChildIndex(this, this.game.stage.numChildren - 2);
     this.animation.gotoAndPlay("bag_dropped", 0);
 };

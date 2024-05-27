@@ -101,14 +101,6 @@ the_final_stand.scene.GameOver.prototype.update = function (step) {
  */
 the_final_stand.scene.GameOver.prototype.dispose = function () {
     rune.scene.Scene.prototype.dispose.call(this);
-
-    /*
-    this.stage.removeChild(this.background);
-    this.stage.removeChild(this.menu);
-    this.stage.removeChild(this.teamText);
-    this.stage.removeChild(this.waveText);
-    this.stage.removeChild(this.zombiesKilledText);
-*/
 };
 
 the_final_stand.scene.GameOver.prototype.m_initMenu = function () {

@@ -65,9 +65,9 @@ the_final_stand.entity.WeaponsCrate.prototype.m_checkPlayerNearCrate = function 
 
 the_final_stand.entity.WeaponsCrate.prototype.m_buyWeapon = function (playerIndex) {
     // Kontrollera om spelaren har tillräckligt med pengar för att köpa ett vapen
-    if (this.game.bank >= 2500) {
+    if (this.game.bank >= 1500) {
         // Kostnaden för att köpa ett vapen
-        this.game.bank -= 2500;
+        this.game.bank -= 1500;
 
         // Definiera vilka vapen som kan plockas upp och deras sannolikheter
         var weapons = [

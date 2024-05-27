@@ -124,6 +124,10 @@ the_final_stand.entity.Player.prototype.update = function (step) {
  */
 the_final_stand.entity.Player.prototype.dispose = function () {
     rune.display.Sprite.prototype.dispose.call(this);
+
+    this.hud = null;
+    this.currentWeapon.activeSounds = null;
+    this.currentWeapon = null;
 };
 
 the_final_stand.entity.Player.prototype.m_initSounds = function () {
