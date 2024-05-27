@@ -83,7 +83,10 @@ the_final_stand.scene.HowToPlay.prototype.m_initBackground = function () {
         "AS MANY WAVES AS POSSIBLE AS A TEAM",
         "YOU CAN BUY NEW WEAPONS AT THE WEAPON CRATE",
         "TO HELP YOU SURVIVE",
-        "A NEW WEAPON COSTS 1500"
+        "A NEW WEAPON COSTS 1500",
+        "ZOMBIES DROP MONEYBAGS AND FOR EVERY",
+        "SURVIVED ROUND YOU EARN CASH",
+        "YOU CAN ALSO REVIVE TEAMMATES"
     ];
     this.lineHeight = 20; // Justera efter behov
 

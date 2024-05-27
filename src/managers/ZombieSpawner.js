@@ -100,20 +100,22 @@ the_final_stand.managers.ZombieSpawner.prototype.m_spawnWave = function (waveNum
         numZombies = 3 + Math.pow(2, waveNumber); // Ökar antalet zombies exponentiellt
     }
 
-    // Styr spawnintervallet för zombies
+    // Styr spawnintervallet för zombies samt belöna spelaren med pengar för varje överlevd våg
     if (this.spawnInterval > 0) {
-        if (waveNumber >= 1 && waveNumber <= 3) {
+        if (waveNumber === 1) {
             this.spawnInterval = Math.max(this.spawnInterval - 5, 0);
+        } else if (waveNumber > 1 && waveNumber <= 3) {
+            this.spawnInterval = Math.max(this.spawnInterval - 5, 0);
+            this.game.bank += 500;
         } else if (waveNumber > 3 && waveNumber <= 7) {
             this.spawnInterval = Math.max(this.spawnInterval - 7, 0);
+            this.game.bank += 1000;
         } else if (waveNumber > 7) {
             this.spawnInterval = Math.max(this.spawnInterval - 1, 0);
+            this.game.bank += 2000;
         }
     }
-
-    console.log(this.spawnInterval);
-
-    this.zombiesDead = 0; // Reset the number of dead zombies
+    this.zombiesDead = 0; // Nollställ antalet döda zombies
     this.zombiesToSpawn = numZombies;
     this.totalZombiesInWave = numZombies;
     this.waveHUD.updateWaveCounter();
