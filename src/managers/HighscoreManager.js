@@ -3,7 +3,7 @@ the_final_stand.managers.HighscoreManager = function () {
 };
 
 the_final_stand.managers.HighscoreManager.prototype.addHighscore = function (team, wave, zombiesKilled) {
-    this.highscores.push({ team, wave, zombiesKilled });
+    this.highscores.push({ team: team, wave: wave, zombiesKilled: zombiesKilled });
     localStorage.setItem('highscores', JSON.stringify(this.highscores));
 };
 
