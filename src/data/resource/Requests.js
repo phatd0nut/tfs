@@ -74,7 +74,6 @@ the_final_stand.data.Requests.prototype.m_construct = function() {
 	this.add("buy_weapon_instruction_150x32", "./../asset/img/buy_weapon_instruction_150x32.png");
 	this.add("map2", "./../asset/maps/map_2/map2.json");
 	this.add("Newmap2", "./../asset/maps/map_2/Newmap2.png");
-	this.add("test_map", "./../asset/maps/test_map.png");
 	this.add("moneybag_24x24", "./../asset/pickups/moneybag_24x24.png");
 	this.add("1_mathias_60x60", "./../asset/players/1_mathias_60x60.png");
 	this.add("2_jesper_60x60", "./../asset/players/2_jesper_60x60.png");
