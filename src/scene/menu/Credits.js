@@ -92,10 +92,13 @@ the_final_stand.scene.Credits.prototype.m_render = function () {
     "SUCCESS FANFARE TRUMPETS/ PIXABAY/",
     "GAME MUSIC ACTION/ ZAPSLAT/",
     "APOCALYPSE BACKGROUND PIANO LAYER/ CESSIR/ LOOPERMAN",
-    "ROCKET LAUNCHER/ SOUNDSNAP/",
+    "ROCKET LAUNCHER SOUND/ SOUNDSNAP/",
     "EXPLOSION SOUND/ PIXABAY/",
     "LABYRINTH OF DESPAIR/ MOODMODE/ PIXABAY/",
-    "NO CASH SOUND/ UNIVERSFIELD/ PIXABAY/"
+    "NO CASH SOUND/ UNIVERSFIELD/ PIXABAY/",
+    "ZOMBIE BUFFED SOUND: CALL FOR BRAINS/ PIXABAY/",
+    "ZOMBIE BUFFED ALARM SOUND: EVACUATION ALARM/ LIECIO/ PIXABAY/",
+    "ZOMBIE BUFF RESET SOUND: A SUDDEN APPEARANCE/ UNIVERSFIELD/ PIXABAY/",
     ];
 
     this.texts2 = [
@@ -111,7 +114,7 @@ the_final_stand.scene.Credits.prototype.m_render = function () {
         var textField = this.createBitmapField(this.texts[i], 600, 320 + i * 20);
         this.stage.addChild(textField);
         textField.x = (this.application.screen.width - textField.width) / 2; // Centrera texten horisontellt
-        textField.y = 200 + i * 20;
+        textField.y = 100 + i * 20;
         this.textFields.push(textField);
     }
 
@@ -119,7 +122,7 @@ the_final_stand.scene.Credits.prototype.m_render = function () {
         var textField = this.createBitmapField(this.texts2[i], 600, 320 + (this.texts.length + i + 1) * 20); // Lägg till en extra radbrytning
         this.stage.addChild(textField);
         textField.x = (this.application.screen.width - textField.width) / 2; // Centrera texten horisontellt
-        textField.y = 280 + (this.texts.length + i + 1) * 20; // Lägg till en extra radbrytning
+        textField.y = 180 + (this.texts.length + i + 1) * 20; // Lägg till en extra radbrytning
         this.textFields.push(textField);
     }
 };

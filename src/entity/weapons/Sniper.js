@@ -1,6 +1,6 @@
 the_final_stand.entity.Sniper = function (stage, game) {
     the_final_stand.entity.Weapon.call(this, "sniper_rifle", 10, -26, 0, stage, game, true);
-    this.weaponDamage = 200;
+    this.weaponDamage = 9999;
     this.fireRate = 2000;
     this.totalAmmo = 10; // Används i PlayerHUD.js för att räkna ut procentuell ammo
     this.resetFireRate();

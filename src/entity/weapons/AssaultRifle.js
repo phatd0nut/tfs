@@ -1,6 +1,6 @@
 the_final_stand.entity.AssaultRifle = function(stage, game) {
     the_final_stand.entity.Weapon.call(this, "assault_rifle", 120, -26, 5, stage, game, true);
-    this.weaponDamage = 44;
+    this.weaponDamage = 49;
     this.fireRate = 130;
     this.totalAmmo = 120; // Används i PlayerHUD.js för att räkna ut procentuell ammo
 };

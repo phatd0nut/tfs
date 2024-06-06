@@ -44,7 +44,7 @@ the_final_stand.scene.HowToPlay.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
     this.selectSound = this.application.sounds.sound.get("select");
     this.menuMusic = this.application.sounds.sound.get("menumusic_2");
-    
+
     this.menuMusic.play();
     this.m_initBackground();
     this.m_initMenu();
@@ -71,30 +71,29 @@ the_final_stand.scene.HowToPlay.prototype.createBitmapField = function (text, x,
 the_final_stand.scene.HowToPlay.prototype.m_initBackground = function () {
     this.background = new rune.display.Graphic(
         0,
-        0,
+        80,
         this.application.screen.width,
         this.application.screen.height, "tutorial_bg"
     );
     this.stage.addChild(this.background);
 
     this.lines = [
-        "THE FINAL STAND IS A SURVIVAL GAME",
-        "WHERE YOU TRY TO SURVIVE",
+        "THE FINAL STAND IS A SURVIVAL GAME WHERE YOU TRY TO SURVIVE",
         "AS MANY WAVES AS POSSIBLE AS A TEAM",
-        "YOU CAN BUY NEW WEAPONS AT THE WEAPON CRATE",
-        "TO HELP YOU SURVIVE",
-        "A NEW WEAPON COSTS 1500",
-        "ZOMBIES DROP MONEYBAGS AND FOR EVERY",
-        "SURVIVED ROUND YOU EARN CASH",
-        "YOU CAN ALSO REVIVE TEAMMATES"
+        "NEW WEAPONS ARE BOUGHT AT THE WEAPON CRATE",
+        "FOR 1500 DOLLARS TO HELP YOU SURVIVE",
+        "ZOMBIES DROP MONEYBAGS WHEN THEY DIE AND",
+        "YOU ALSO GAIN MONEY FOR EACH SURVIVED WAVE",
+        "TEAMMATES CAN REVIVE EACH OTHER BY STANDING CLOSE TO EACH OTHER",
+        "ZOMBIES GET STRONGER FOR EACH WAVE AND CAN RANDOMLY RECEIVE BUFFS",
     ];
-    this.lineHeight = 20; // Justera efter behov
+    this.lineHeight = 25; // Justera efter behov
 
     for (var i = 0; i < this.lines.length; i++) {
         this.line = this.createBitmapField(
             this.lines[i],
             20,
-            80 + i * this.lineHeight
+            20 + i * this.lineHeight
         );
         this.stage.addChild(this.line);
     }
@@ -104,7 +103,7 @@ the_final_stand.scene.HowToPlay.prototype.m_initMenu = function () {
     this.menu = new rune.ui.VTMenu({ resource: "tfs_font", duration: 30, pointer: the_final_stand.entity.Pointer });
     this.menu.add("BACK TO MENU");
     this.menu.x = 435;
-    this.menu.y = 600;
+    this.menu.y = 665;
     this.menu.scaleX = 2;
     this.menu.scaleY = 2;
     this.menu.onSelect(this.selectOption, this);

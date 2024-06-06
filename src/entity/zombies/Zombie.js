@@ -30,6 +30,8 @@ the_final_stand.entity.Zombie = function (x, y, width, height, texture) {
     this.centerX = this.x + this.width / 2;
     this.centerY = this.y + this.height / 2;
     this.aabb = new AABB(this.x, this.y, width, height);
+    this.isBuffed = false;
+    this.wasDamagedDuringBuff = false;
 };
 
 //------------------------------------------------------------------------------
@@ -146,6 +148,12 @@ the_final_stand.entity.Zombie.prototype.m_hitBoxDetection = function () {
 
                             if (distance <= 140) {
                                 zombie.hp -= bullets.damage;
+
+                                // Om zombien är buffad, markera den som skadad under buffen
+                                if (this.isBuffed) {
+                                    this.wasDamagedDuringBuff = true;
+                                }
+
                                 this.explosionSound = this.application.sounds.sound.get("explosion");
                                 this.explosionSound.play();
                                 if (zombie.hp <= 0) {
@@ -163,7 +171,14 @@ the_final_stand.entity.Zombie.prototype.m_hitBoxDetection = function () {
                 }
 
                 this.hp -= bullets.damage;
+
+                // Om zombien är buffad, markera den som skadad under buffen
+                if (this.isBuffed) {
+                    this.wasDamagedDuringBuff = true;
+                }
+
                 if (this.hp <= 0) {
+                    this.hp = 0;
                     this.die();
                 }
 
@@ -387,7 +402,7 @@ the_final_stand.entity.Zombie.prototype.checkObjColl = function (tileMap) {
     var tileValue = tileMap.getTileValueOfPoint(scanPoint); // Hämta tile-värdet för punkten framför zombien
 
     if (tilesToCheck.includes(tileValue)) {
-        this.isObstacleInFront = true; 
+        this.isObstacleInFront = true;
         this.changeDirection();
     } else {
         this.isObstacleInFront = false;

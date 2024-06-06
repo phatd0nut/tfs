@@ -1,6 +1,6 @@
 the_final_stand.entity.RPG = function (stage, game) {
     the_final_stand.entity.Weapon.call(this, "rpg", 4, 0, 0, stage, game, true);
-    this.weaponDamage = 200;
+    this.weaponDamage = 9999;
     this.fireRate = 2500;
     this.totalAmmo = 4; // Används i PlayerHUD.js för att räkna ut procentuell ammo
     this.resetFireRate();
