@@ -59,7 +59,6 @@ the_final_stand.entity.Player.prototype.init = function () {
     this.m_initSounds();
 
     this.hud = new the_final_stand.hud.PlayerHUD(this);
-    this.damageSound = this.application.sounds.sound.get("damage");
     this.lastHp = this.hp;
 };
 
@@ -131,7 +130,9 @@ the_final_stand.entity.Player.prototype.dispose = function () {
 };
 
 the_final_stand.entity.Player.prototype.m_initSounds = function () {
-    this.reviveBleep = this.game.application.sounds.sound.get("revive_sound", true);
+    this.reviveBleep = this.game.application.sounds.sound.get("revive_sound");
+    this.damageSound = this.application.sounds.sound.get("damage");
+    this.playerRevived = this.application.sounds.sound.get("player_revived");
 };
 
 
@@ -196,6 +197,7 @@ the_final_stand.entity.Player.prototype.revive = function () {
     this.hp = 100;
     this.animation.gotoAndPlay("idle_" + this.weaponName);
     this.hud.init();
+    this.playerRevived.play();
 };
 
 /*

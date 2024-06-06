@@ -25,14 +25,14 @@ the_final_stand.system.Main = function() {
         developer: "gh.phatd0nut",
         app: "the_final_stand",
         build: "1.0.0",
-        scene: the_final_stand.scene.HowToPlay,
+        scene: the_final_stand.scene.Menu,
         resources: the_final_stand.data.Requests,
         useGamepads:true,
         useKeyboard:true,
         framerate: 30,
         screenResolutionX: 1280,
         screenResolutionY: 720,
-        debug: true
+        debug: false
     });
 };
 
